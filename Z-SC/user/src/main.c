@@ -91,12 +91,6 @@ int main (void)
     {
 		
         
-		if(mt9v03x_finish_flag)
-		{
-			memcpy(image_copy, mt9v03x_image, MT9V03X_H*MT9V03X_W);
-			ips200_show_gray_image(0, 0, (const uint8 *)image_copy, MT9V03X_W, MT9V03X_H, MT9V03X_W, MT9V03X_H, 0);
-			mt9v03x_finish_flag=0;
-		}
 		
     }
 }
@@ -106,6 +100,9 @@ void All_Init(){
     debug_init();                                                               // 初始化默认 Debug UART
 	system_delay_ms(300);
 	ips200_init(IPS200_TYPE_SPI);                                               //ips初始化
+	Key_Init();
+	Motor_Init();
+	Encoder_Init();
 	//摄像头初始化
 	while(1)
     {
@@ -122,14 +119,12 @@ void All_Init(){
         system_delay_ms(500);
 	ips200_show_string(0, 16, "init success.");
 	system_delay_ms(1000);  
-	Key_Init();
-	Motor_Init();
+	
 	
 	gpio_init(LED1, GPO, GPIO_HIGH, GPO_PUSH_PULL);                             // 初始化 LED1 输出 默认高电平 推挽输出模式
     gpio_init(LED2, GPO, GPIO_HIGH, GPO_PUSH_PULL);                             // 初始化 LED2 输出 默认高电平 推挽输出模式
 	
 	
-	Encoder_Init();
 	ips200_clear();
 	
 	//编码器，中断初始化
@@ -138,6 +133,12 @@ void All_Init(){
 
 void pit2_handler(){
     T_Counter++;
+	if(mt9v03x_finish_flag)
+		{
+			memcpy(image_copy, mt9v03x_image, MT9V03X_H*MT9V03X_W);
+			ips200_show_gray_image(0, 0, (const uint8 *)image_copy, MT9V03X_W, MT9V03X_H, MT9V03X_W, MT9V03X_H, 0);
+			mt9v03x_finish_flag=0;
+		}
 	Scan_Key();
 	if(T_Counter%5==0){
 		Dis_GB();

@@ -23,8 +23,9 @@ void pit6_handler(){
 	E_Num1=-E_Num1;
     encoder_clear_count(ENCODER_QUADDEC1);                                       // 清空编码器计数
     encoder_clear_count(ENCODER_QUADDEC2);                                           // 清空编码器计数
-	if(C_Num==2){
-		ips200_show_int (70, 164,E_Num1,4);
-		ips200_show_int (70, 180,E_Num2,4);
-	}
+	if(C_Num==3){  //正常为2
+		//ips200_show_int (70, 164,E_Num1,5);
+		//ips200_show_int (70, 180,E_Num2,5);
+		ips200_show_int (70, 250,E_Num1,5);
+	}   ips200_show_int (70, 270,E_Num2,5);
 }

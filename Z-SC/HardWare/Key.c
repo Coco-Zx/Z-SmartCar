@@ -90,9 +90,9 @@ void Scan_Key(){
 									Car_Flag=0;
 									Motor_Stop();
 								}break;
-						case 2:C_Num=1;ips200_full(RGB565_WHITE);Dis_CD1();G_Num=1;break;
-						case 3:C_Num=2;ips200_full(RGB565_WHITE);Dis_CD2();G_Num=1;break;
-						case 4:C_Num=3;ips200_full(RGB565_WHITE);Dis_CD3();G_Num=1;break;
+						case 2:C_Num=1;Dis_CD1();G_Num=1;break;
+						case 3:C_Num=2;Dis_CD2();G_Num=1;break;
+						case 4:C_Num=3;Dis_CD3();G_Num=1;break;
 					}
 				}break;
 				case 3:
