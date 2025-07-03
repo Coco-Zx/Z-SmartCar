@@ -120,7 +120,6 @@ void All_Init(){
 	ips200_show_string(0, 16, "init success.");
 	system_delay_ms(1000);  
 	
-	
 	gpio_init(LED1, GPO, GPIO_HIGH, GPO_PUSH_PULL);                             // 初始化 LED1 输出 默认高电平 推挽输出模式
     gpio_init(LED2, GPO, GPIO_HIGH, GPO_PUSH_PULL);                             // 初始化 LED2 输出 默认高电平 推挽输出模式
 	

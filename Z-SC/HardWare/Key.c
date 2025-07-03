@@ -1,6 +1,7 @@
 #include "zf_common_headfile.h"
 #include "Menu.h"
 #include "Motor.h" 
+#include "pid.h"
 #define KEY1                    (E2 )
 #define KEY2                    (E3 )
 #define KEY3                    (E4 )
@@ -32,10 +33,10 @@ void Scan_Key(){
 			}
 			else if(CS_Change_Flag==1){
 				switch(G_Num){
-					case 1:Kp--;ips200_show_int (70, 164,Kp,2);break;
-					case 2:Ki--;ips200_show_int (70, 180,Ki,2);break;
-					case 3:Kd--;ips200_show_int (70, 196,Kd,2);break;
-					case 4:Speed--;ips200_show_int (70, 212,Speed,2);break;
+					case 1:Kp-=0.01;ips200_show_float (70, 164,Kp,2,2);break;
+					case 2:Ki-=0.01;ips200_show_float (70, 180,Ki,2,2);break;
+					case 3:Kd-=0.01;ips200_show_float (70, 196,Kd,2,2);break;
+					case 4:Speed-=100;ips200_show_float (70, 212,Speed,4,2);break;
 				}
 			}
 		}
@@ -52,10 +53,10 @@ void Scan_Key(){
 			}
 			else if(CS_Change_Flag==1){
 				switch(G_Num){
-					case 1:Kp++;ips200_show_int (70, 164,Kp,2);break;
-					case 2:Ki++;ips200_show_int (70, 180,Ki,2);break;
-					case 3:Kd++;ips200_show_int (70, 196,Kd,2);break;
-					case 4:Speed++;ips200_show_int (70, 212,Speed,2);break;
+					case 1:Kp+=0.01;ips200_show_float (70, 164,Kp,2,2);;break;
+					case 2:Ki+=0.01;ips200_show_float (70, 180,Ki,2,2);;break;
+					case 3:Kd+=0.01;ips200_show_float (70, 196,Kd,2,2);;break;
+					case 4:Speed+=100;ips200_show_float (70, 212,Speed,4,2);break;
 				}
 			}
 		}
@@ -82,7 +83,7 @@ void Scan_Key(){
 								if(Car_Flag==0){
 									ips200_show_string(0, 300, " GO!");
 									Car_Flag=1;
-									Motor_SetSpeed(PWM_change(Speed),PWM_change(Speed));
+									Motor_SetSpeed(0,0); //
 									break;
 								}
 								else{
@@ -109,6 +110,7 @@ void Scan_Key(){
 				}
 					else{
 						CS_Change_Flag=0;
+						Target=Speed;
 						
 					}
 				}break;

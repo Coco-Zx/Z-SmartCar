@@ -7,10 +7,8 @@ extern char CS_GB;//????
 extern char CS_Change_Flag;//???????
 
 //????
-extern int Kp;
-extern int Ki;
-extern int Kd;
-extern int Speed;
+
+extern float Speed;
 
 void Dis_CD0();
 void Dis_CD1();

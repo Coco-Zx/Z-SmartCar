@@ -1,16 +1,15 @@
 #include "zf_common_headfile.h"
 #include "Motor.h" 
 #include "Encoder.h"
+#include "pid.h"
 int G_Num=1;//????
 char C_Num=0;//????
 char CS_GB=0;//????
 char CS_Change_Flag=0;//???????
 
 
-int Kp=50;
-int Ki=40;
-int Kd=30;
-int Speed=20;
+
+float Speed=0.0;
 void Dis_CD0(){
 	
 			ips200_show_string(10, 132, "MainMenu  ");
@@ -52,14 +51,19 @@ void Dis_CD3(){
 			ips200_show_string(10, 180, "Ki=       ");
 			ips200_show_string(10, 196, "Kd=       ");
 			ips200_show_string(10, 212, "Speed=    ");
+	
+	        ips200_show_string(10, 250, "Actual=   ");
+			ips200_show_string(10, 290, "Out=      ");
+			
 		
-			ips200_show_int (70, 164,Kp,2);
-			ips200_show_int (70, 180,Ki,2);
-			ips200_show_int (70, 196,Kd,2);
-			ips200_show_int (70, 212,Speed,2);
+			ips200_show_float (70, 164,Kp,2,2);
+			ips200_show_float (70, 180,Ki,2,2);
+			ips200_show_float (70, 196,Kd,2,2);
+			ips200_show_float (70, 212,Speed,4,2);
 	//
-	        ips200_show_int (70, 250,E_Num1,5);
-			ips200_show_int (70, 270,E_Num2,5);
+	        ips200_show_float (70, 250,Actual,4,2);
+			ips200_show_float (70, 270,E_Num2,4,2);
+			
 		
 }
 void Dis_GB(){

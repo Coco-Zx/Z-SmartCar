@@ -35,7 +35,7 @@ void MotorL_SetSpeed(int pwm){//10000
 }
 
 void Motor_SetSpeed(int pwmL,int pwmR){//10000
-	MotorL_SetSpeed(pwmL);
+	//MotorL_SetSpeed(pwmL);
 	MotorR_SetSpeed(pwmR);
 }
 int PWM_change(int x){
