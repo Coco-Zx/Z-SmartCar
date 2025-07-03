@@ -7,6 +7,7 @@
 #/*
 #!/Z-SC/  只保留某目录
 
-/libraries/*
+
 /Z-SC/*
 !/Z-SC/user
+!/Z-SC/HardWare
