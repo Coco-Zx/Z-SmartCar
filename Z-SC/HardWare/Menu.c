@@ -1,5 +1,6 @@
 #include "zf_common_headfile.h"
 #include "Motor.h" 
+#include "Encoder.h"
 int G_Num=1;//????
 char C_Num=0;//????
 char CS_GB=0;//????
@@ -31,17 +32,16 @@ void Dis_CD1(){
 }
 void Dis_CD2(){
 			
-			ips200_show_string(10, 132, "Setting   ");
+			ips200_show_string(10, 132, "View      ");
 			ips200_show_string(0, 164, ">");
-			ips200_show_string(10, 164, "Kp=       ");
-			ips200_show_string(10, 180, "Ki=       ");
-			ips200_show_string(10, 196, "Kd=       ");
-			ips200_show_string(10, 212, "Speed=    ");
+			ips200_show_string(10, 164, "E1=       ");
+			ips200_show_string(10, 180, "E2=       ");
+			ips200_show_string(10, 196, "          ");
+			ips200_show_string(10, 212, "          ");
 	
-			ips200_show_int (70, 164,Kp,2);
-			ips200_show_int (70, 180,Ki,2);
-			ips200_show_int (70, 196,Kd,2);
-			ips200_show_int (70, 212,Speed,2);
+			ips200_show_int (70, 164,E_Num1,4);
+			ips200_show_int (70, 180,E_Num2,4);
+			
 		
 }
 void Dis_CD3(){

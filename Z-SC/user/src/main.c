@@ -37,6 +37,7 @@
 #include "Menu.h"
 #include "Key.h"
 #include "Motor.h"
+#include "Encoder.h"
 // 打开新的工程或者工程移动了位置务必执行以下操作
 // 第一步 关闭上面所有打开的文件
 // 第二步 project->clean  等待下方进度条走完
@@ -127,23 +128,20 @@ void All_Init(){
 	gpio_init(LED1, GPO, GPIO_HIGH, GPO_PUSH_PULL);                             // 初始化 LED1 输出 默认高电平 推挽输出模式
     gpio_init(LED2, GPO, GPIO_HIGH, GPO_PUSH_PULL);                             // 初始化 LED2 输出 默认高电平 推挽输出模式
 	
-	encoder_quad_init(TIM3_ENCODER, TIM3_ENCODER_CH1_B4, TIM3_ENCODER_CH2_B5);
-	encoder_quad_init(TIM4_ENCODER, TIM4_ENCODER_CH1_B6, TIM4_ENCODER_CH2_B7);
 	
+	Encoder_Init();
 	ips200_clear();
 	
 	//编码器，中断初始化
 }
 
 
-void TIM2_IRQHandler (void)
-{
+void pit2_handler(){
     T_Counter++;
 	Scan_Key();
 	if(T_Counter%5==0){
 		Dis_GB();
 	}
-    TIM2->SR &= ~TIM2->SR;                                                      // 清空中断状态
 }
 
 
