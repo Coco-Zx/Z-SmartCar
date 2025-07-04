@@ -90,7 +90,7 @@ int main (void)
 	
     while(1)
     {
-		
+
         
 		
     }
@@ -137,7 +137,8 @@ void pit2_handler(){
 		{
 			memcpy(image_copy, mt9v03x_image, MT9V03X_H*MT9V03X_W);
 			//filter();
-			ips200_show_gray_image(0, 0, (const uint8 *)image_copy, MT9V03X_W, MT9V03X_H, MT9V03X_W, MT9V03X_H, DJthreshold());
+			uint8 threshold=DJthreshold();
+			ips200_show_gray_image(0, 0, (const uint8 *)image_copy, MT9V03X_W, MT9V03X_H, MT9V03X_W, MT9V03X_H,threshold);
 			mt9v03x_finish_flag=0;
 		}
 	Scan_Key();
