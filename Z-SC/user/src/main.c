@@ -39,6 +39,7 @@
 #include "Motor.h"
 #include "Encoder.h"
 #include "YUdeal.h" 
+#include "pid.h"
 // 打开新的工程或者工程移动了位置务必执行以下操作
 // 第一步 关闭上面所有打开的文件
 // 第二步 project->clean  等待下方进度条走完
@@ -91,7 +92,7 @@ int main (void)
     while(1)
     {
 
-        
+        printf("%f %f %f\r\n",Target,Actual,Out);
 		
     }
 }
@@ -139,6 +140,7 @@ void pit2_handler(){
 			//filter();
 			uint8 threshold=DJthreshold();
 			ips200_show_gray_image(0, 0, (const uint8 *)image_copy, MT9V03X_W, MT9V03X_H, MT9V03X_W, MT9V03X_H,threshold);
+			ips200_show_int (100,230,threshold,5);
 			mt9v03x_finish_flag=0;
 		}
 	Scan_Key();
