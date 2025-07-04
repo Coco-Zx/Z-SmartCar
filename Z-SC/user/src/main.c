@@ -38,6 +38,7 @@
 #include "Key.h"
 #include "Motor.h"
 #include "Encoder.h"
+#include "YUdeal.h" 
 // 打开新的工程或者工程移动了位置务必执行以下操作
 // 第一步 关闭上面所有打开的文件
 // 第二步 project->clean  等待下方进度条走完
@@ -135,7 +136,7 @@ void pit2_handler(){
 	if(mt9v03x_finish_flag)
 		{
 			memcpy(image_copy, mt9v03x_image, MT9V03X_H*MT9V03X_W);
-			ips200_show_gray_image(0, 0, (const uint8 *)image_copy, MT9V03X_W, MT9V03X_H, MT9V03X_W, MT9V03X_H, 0);
+			ips200_show_gray_image(0, 0, (const uint8 *)image_copy, MT9V03X_W, MT9V03X_H, MT9V03X_W, MT9V03X_H, DJthreshold());
 			mt9v03x_finish_flag=0;
 		}
 	Scan_Key();
