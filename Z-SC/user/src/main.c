@@ -133,9 +133,10 @@ void All_Init(){
 
 void pit2_handler(){
     T_Counter++;
-	if(mt9v03x_finish_flag)
+	if(mt9v03x_finish_flag&&C_Num==3)
 		{
 			memcpy(image_copy, mt9v03x_image, MT9V03X_H*MT9V03X_W);
+			//filter();
 			ips200_show_gray_image(0, 0, (const uint8 *)image_copy, MT9V03X_W, MT9V03X_H, MT9V03X_W, MT9V03X_H, DJthreshold());
 			mt9v03x_finish_flag=0;
 		}
