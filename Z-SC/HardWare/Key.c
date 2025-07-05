@@ -21,9 +21,8 @@ void Scan_Key(){
 		case 2:Max=4;break;
 		case 3:Max=4;break;
 	}
-	if(!gpio_get_level(KEY2)) {
-		system_delay_ms(100);
-		if(!gpio_get_level(KEY2)) {
+	if(key_get_state(KEY_2)==KEY_SHORT_PRESS) {
+		key_clear_state(KEY_2); 
 			if(CS_Change_Flag==0){
 				G_Num++;
 				if(G_Num > Max)
@@ -39,11 +38,10 @@ void Scan_Key(){
 					case 4:Speed-=100;ips200_show_float (70, 212,Speed,4,2);break;
 				}
 			}
-		}
+		
 	}
-	if(!gpio_get_level(KEY1)) {
-		system_delay_ms(100);
-		if(!gpio_get_level(KEY1)) {
+	if(key_get_state(KEY_1)==KEY_SHORT_PRESS) {
+		key_clear_state(KEY_1);
 			if(CS_Change_Flag==0){
 				G_Num--;
 				if(G_Num <1)
@@ -59,22 +57,20 @@ void Scan_Key(){
 					case 4:Speed+=100;ips200_show_float (70, 212,Speed,4,2);break;
 				}
 			}
-		}
+		
 	}
-	if(!gpio_get_level(KEY4)) {
-		system_delay_ms(100);
-		if(!gpio_get_level(KEY4)) {
+	if(key_get_state(KEY_4)==KEY_SHORT_PRESS) {
+		key_clear_state(KEY_4);
 			if(CS_Change_Flag==0){
 			C_Num=0;
 			ips200_clear();
 			Dis_CD0();
 			G_Num=1;
 			}
-		}
+		
 	}
-	if(!gpio_get_level(KEY3)) {
-		system_delay_ms(100);
-		if(!gpio_get_level(KEY3)) {
+	if(key_get_state(KEY_3)==KEY_SHORT_PRESS) {
+		key_clear_state(KEY_3);
 			switch(C_Num){
 				case 0:
 				{
@@ -119,5 +115,5 @@ void Scan_Key(){
 			}
 			
 		}
-	}
+	
 }

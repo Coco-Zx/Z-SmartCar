@@ -89,6 +89,7 @@ int main (void)
 	All_Init();
     Dis_CD0();
 	pit_ms_init(TIM2_PIT,20);
+	pit_ms_init(TIM7_PIT,20);
 	
     while(1)
     {
@@ -114,7 +115,8 @@ void All_Init(){
 	clock_init(SYSTEM_CLOCK_120M);                                              // 初始化芯片时钟 工作频率为 120MHz
     debug_init();                                                               // 初始化默认 Debug UART
 	system_delay_ms(300);
-	ips200_init(IPS200_TYPE_SPI);                                               //ips初始化
+	ips200_init(IPS200_TYPE_SPI);   	//ips初始化
+	key_init(5);
 	Key_Init();
 	Motor_Init();
 	Encoder_Init();
@@ -143,25 +145,29 @@ void All_Init(){
 
 void pit2_handler(){
     T_Counter++;
-	if(mt9v03x_finish_flag&&C_Num==3)
-		{
-			memcpy(image_copy, mt9v03x_image, MT9V03X_H*MT9V03X_W);
-			//filter();
-			uint8 threshold=DJthreshold(image_copy);
-			Set_image_T(threshold);
-			find_JD(image_copy);
-			find_BX(image_copy);
-			Draw_Line();
-			ips200_show_gray_image(0, 0, (const uint8 *)image_copy, MT9V03X_W, MT9V03X_H, MT9V03X_W, MT9V03X_H,0);
-			
-			mt9v03x_finish_flag=0;
-		}
-	Scan_Key();
+	
+//	if(mt9v03x_finish_flag&&C_Num==3)
+//		{
+//			memcpy(image_copy, mt9v03x_image, MT9V03X_H*MT9V03X_W);
+//			//filter();
+//			uint8 threshold=DJthreshold(image_copy);
+//			Set_image_T(threshold);
+//			find_JD(image_copy);
+//			find_BX(image_copy);
+//			Draw_Line();
+//			ips200_show_gray_image(0, 0, (const uint8 *)image_copy, MT9V03X_W, MT9V03X_H, MT9V03X_W, MT9V03X_H,0);
+//			
+//			mt9v03x_finish_flag=0;
+//		}
+	
 	if(T_Counter%5==0){
 		Dis_GB();
 	}
 }
-
+void pit7_handler(){
+    key_scanner();
+	Scan_Key();
+}
 
 
 
