@@ -1,9 +1,6 @@
 #include "zf_common_headfile.h"
-#define Gray 255
-#define P_Sum MT9V03X_H*MT9V03X_W
-#define S_P_Sum  S_MT9V03X_H*S_MT9V03X_W
-#define S_MT9V03X_H  120
-#define S_MT9V03X_W  188
+#include "YUdeal.h" 
+
 void filter(){
 	uint8 (*ptr)[S_MT9V03X_H][S_MT9V03X_W]=&image_copy;
 	uint16 i;
@@ -40,7 +37,13 @@ uint8 DJthreshold(){
 	uint16 MinV,MaxV;
 	
 	for(MinV=0;MinV<Gray&&histogram[MinV]==0;MinV++);
-	for(MaxV=Gray;MaxV>MinV&&histogram[MaxV]==0;MinV--);
+	for(MaxV=Gray;MaxV>MinV&&histogram[MaxV]==0;MaxV--);
+	if(MinV==MaxV){
+		return (uint8)MinV;
+	}
+	if(MinV+1==MaxV){
+		return (uint8)MaxV;
+	}
 	
 	uint16 b_back=0,b_front=0;
 	uint32 u_back_sum=0,u_front_sum=0;
@@ -65,4 +68,37 @@ uint8 DJthreshold(){
 	}
 	
 	return threshold;
+}
+
+//uint8 DJ(uint8 index[S_MT9V03X_H][S_MT9V03X_W]){
+//	uint8 threshold;
+//	uint8 temp;
+//	
+//	float SumP=0;
+//	float SumM=0;
+//	float Var=0;
+//	float Vartemp;
+//	
+//	for(uint16 i=0;i<Gray;i++){
+//		
+//	}
+//	
+//	return threshold;
+//}
+void Set_image_T(uint8 value){
+	uint8 temp_value;
+	uint8 (*ptr)[S_MT9V03X_H][S_MT9V03X_W]=&image_copy;
+	uint16 i;
+	uint16 j;
+	for(i=0;i<=S_MT9V03X_H;i++){
+		for(j=0;j<=S_MT9V03X_W;j++){
+			temp_value=(*ptr)[i][j];
+			if(temp_value<value){
+				(*ptr)[i][j]=0;
+			}
+			else{
+				(*ptr)[i][j]=255;
+			}
+		}		
+	}
 }
