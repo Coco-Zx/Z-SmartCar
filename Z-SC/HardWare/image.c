@@ -204,9 +204,9 @@ void find_BX(uint8 index[S_MT9V03X_H][S_MT9V03X_W]){
 
 
 void Draw_Line(){
-	for(uint8 i=S_MT9V03X_H-1;i>BX_Search_End;i++){
-		ips200_draw_point (BX_L_List[i],i,RGB565_RED);
-		ips200_draw_point (BX_R_List[i],i,RGB565_RED);
+	for(uint8 i=S_MT9V03X_H-1;i>BX_Search_End;i--){
+		ips200_draw_point (BX_L_List[i],i,RGB565_YELLOW);
+		ips200_draw_point (BX_R_List[i],i,RGB565_GREEN);
 		ips200_draw_point (M_M_List[i],i,RGB565_RED);
 	}
 

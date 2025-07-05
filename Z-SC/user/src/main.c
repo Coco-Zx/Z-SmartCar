@@ -92,19 +92,19 @@ int main (void)
 	
     while(1)
     {
-		if(mt9v03x_finish_flag&&C_Num==3)
-		{
-			memcpy(image_copy, mt9v03x_image, MT9V03X_H*MT9V03X_W);
-			//filter();
-			//uint8 threshold=DJthreshold();
-			//ips200_show_int (100,230,threshold,3);
-			//Set_image_T(threshold);
-			//find_JD(image_copy);
-			//find_BX(image_copy);
-			ips200_show_gray_image(0, 0, (const uint8 *)image_copy, MT9V03X_W, MT9V03X_H, MT9V03X_W, MT9V03X_H,0);
-			
-			mt9v03x_finish_flag=0;
-		}
+//		if(mt9v03x_finish_flag&&C_Num==3)
+//		{
+//			memcpy(image_copy, mt9v03x_image, MT9V03X_H*MT9V03X_W);
+//			//filter();
+//			//uint8 threshold=DJthreshold();
+//			//ips200_show_int (100,230,threshold,3);
+//			//Set_image_T(threshold);
+//			//find_JD(image_copy);
+//			//find_BX(image_copy);
+//			ips200_show_gray_image(0, 0, (const uint8 *)image_copy, MT9V03X_W, MT9V03X_H, MT9V03X_W, MT9V03X_H,0);
+//			
+//			mt9v03x_finish_flag=0;
+//		}
         //printf("%f %f %f\r\n",Target,Actual,Out);
 		
     }
@@ -135,19 +135,27 @@ void All_Init(){
 	ips200_show_string(0, 16, "init success.");
 	system_delay_ms(1000);  
 	
-	gpio_init(LED1, GPO, GPIO_HIGH, GPO_PUSH_PULL);                             // 初始化 LED1 输出 默认高电平 推挽输出模式
-    gpio_init(LED2, GPO, GPIO_HIGH, GPO_PUSH_PULL);                             // 初始化 LED2 输出 默认高电平 推挽输出模式
-	
-	
 	ips200_clear();
 	
-	//编码器，中断初始化
+	
 }
 
 
 void pit2_handler(){
     T_Counter++;
-	
+	if(mt9v03x_finish_flag&&C_Num==3)
+		{
+			memcpy(image_copy, mt9v03x_image, MT9V03X_H*MT9V03X_W);
+			//filter();
+			uint8 threshold=DJthreshold(image_copy);
+			Set_image_T(threshold);
+			find_JD(image_copy);
+			find_BX(image_copy);
+			Draw_Line();
+			ips200_show_gray_image(0, 0, (const uint8 *)image_copy, MT9V03X_W, MT9V03X_H, MT9V03X_W, MT9V03X_H,0);
+			
+			mt9v03x_finish_flag=0;
+		}
 	Scan_Key();
 	if(T_Counter%5==0){
 		Dis_GB();
