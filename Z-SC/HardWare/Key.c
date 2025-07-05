@@ -59,15 +59,18 @@ void Scan_Key(){
 			}
 		
 	}
-	if(key_get_state(KEY_4)==KEY_SHORT_PRESS) {
-		key_clear_state(KEY_4);
+	if(!gpio_get_level(KEY4)) {
+		system_delay_ms(100);
+		if(!gpio_get_level(KEY4)){
+//	if(key_get_state(KEY_4)==KEY_SHORT_PRESS) {
+//		key_clear_state(KEY_4);
 			if(CS_Change_Flag==0){
 			C_Num=0;
 			ips200_clear();
 			Dis_CD0();
 			G_Num=1;
 			}
-		
+		}
 	}
 	if(key_get_state(KEY_3)==KEY_SHORT_PRESS) {
 		key_clear_state(KEY_3);
