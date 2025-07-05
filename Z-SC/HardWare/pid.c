@@ -4,10 +4,10 @@
 #include "Motor.h"
 float Target,Actual,Out;
 float Kp=0,Ki=0,Kd=0;
-float Err0,Err1,ErrI;
+float Err0,Err1,ErrI,Err2;
 
 
-void pid(){
+void pid_W(){
 	
 	
 	Actual=E_Num1;
@@ -22,6 +22,28 @@ void pid(){
 	}
 	
 	Out=Kp*Err0+Ki*ErrI+Kd*(Err0-Err1);
+	
+	if(Out>4000){
+		Out=4000;
+	}
+	if(Out<-4000){
+		Out=-4000;
+	}
+	
+	MotorR_SetSpeed(Out);
+}
+
+void pid_Z(){
+	
+	
+	Actual=E_Num1;
+	
+	Err2=Err1;
+	Err1=Err0;
+	Err0=Target -Actual;
+	
+	
+	Out+=Kp*(Err0-Err1)+Ki*Err0+Kd*(Err0-2*Err1+Err2);
 	
 	if(Out>4000){
 		Out=4000;

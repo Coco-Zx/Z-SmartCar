@@ -2,5 +2,7 @@
 #define __PID_H
 extern float Kp,Ki,Kd;
 extern float Target,Actual,Out;
-void pid();
+
+void pid_W();
+void pid_Z();
 #endif
