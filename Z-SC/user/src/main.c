@@ -106,7 +106,7 @@ int main (void)
 //			
 //			mt9v03x_finish_flag=0;
 //		}
-       //printf("%f %f %f\r\n",Target,Actual ,Out );
+       printf("%f %f %f\r\n",Inner.Target,Inner.Actual ,Inner.Out );
 		
     }
 }

@@ -1,6 +1,7 @@
 #include "zf_common_headfile.h"
 #include "Menu.h" 
 #include "pid.h"
+#include "Motor.h" 
 #define ENCODER_QUADDEC1                (TIM3_ENCODER)                          // 正交编码器对应使用的编码器接口 这里使用 TIM3 的编码器功能
 #define ENCODER_QUADDEC1_A               (TIM3_ENCODER_CH1_B4)                   // A 相对应的引脚
 #define ENCODER_QUADDEC1_B               (TIM3_ENCODER_CH2_B5)                   // B 相对应的引脚
@@ -23,7 +24,11 @@ void pit6_handler(){
     E_Num2= encoder_get_count(ENCODER_QUADDEC2);                          // 获取编码器计数
     encoder_clear_count(ENCODER_QUADDEC1);                                       // 清空编码器计数
     encoder_clear_count(ENCODER_QUADDEC2);                                           // 清空编码器计数
-	pid_W();
+	
+	Inner.Actual=E_Num1;
+	PID_Update(&Inner);
+	MotorR_SetSpeed(Inner.Out);
+	
 	if(C_Num==3){  //正常为2
 		//ips200_show_int (70, 164,E_Num1,5);
 		//ips200_show_int (70, 180,E_Num2,5);

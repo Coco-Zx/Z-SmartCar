@@ -211,3 +211,34 @@ void Draw_Line(){
 	}
 
 }
+
+uint8 M_W_List[120]=
+{
+	1,1,1,1,1,1,1,1,1,1,
+	1,1,1,1,1,1,1,1,1,1,
+	1,1,1,1,1,1,1,1,1,1,
+	1,1,1,1,1,1,1,1,1,1,
+	1,1,1,1,1,1,1,1,1,1,
+	6,6,6,6,6,6,6,6,6,6,
+	7,8,9,10,11,12,13,14,15,16,
+	17,18,19,20,20,20,20,19,18,17,
+	16,15,14,13,12,11,10,9,8,7,
+	6,6,6,6,6,6,6,6,6,6,
+	1,1,1,1,1,1,1,1,1,1,
+	1,1,1,1,1,1,1,1,1,1,
+};
+uint8 Last_M_Out=94;
+uint8 M_Weight(){
+	uint8 M_Out;
+	uint8 M_Value;
+	uint32 M_W_Sum=0;
+	uint32 W_Sum=0;
+	for(uint8 i=S_MT9V03X_H-1;i>BX_Search_End;i--){
+		M_W_Sum+=M_M_List[i]*M_W_List[i];
+		W_Sum+=M_W_List[i];
+	}
+	M_Value=(uint8)(M_W_Sum/W_Sum);
+	M_Out=Last_M_Out*0.2+M_Value*0.8;
+	Last_M_Out=M_Out;
+	return M_Out;
+}

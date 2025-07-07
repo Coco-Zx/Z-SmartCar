@@ -32,9 +32,9 @@ void Scan_Key(){
 			}
 			else if(CS_Change_Flag==1){
 				switch(G_Num){
-					case 1:Kp-=0.01;ips200_show_float (70, 164,Kp,2,2);break;
-					case 2:Ki-=0.01;ips200_show_float (70, 180,Ki,2,2);break;
-					case 3:Kd-=0.01;ips200_show_float (70, 196,Kd,2,2);break;
+					case 1:Inner.Kp-=0.01;ips200_show_float (70, 164,Inner.Kp,2,2);break;
+					case 2:Inner.Ki-=0.01;ips200_show_float (70, 180,Inner.Ki,2,2);break;
+					case 3:Inner.Kd-=0.01;ips200_show_float (70, 196,Inner.Kd,2,2);break;
 					case 4:Speed-=100;ips200_show_float (70, 212,Speed,4,2);break;
 				}
 			}
@@ -51,9 +51,9 @@ void Scan_Key(){
 			}
 			else if(CS_Change_Flag==1){
 				switch(G_Num){
-					case 1:Kp+=0.01;ips200_show_float (70, 164,Kp,2,2);;break;
-					case 2:Ki+=0.01;ips200_show_float (70, 180,Ki,2,2);;break;
-					case 3:Kd+=0.01;ips200_show_float (70, 196,Kd,2,2);;break;
+					case 1:Inner.Kp+=0.01;ips200_show_float (70, 164,Inner.Kp,2,2);;break;
+					case 2:Inner.Ki+=0.01;ips200_show_float (70, 180,Inner.Ki,2,2);;break;
+					case 3:Inner.Kd+=0.01;ips200_show_float (70, 196,Inner.Kd,2,2);;break;
 					case 4:Speed+=100;ips200_show_float (70, 212,Speed,4,2);break;
 				}
 			}
