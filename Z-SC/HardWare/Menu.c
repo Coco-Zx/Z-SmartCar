@@ -2,14 +2,14 @@
 #include "Motor.h" 
 #include "Encoder.h"
 #include "pid.h"
-int G_Num=1;//????
-char C_Num=0;//????
-char CS_GB=0;//????
-char CS_Change_Flag=0;//???????
+int G_Num=1;//光标序号
+char C_Num=0;//菜单序号
+char CS_Change_Flag=0;//参数改变标志位
 
 
 
 float Speed=0.0;
+//主菜单显示
 void Dis_CD0(){
 	
 			ips200_show_string(10, 132, "MainMenu  ");
@@ -20,6 +20,7 @@ void Dis_CD0(){
 			ips200_show_string(10, 212, "Setting   ");
 		
 }
+//模式菜单显示
 void Dis_CD1(){
 	
 			ips200_show_string(10, 132, "MODE      ");
@@ -29,6 +30,7 @@ void Dis_CD1(){
 			ips200_show_string(10, 196, "Mode3     ");
 			ips200_show_string(10, 212, "          ");
 }
+//试图菜单显示
 void Dis_CD2(){
 			
 			ips200_show_string(10, 132, "View      ");
@@ -43,6 +45,7 @@ void Dis_CD2(){
 			
 		
 }
+//设置菜单显示
 void Dis_CD3(){
 	
 			ips200_show_string(10, 132, "Setting   ");
@@ -52,22 +55,28 @@ void Dis_CD3(){
 			ips200_show_string(10, 196, "Kd=       ");
 			ips200_show_string(10, 212, "Speed=    ");
 	
-	        ips200_show_string(10, 250, "Actual=   ");
-			ips200_show_string(10, 290, "Out=      ");
+	        ips200_show_string(10, 230, "ActualR=   ");
+			ips200_show_string(10, 250, "ActualL=   ");
+			ips200_show_string(10, 270, "OutR=      ");
+			ips200_show_string(10, 290, "OutL=      ");
 			
 		
-			ips200_show_float (70, 164,Kp,2,2);
-			ips200_show_float (70, 180,Ki,2,2);
-			ips200_show_float (70, 196,Kd,2,2);
+			ips200_show_float (70, 164,Inner_L.Kp,2,2);
+			ips200_show_float (70, 180,Inner_L.Ki,2,2);
+			ips200_show_float (70, 196,Inner_L.Kd,2,2);
 			ips200_show_float (70, 212,Speed,4,2);
-	//
-	        ips200_show_float (70, 250,Actual,4,2);
-			ips200_show_float (70, 270,E_Num2,4,2);
+	
+	        ips200_show_float (70, 250,Inner_L.Actual,4,2);
+	
+			ips200_show_float (70, 230,Inner_R.Actual,4,2);
+			
+			ips200_show_float (70, 270,Inner_R.Out,4,2);
+	        ips200_show_float (70, 290,Inner_L.Out,4,2);
 			
 		
 }
+//光标显示
 void Dis_GB(){
-	unsigned char k;
 	switch(C_Num){
 		case 0:
 		{

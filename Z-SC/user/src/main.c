@@ -86,10 +86,10 @@ void All_Init();
 
 int main (void)
 {
-	All_Init();
-    Dis_CD0();
-	pit_ms_init(TIM2_PIT,20);
-	pit_ms_init(TIM7_PIT,20);
+	All_Init();//全部初始化
+    Dis_CD0();//主页面菜单显示
+	pit_ms_init(TIM2_PIT,20);//屏幕刷新
+	pit_ms_init(TIM7_PIT,20);//按键
 	
     while(1)
     {
@@ -106,14 +106,15 @@ int main (void)
 //			
 //			mt9v03x_finish_flag=0;
 //		}
-       printf("%f %f %f\r\n",Inner.Target,Inner.Actual ,Inner.Out );
+		//ips200_show_float (70, 290,Inner.Out,4,2);
+    //   printf("%f %f %f\r\n",Inner_L.Target,Inner_L.Actual,Inner_L.Out );
 		
     }
 }
 
 void All_Init(){
 	clock_init(SYSTEM_CLOCK_120M);                                              // 初始化芯片时钟 工作频率为 120MHz
-    debug_init();                                                               // 初始化默认 Debug UART
+    debug_init();                                                               // 初始化默认 Debug UART 方便调pid
 	system_delay_ms(300);
 	ips200_init(IPS200_TYPE_SPI);   	//ips初始化
 	key_init(5);
@@ -155,6 +156,8 @@ void pit2_handler(){
 			find_JD(image_copy);
 			find_BX(image_copy);
 			Draw_Line();
+			uint8 M_W_Finally=M_Weight();
+			ips200_show_float (90, 290, M_W_Finally,4,2);
 			ips200_show_gray_image(0, 0, (const uint8 *)image_copy, MT9V03X_W, MT9V03X_H, MT9V03X_W, MT9V03X_H,0);
 			
 			mt9v03x_finish_flag=0;

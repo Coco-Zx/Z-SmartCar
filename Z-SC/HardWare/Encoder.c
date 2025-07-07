@@ -2,38 +2,43 @@
 #include "Menu.h" 
 #include "pid.h"
 #include "Motor.h" 
-#define ENCODER_QUADDEC1                (TIM3_ENCODER)                          // Õı½»±àÂëÆ÷¶ÔÓ¦Ê¹ÓÃµÄ±àÂëÆ÷½Ó¿Ú ÕâÀïÊ¹ÓÃ TIM3 µÄ±àÂëÆ÷¹¦ÄÜ
-#define ENCODER_QUADDEC1_A               (TIM3_ENCODER_CH1_B4)                   // A Ïà¶ÔÓ¦µÄÒı½Å
-#define ENCODER_QUADDEC1_B               (TIM3_ENCODER_CH2_B5)                   // B Ïà¶ÔÓ¦µÄÒı½Å
+#define ENCODER_QUADDEC1                (TIM3_ENCODER)                      
+#define ENCODER_QUADDEC1_A               (TIM3_ENCODER_CH1_B4)              
+#define ENCODER_QUADDEC1_B               (TIM3_ENCODER_CH2_B5)              
  
-#define ENCODER_QUADDEC2                 (TIM4_ENCODER)                          //Õı½»±àÂëÆ÷¶ÔÓ¦Ê¹ÓÃµÄ±àÂëÆ÷½Ó¿Ú ÕâÀïÊ¹ÓÃ TIM3 µÄ±àÂëÆ÷¹¦ÄÜ
-#define ENCODER_QUADDEC2_A               (TIM4_ENCODER_CH1_B6)                   // A Ïà¶ÔÓ¦µÄÒı½Å
-#define ENCODER_QUADDEC2_B               (TIM4_ENCODER_CH2_B7)                   // B Ïà¶ÔÓ¦µÄÒı½Å
+#define ENCODER_QUADDEC2                 (TIM4_ENCODER)                     
+#define ENCODER_QUADDEC2_A               (TIM4_ENCODER_CH1_B6)              
+#define ENCODER_QUADDEC2_B               (TIM4_ENCODER_CH2_B7)                
 int E_Num1;
-int E_Num2;
+int E_Num2;//ç¼–ç å™¨æ•°å€¼
+//ç¼–ç å™¨åˆå§‹åŒ–
 void Encoder_Init(){
 	encoder_quad_init(TIM3_ENCODER, TIM3_ENCODER_CH1_B4, TIM3_ENCODER_CH2_B5);
 	encoder_quad_init(TIM4_ENCODER, TIM4_ENCODER_CH1_B6, TIM4_ENCODER_CH2_B7);
 	
-	pit_ms_init(TIM6_PIT, 80);                                                      // ³õÊ¼»¯ PIT ÎªÖÜÆÚÖĞ¶Ï 100ms ÖÜÆÚ
+	pit_ms_init(TIM6_PIT, 80);                                            
 
-    interrupt_set_priority(TIM6_IRQn, 0);                                    // ÉèÖÃ PIT ¶ÔÖÜÆÚÖĞ¶ÏµÄÖĞ¶ÏÓÅÏÈ¼¶Îª 0
+    interrupt_set_priority(TIM6_IRQn, 0);                                 
 }
 void pit6_handler(){
-    E_Num1= -encoder_get_count(ENCODER_QUADDEC1);                  // »ñÈ¡±àÂëÆ÷¼ÆÊı
-    E_Num2= encoder_get_count(ENCODER_QUADDEC2);                          // »ñÈ¡±àÂëÆ÷¼ÆÊı
-    encoder_clear_count(ENCODER_QUADDEC1);                                       // Çå¿Õ±àÂëÆ÷¼ÆÊı
-    encoder_clear_count(ENCODER_QUADDEC2);                                           // Çå¿Õ±àÂëÆ÷¼ÆÊı
+    E_Num1= -encoder_get_count(ENCODER_QUADDEC1);                  
+    E_Num2= encoder_get_count(ENCODER_QUADDEC2);     //è¯»å–æ•°å€¼              
+    encoder_clear_count(ENCODER_QUADDEC1);                         
+    encoder_clear_count(ENCODER_QUADDEC2);            //æ¸…ç©ºè®¡æ•°             
 	
-	Inner.Actual=E_Num1;
-	PID_Update(&Inner);
-	MotorR_SetSpeed(Inner.Out);
+	Inner_L.Actual=E_Num2;
+	Inner_R.Actual=E_Num1;   //å®é™…è°ƒé€Ÿèµ‹å€¼
+	PID_Update(&Inner_L);    //PID
+	PID_Update(&Inner_R); 
+	MotorL_SetSpeed(Inner_L.Out);//å·¦è½®PID
+	MotorR_SetSpeed(Inner_R.Out);
+	ips200_show_float (70, 270,Inner_R.Out,4,2);
+	ips200_show_float (70, 290,Inner_L.Out,4,2);
 	
-	if(C_Num==3){  //Õı³£Îª2
+	if(C_Num==3){  
 		//ips200_show_int (70, 164,E_Num1,5);
 		//ips200_show_int (70, 180,E_Num2,5);
-		ips200_show_float (70, 250,E_Num1,4,2);
-	    ips200_show_float (70, 270,E_Num2,4,2);
-		ips200_show_float (70, 290,Out,4,2);
+		ips200_show_float (70, 230,Inner_R.Actual,4,2);
+	    ips200_show_float (70, 250,Inner_L.Actual,4,2);//å®é™…é€Ÿåº¦è¾“å‡º
 	}
 }

@@ -7,13 +7,23 @@ float Target,Actual,Out;
 float Kp=0,Ki=0,Kd=0;
 float Err0,Err1,ErrI,Err2;
 
-PID Inner={
-	.Kp=0,
-	.Ki=0,
+//右轮pid结构体定义
+PID Inner_R={
+	.Kp=1.0,
+	.Ki=0.11,
+	.Kd=0,
+	.OutMax=4000,//限幅
+	.OutMin=-4000,
+};
+//左轮pid结构体定义
+PID Inner_L={
+	.Kp=0.88,
+	.Ki=0.11,
 	.Kd=0,
 	.OutMax=4000,
 	.OutMin=-4000,
 };
+//中线外环pid定义
 PID Outer={
 	.Kp=0,
 	.Ki=0,
@@ -21,27 +31,34 @@ PID Outer={
 	.OutMax=4000,
 	.OutMin=-4000,
 };
+//pid封装
 void PID_Update(PID *p){
 	p->Err1=p->Err0;
-	p->Err0=p->Target - p->Actual;
+	p->Err0=p->Target - p->Actual;//数据读取
 	
-	if(p->ErrI!=0){
-		p->ErrI+=p->Err0;
-	}
-	else{
-		p->ErrI=0;
-	}
+//	if(p->ErrI!=0){
+		p->ErrI+=p->Err0;//积分项累加
+//	}
+//	else{
+//		p->ErrI=0;
+//	}
 	p->Out =p->Kp*p->Err0 
 		   +p->Ki*p->ErrI
-		   +p->Kd*(p->Err0-p->Err1);
+		   +p->Kd*(p->Err0-p->Err1);//输出
 	
 	if(p->Out>p->OutMax){
 		p->Out=p->OutMax;
 	}
 	if(p->Out<p->OutMin){
-		p->Out=p->OutMin;
+		p->Out=p->OutMin;//限幅
 	}
 }
+
+
+
+//以下未封装
+
+//位置式PID
 void pid_W(){
 	
 	
@@ -74,7 +91,7 @@ void pid_W(){
 	
 	MotorR_SetSpeed(Out);
 }
-
+//增量式PID
 void pid_Z(){
 	
 	

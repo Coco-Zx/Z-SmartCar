@@ -1,21 +1,22 @@
 #include "zf_common_headfile.h"
 #include "YUdeal.h"
 
-#define JD_Search_Line  S_MT9V03X_H
-#define BX_Search_Start S_MT9V03X_H
-#define BX_Search_End   30
-#define BX_L_R          10
-#define BX_L_L          5
-#define BX_R_R          5
-#define BX_R_L          10
-#define M_M             93
+#define JD_Search_Line  S_MT9V03X_H   //基点搜寻起始行
+#define BX_Search_Start S_MT9V03X_H   //边线搜寻起始行
+#define BX_Search_End   30			  //边线搜寻终止行
+#define BX_L_R          10            //左边线-右搜寻
+#define BX_L_L          5			  //左边线-左搜寻
+#define BX_R_R          5			  //右边线-右搜寻
+#define BX_R_L          10            //右边线-左搜寻
+#define M_M             93			  //中间行
 
-uint8   BX_L_List[S_MT9V03X_H];
-uint8   BX_R_List[S_MT9V03X_H];
-uint8   M_M_List[S_MT9V03X_H];
+uint8   BX_L_List[S_MT9V03X_H];//左边线
+uint8   BX_R_List[S_MT9V03X_H];//右边线
+uint8   M_M_List[S_MT9V03X_H];//中线
 
-uint8 JD_L,JD_R;
+uint8 JD_L,JD_R;//左右基点
 void find_JD(uint8 index[S_MT9V03X_H][S_MT9V03X_W]){
+	//1/2处找基点
 	if(index[JD_Search_Line-1][S_MT9V03X_W/2]==255&&index[JD_Search_Line-1][S_MT9V03X_W/2+1]==255&&index[JD_Search_Line-1][S_MT9V03X_W/2-1]==255){
 		for(uint8 i=S_MT9V03X_W/2;i>0;i--){
 			if(index[JD_Search_Line-1][i-1]==0&&index[JD_Search_Line-1][i]==255&&index[JD_Search_Line-1][i+1]==255){
@@ -38,6 +39,7 @@ void find_JD(uint8 index[S_MT9V03X_H][S_MT9V03X_W]){
 			}
 		}
 	}
+	//3/4找基点
 	if(index[JD_Search_Line-1][S_MT9V03X_W*3/4]==255&&index[JD_Search_Line-1][S_MT9V03X_W*3/4+1]==255&&index[JD_Search_Line-1][S_MT9V03X_W*3/4-1]==255){
 		for(uint8 i=S_MT9V03X_W*3/4;i>0;i--){
 			if(index[JD_Search_Line-1][i-1]==0&&index[JD_Search_Line-1][i]==255&&index[JD_Search_Line-1][i+1]==255){
@@ -60,6 +62,7 @@ void find_JD(uint8 index[S_MT9V03X_H][S_MT9V03X_W]){
 			}
 		}
 	}
+	//1/4找基点
 	if(index[JD_Search_Line-1][S_MT9V03X_W*1/4]==255&&index[JD_Search_Line-1][S_MT9V03X_W*1/4+1]==255&&index[JD_Search_Line-1][S_MT9V03X_W*1/4-1]==255){
 		for(uint8 i=S_MT9V03X_W*1/4;i>0;i--){
 			if(index[JD_Search_Line-1][i-1]==0&&index[JD_Search_Line-1][i]==255&&index[JD_Search_Line-1][i+1]==255){
@@ -83,6 +86,7 @@ void find_JD(uint8 index[S_MT9V03X_H][S_MT9V03X_W]){
 		}
 	}
 }
+//限制函数
 uint8 Limit(uint8 a,uint8 b,uint8 c){
 	if(b>=a&&b<=c){
 		return b;
@@ -95,13 +99,16 @@ uint8 Limit(uint8 a,uint8 b,uint8 c){
 	}
 	return a;
 }
+//边线寻找
 void find_BX(uint8 index[S_MT9V03X_H][S_MT9V03X_W]){
 	uint8 Point_L=JD_L;
 	uint8 Point_R=JD_R;
+	//左边线寻找
 	for(uint8 i=BX_Search_Start-1;i>BX_Search_End;i--){
 		
-		uint8 L_Search_Flag=0;
-		uint8 ML_Search_Flag=0;
+		uint8 L_Search_Flag=0;//往左寻找标志位
+		uint8 ML_Search_Flag=0;//中左寻找标志位
+		//左边线往右找
 		for(uint8 j=Point_L;j<Point_L+BX_L_R;j++){
 			if(index[i][j-1]==0&&index[i][j]==255&&index[i][j+1]==255){
 				Point_L=j;
@@ -116,6 +123,7 @@ void find_BX(uint8 index[S_MT9V03X_H][S_MT9V03X_W]){
 				break;
 			}
 		}
+		//左边线往左找
 		if(L_Search_Flag==1){
 			for(uint8 j=Point_L;j>Point_L-BX_L_L;j--){
 				if(index[i][j-1]==0&&index[i][j]==255&&index[i][j+1]==255){
@@ -134,6 +142,7 @@ void find_BX(uint8 index[S_MT9V03X_H][S_MT9V03X_W]){
 		   }
 			
 	    }
+		//中间开始找左边线
 		if(ML_Search_Flag==1){
 			for(uint8 j=M_M;j>0;j--){
 				if(index[i][j-1]==0&&index[i][j]==255&&index[i][j+1]==255){
@@ -146,8 +155,9 @@ void find_BX(uint8 index[S_MT9V03X_H][S_MT9V03X_W]){
 				}
 		   }
 	   }
-		uint8 R_Search_Flag=0;
-		uint8 MR_Search_Flag=0;
+		uint8 R_Search_Flag=0;//往右寻找标志位
+		uint8 MR_Search_Flag=0;//中右寻找标志位;
+	   //右边线往左找
 		for(uint8 j=Point_R;j>Point_R-BX_R_L;j--){
 			if(index[i][j-1]==255&&index[i][j]==255&&index[i][j+1]==0){
 				Point_R=j;
@@ -162,6 +172,7 @@ void find_BX(uint8 index[S_MT9V03X_H][S_MT9V03X_W]){
 				break;
 			}
 		}
+		//右边线往右找
 		if(R_Search_Flag==1){
 			for(uint8 j=Point_R;j<Point_L+BX_R_R;j++){
 				if(index[i][j-1]==255&&index[i][j]==255&&index[i][j+1]==0){
@@ -180,6 +191,7 @@ void find_BX(uint8 index[S_MT9V03X_H][S_MT9V03X_W]){
 		   }
 			
 	    }
+		//中间开始找右边线
 		if(MR_Search_Flag==1){
 			for(uint8 j=M_M;j<S_MT9V03X_W-1;j++){
 				if(index[i][j-1]==255&&index[i][j]==255&&index[i][j+1]==0){
@@ -193,16 +205,16 @@ void find_BX(uint8 index[S_MT9V03X_H][S_MT9V03X_W]){
 		   }
 	   }
 	   
-	 //
+		//猪肺画线显示边线和中线
 	   BX_L_List[i]=Limit(1,Point_L,S_MT9V03X_W-2);
 	   BX_R_List[i]=Limit(1,Point_R,S_MT9V03X_W-2);
 	   M_M_List[i]=Limit(1,(BX_L_List[i]+BX_R_List[i])/2,S_MT9V03X_W-2);
 	   
-	   //猪肺画线显示边线和中线
+	   
 	}
 }
 
-
+//画中线和边线函数
 void Draw_Line(){
 	for(uint8 i=S_MT9V03X_H-1;i>BX_Search_End;i--){
 		ips200_draw_point (BX_L_List[i],i,RGB565_YELLOW);
@@ -211,7 +223,7 @@ void Draw_Line(){
 	}
 
 }
-
+//中线权重数组
 uint8 M_W_List[120]=
 {
 	1,1,1,1,1,1,1,1,1,1,
@@ -227,7 +239,8 @@ uint8 M_W_List[120]=
 	1,1,1,1,1,1,1,1,1,1,
 	1,1,1,1,1,1,1,1,1,1,
 };
-uint8 Last_M_Out=94;
+uint8 Last_M_Out=94;//中线权重最终输出
+//中线权重计算
 uint8 M_Weight(){
 	uint8 M_Out;
 	uint8 M_Value;

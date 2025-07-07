@@ -1,7 +1,7 @@
 #include "zf_common_headfile.h"
 #include "YUdeal.h" 
 
-void filter(){
+void filter(){//图像处理滤波
 	uint8 (*ptr)[S_MT9V03X_H][S_MT9V03X_W]=&image_copy;
 	uint16 i;
 	uint16 j;
@@ -15,7 +15,7 @@ void filter(){
 	}
 }
 
-uint8 DJthreshold(uint8 index[S_MT9V03X_H][S_MT9V03X_W]){
+uint8 DJthreshold(uint8 index[S_MT9V03X_H][S_MT9V03X_W]){//大津法处理阈值
 	uint16 histogram[Gray]={0};
 	uint32 Gray_Sum[Gray]={0};
 	uint8 threshold=0;
@@ -112,7 +112,7 @@ uint8 DJthreshold(uint8 index[S_MT9V03X_H][S_MT9V03X_W]){
 //}
 
 
-void Set_image_T(uint8 value){
+void Set_image_T(uint8 value){//二值化转换
 	uint8 temp_value;
 	uint8 (*ptr)[S_MT9V03X_H][S_MT9V03X_W]=&image_copy;
 	uint16 i;

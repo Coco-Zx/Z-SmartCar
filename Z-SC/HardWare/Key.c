@@ -6,13 +6,16 @@
 #define KEY2                    (E3 )
 #define KEY3                    (E4 )
 #define KEY4                    (E5 )
+//发车标志位
 char Car_Flag=0;
+//按键初始化
 void Key_Init(){
 	gpio_init(KEY1, GPI, GPIO_HIGH, GPI_PULL_UP);                               // ??? KEY1 ?? ????? ????
     gpio_init(KEY2, GPI, GPIO_HIGH, GPI_PULL_UP);                               // ??? KEY2 ?? ????? ????
     gpio_init(KEY3, GPI, GPIO_HIGH, GPI_PULL_UP);                               // ??? KEY3 ?? ????? ????
     gpio_init(KEY4, GPI, GPIO_HIGH, GPI_PULL_UP);                               // ??? KEY4 ?? ????? ????
 }
+//按键代码执行
 void Scan_Key(){
 	int Max;
 	switch(C_Num){
@@ -23,24 +26,24 @@ void Scan_Key(){
 	}
 	if(key_get_state(KEY_2)==KEY_SHORT_PRESS) {
 		key_clear_state(KEY_2); 
-			if(CS_Change_Flag==0){
+		if(CS_Change_Flag==0){//不调参情况下上下页翻动
 				G_Num++;
 				if(G_Num > Max)
 				{
 					G_Num=1;
 				}
 			}
-			else if(CS_Change_Flag==1){
+			else if(CS_Change_Flag==1){//调参情况下参数增减
 				switch(G_Num){
-					case 1:Inner.Kp-=0.01;ips200_show_float (70, 164,Inner.Kp,2,2);break;
-					case 2:Inner.Ki-=0.01;ips200_show_float (70, 180,Inner.Ki,2,2);break;
-					case 3:Inner.Kd-=0.01;ips200_show_float (70, 196,Inner.Kd,2,2);break;
+					case 1:Inner_L.Kp-=0.01;ips200_show_float (70, 164,Inner_L.Kp,2,2);break;
+					case 2:Inner_L.Ki-=0.01;ips200_show_float (70, 180,Inner_L.Ki,2,2);break;
+					case 3:Inner_L.Kd-=0.01;ips200_show_float (70, 196,Inner_L.Kd,2,2);break;
 					case 4:Speed-=100;ips200_show_float (70, 212,Speed,4,2);break;
 				}
 			}
 		
 	}
-	if(key_get_state(KEY_1)==KEY_SHORT_PRESS) {
+	if(key_get_state(KEY_1)==KEY_SHORT_PRESS) {//与上按键相同
 		key_clear_state(KEY_1);
 			if(CS_Change_Flag==0){
 				G_Num--;
@@ -51,15 +54,15 @@ void Scan_Key(){
 			}
 			else if(CS_Change_Flag==1){
 				switch(G_Num){
-					case 1:Inner.Kp+=0.01;ips200_show_float (70, 164,Inner.Kp,2,2);;break;
-					case 2:Inner.Ki+=0.01;ips200_show_float (70, 180,Inner.Ki,2,2);;break;
-					case 3:Inner.Kd+=0.01;ips200_show_float (70, 196,Inner.Kd,2,2);;break;
+					case 1:Inner_L.Kp+=0.01;ips200_show_float (70, 164,Inner_L.Kp,2,2);;break;
+					case 2:Inner_L.Ki+=0.01;ips200_show_float (70, 180,Inner_L.Ki,2,2);;break;
+					case 3:Inner_L.Kd+=0.01;ips200_show_float (70, 196,Inner_L.Kd,2,2);;break;
 					case 4:Speed+=100;ips200_show_float (70, 212,Speed,4,2);break;
 				}
 			}
 		
 	}
-	if(!gpio_get_level(KEY4)) {
+	if(!gpio_get_level(KEY4)) {//退出按键。返回主菜单，阻塞式
 		system_delay_ms(100);
 		if(!gpio_get_level(KEY4)){
 //	if(key_get_state(KEY_4)==KEY_SHORT_PRESS) {
@@ -72,14 +75,14 @@ void Scan_Key(){
 			}
 		}
 	}
-	if(key_get_state(KEY_3)==KEY_SHORT_PRESS) {
+	if(key_get_state(KEY_3)==KEY_SHORT_PRESS) {//确定按键
 		key_clear_state(KEY_3);
 			switch(C_Num){
 				case 0:
 				{
 					switch(G_Num){
 						case 1:
-								if(Car_Flag==0){
+								if(Car_Flag==0){//发车确认
 									ips200_show_string(0, 300, " GO!");
 									Car_Flag=1;
 									Motor_SetSpeed(0,0); //
@@ -96,7 +99,7 @@ void Scan_Key(){
 					}
 				}break;
 				case 3:
-				{
+				{//调参确认
 					
 					if(CS_Change_Flag==0){
 						
@@ -109,7 +112,8 @@ void Scan_Key(){
 				}
 					else{
 						CS_Change_Flag=0;
-						Target=Speed;
+						Inner_L.Target=Speed;
+						Inner_R.Target=Speed;
 						
 					}
 				}break;

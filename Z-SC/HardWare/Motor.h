@@ -7,5 +7,5 @@ void MotorR_SetSpeed(int pwm);
 void MotorL_SetSpeed(int pwm);
 void Motor_SetSpeed(int pwmL,int pwmR);
 void Motor_Stop(void);
-int PWM_change(int x);
+//int PWM_change(int x);
 #endif
