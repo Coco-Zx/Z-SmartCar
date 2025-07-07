@@ -19,7 +19,7 @@ typedef struct{
 	float OutMax;
 	float OutMin;//限幅
 }PID;
-extern PID Inner_L,Inner_R;
+extern PID Inner_L,Inner_R,Outer;
 
 void PID_Update(PID *p);
 void pid_W();

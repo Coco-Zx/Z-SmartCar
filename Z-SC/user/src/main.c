@@ -93,6 +93,7 @@ int main (void)
 	
     while(1)
     {
+		
 //		if(mt9v03x_finish_flag&&C_Num==3)
 //		{
 //			memcpy(image_copy, mt9v03x_image, MT9V03X_H*MT9V03X_W);
@@ -146,7 +147,6 @@ void All_Init(){
 
 void pit2_handler(){
     T_Counter++;
-	
 	if(mt9v03x_finish_flag&&C_Num==2)
 		{
 			memcpy(image_copy, mt9v03x_image, MT9V03X_H*MT9V03X_W);
@@ -156,12 +156,13 @@ void pit2_handler(){
 			find_JD(image_copy);
 			find_BX(image_copy);
 			Draw_Line();
-			uint8 M_W_Finally=M_Weight();
+			M_W_Finally=M_Weight();
 			ips200_show_float (90, 290, M_W_Finally,4,2);
 			ips200_show_gray_image(0, 0, (const uint8 *)image_copy, MT9V03X_W, MT9V03X_H, MT9V03X_W, MT9V03X_H,0);
 			
 			mt9v03x_finish_flag=0;
 		}
+	
 	
 	if(T_Counter%5==0){
 		Dis_GB();

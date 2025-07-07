@@ -1,4 +1,5 @@
 #include "zf_common_headfile.h"
+#include "image.h"
 #include "Menu.h" 
 #include "pid.h"
 #include "Motor.h" 
@@ -8,7 +9,8 @@
  
 #define ENCODER_QUADDEC2                 (TIM4_ENCODER)                     
 #define ENCODER_QUADDEC2_A               (TIM4_ENCODER_CH1_B6)              
-#define ENCODER_QUADDEC2_B               (TIM4_ENCODER_CH2_B7)                
+#define ENCODER_QUADDEC2_B               (TIM4_ENCODER_CH2_B7)    
+int Count=0;
 int E_Num1;
 int E_Num2;//编码器数值
 //编码器初始化
@@ -16,7 +18,7 @@ void Encoder_Init(){
 	encoder_quad_init(TIM3_ENCODER, TIM3_ENCODER_CH1_B4, TIM3_ENCODER_CH2_B5);
 	encoder_quad_init(TIM4_ENCODER, TIM4_ENCODER_CH1_B6, TIM4_ENCODER_CH2_B7);
 	
-	pit_ms_init(TIM6_PIT, 80);                                            
+	pit_ms_init(TIM6_PIT,40);                                            
 
     interrupt_set_priority(TIM6_IRQn, 0);                                 
 }
@@ -25,9 +27,12 @@ void pit6_handler(){
     E_Num2= encoder_get_count(ENCODER_QUADDEC2);     //读取数值              
     encoder_clear_count(ENCODER_QUADDEC1);                         
     encoder_clear_count(ENCODER_QUADDEC2);            //清空计数             
-	
 	Inner_L.Actual=E_Num2;
 	Inner_R.Actual=E_Num1;   //实际调速赋值
+	Outer.Actual= M_W_Finally;
+	PID_Update(&Outer);
+	Inner_L.Target=Outer.Out;
+	Inner_R.Target=Outer.Out;
 	PID_Update(&Inner_L);    //PID
 	PID_Update(&Inner_R); 
 	MotorL_SetSpeed(Inner_L.Out);//左轮PID
@@ -41,4 +46,5 @@ void pit6_handler(){
 		ips200_show_float (70, 230,Inner_R.Actual,4,2);
 	    ips200_show_float (70, 250,Inner_L.Actual,4,2);//实际速度输出
 	}
+	
 }

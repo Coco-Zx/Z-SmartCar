@@ -240,6 +240,7 @@ uint8 M_W_List[120]=
 	1,1,1,1,1,1,1,1,1,1,
 };
 uint8 Last_M_Out=94;//中线权重最终输出
+uint8 M_W_Finally;
 //中线权重计算
 uint8 M_Weight(){
 	uint8 M_Out;
