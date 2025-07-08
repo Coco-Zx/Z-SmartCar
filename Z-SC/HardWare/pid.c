@@ -3,6 +3,7 @@
 #include "Menu.h" 
 #include "Encoder.h"
 #include "Motor.h"
+#include "image.h" 
 float Target,Actual,Out;
 float Kp=0,Ki=0,Kd=0;
 float Err0,Err1,ErrI,Err2;
@@ -25,7 +26,7 @@ PID Inner_L={
 };
 //中线外环pid定义
 PID Outer={
-	.Kp=40,
+	.Kp=30,
 	.Ki=0,
 	.Kd=0,
 	.OutMax=1000,
@@ -52,6 +53,13 @@ void PID_Update(PID *p){
 	if(p->Out<p->OutMin){
 		p->Out=p->OutMin;//限幅
 	}
+}
+
+
+
+int Kp_base=30;
+void Kp_Change(float k){
+	Outer.Kp=Kp_base+(M_M-M_W_Finally)*k;
 }
 
 

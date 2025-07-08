@@ -62,6 +62,7 @@
 vuint8 mt9v03x_finish_flag = 0;                                                 // 一场图像采集完成标志位
 uint8 mt9v03x_image[MT9V03X_H][MT9V03X_W];
 uint8 image_copy[MT9V03X_H][MT9V03X_W];
+uint8 image[MT9V03X_H][MT9V03X_W];
 
 static m9v03x_type_enum     mt9v03x_type = MT9V03X_SCCB;
 static uint16               mt9v03x_version = 0x00;

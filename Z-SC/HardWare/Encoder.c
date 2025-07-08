@@ -14,6 +14,7 @@
 int Count=0;
 int E_Num1;
 int E_Num2;//编码器数值
+int M_M;
 //编码器初始化
 void Encoder_Init(){
 	encoder_quad_init(TIM3_ENCODER, TIM3_ENCODER_CH1_B4, TIM3_ENCODER_CH2_B5);
@@ -30,11 +31,15 @@ void pit6_handler(){
     encoder_clear_count(ENCODER_QUADDEC2);            //清空计数             
 	Inner_L.Actual=E_Num2;
 	Inner_R.Actual=E_Num1;   //实际调速赋值
+	M_M=93;
 	if(Final_Speed!=0){
-		Outer.Actual= M_W_Finally;
+		Outer.Actual= M_M-M_W_Finally;
 		PID_Update(&Outer);
-		Inner_L.Target=Speed-Outer.Out;
-		Inner_R.Target=Speed+Outer.Out;
+		if(Outer.Out>600){
+			Outer.Out=600;
+		}
+		Inner_L.Target=Speed+Outer.Out;
+		Inner_R.Target=Speed-Outer.Out;
 		PID_Update(&Inner_L);    //PID
 		PID_Update(&Inner_R); 
 		MotorL_SetSpeed(Inner_L.Out);//左轮PID
@@ -51,3 +56,4 @@ void pit6_handler(){
 	}
 	
 }
+

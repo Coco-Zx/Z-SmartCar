@@ -91,7 +91,10 @@ int main (void)
 	pit_ms_init(TIM2_PIT,20);//屏幕刷新
 	pit_ms_init(TIM7_PIT,20);//按键
 	
-    while(1)
+	Outer.Target=0;
+    
+	void Kp_Change(float k);
+	while(1)
     {
 		
 //		if(mt9v03x_finish_flag&&C_Num==3)
@@ -151,17 +154,19 @@ void pit2_handler(){
 		{
 			memcpy(image_copy, mt9v03x_image, MT9V03X_H*MT9V03X_W);
 			//filter();
-			uint8 threshold=DJthreshold(image_copy);
+			uint8 threshold=GetOTSU(image_copy);
+		//	uint8 threshold=DJthreshold(image_copy);
 			Set_image_T(threshold);
-			find_JD(image_copy);
-			find_BX(image_copy);
+			find_JD(image);
+			find_BX(image);
 			Draw_Line();
 			M_W_Finally=M_Weight();
-			ips200_show_gray_image(0, 0, (const uint8 *)image_copy, MT9V03X_W, MT9V03X_H, MT9V03X_W, MT9V03X_H,0);
 			
 			mt9v03x_finish_flag=0;
 		}
-	
+	if(C_Num==2){
+		ips200_show_gray_image(0, 0, (const uint8 *)image_copy, MT9V03X_W, MT9V03X_H, MT9V03X_W, MT9V03X_H,0);
+	}
 	
 	
 	if(T_Counter%5==0){
@@ -169,7 +174,7 @@ void pit2_handler(){
 	}
 }
 void pit7_handler(){
-	ips200_show_float (100, 290, M_W_Finally,4,2);
+	ips200_show_float (120, 290, M_W_Finally,4,2);
     key_scanner();
 	Scan_Key();
 }
