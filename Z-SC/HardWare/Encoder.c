@@ -3,6 +3,7 @@
 #include "Menu.h" 
 #include "pid.h"
 #include "Motor.h" 
+#include "Key.h"
 #define ENCODER_QUADDEC1                (TIM3_ENCODER)                      
 #define ENCODER_QUADDEC1_A               (TIM3_ENCODER_CH1_B4)              
 #define ENCODER_QUADDEC1_B               (TIM3_ENCODER_CH2_B5)              
@@ -29,14 +30,16 @@ void pit6_handler(){
     encoder_clear_count(ENCODER_QUADDEC2);            //清空计数             
 	Inner_L.Actual=E_Num2;
 	Inner_R.Actual=E_Num1;   //实际调速赋值
-	Outer.Actual= M_W_Finally;
-	PID_Update(&Outer);
-	Inner_L.Target=Outer.Out;
-	Inner_R.Target=Outer.Out;
-	PID_Update(&Inner_L);    //PID
-	PID_Update(&Inner_R); 
-	MotorL_SetSpeed(Inner_L.Out);//左轮PID
-	MotorR_SetSpeed(Inner_R.Out);
+	if(Final_Speed!=0){
+		Outer.Actual= M_W_Finally;
+		PID_Update(&Outer);
+		Inner_L.Target=Speed-Outer.Out;
+		Inner_R.Target=Speed+Outer.Out;
+		PID_Update(&Inner_L);    //PID
+		PID_Update(&Inner_R); 
+		MotorL_SetSpeed(Inner_L.Out);//左轮PID
+		MotorR_SetSpeed(Inner_R.Out);
+	}
 	ips200_show_float (70, 270,Inner_R.Out,4,2);
 	ips200_show_float (70, 290,Inner_L.Out,4,2);
 	

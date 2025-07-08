@@ -157,11 +157,11 @@ void pit2_handler(){
 			find_BX(image_copy);
 			Draw_Line();
 			M_W_Finally=M_Weight();
-			ips200_show_float (90, 290, M_W_Finally,4,2);
 			ips200_show_gray_image(0, 0, (const uint8 *)image_copy, MT9V03X_W, MT9V03X_H, MT9V03X_W, MT9V03X_H,0);
 			
 			mt9v03x_finish_flag=0;
 		}
+	
 	
 	
 	if(T_Counter%5==0){
@@ -169,6 +169,7 @@ void pit2_handler(){
 	}
 }
 void pit7_handler(){
+	ips200_show_float (100, 290, M_W_Finally,4,2);
     key_scanner();
 	Scan_Key();
 }

@@ -61,9 +61,9 @@ void Dis_CD3(){
 			ips200_show_string(10, 290, "OutL=      ");
 			
 		
-			ips200_show_float (70, 164,Inner_L.Kp,2,2);
-			ips200_show_float (70, 180,Inner_L.Ki,2,2);
-			ips200_show_float (70, 196,Inner_L.Kd,2,2);
+			ips200_show_float (70, 164,Outer.Kp,2,2);
+			ips200_show_float (70, 180,Outer.Ki,2,2);
+			ips200_show_float (70, 196,Outer.Kd,2,2);
 			ips200_show_float (70, 212,Speed,4,2);
 	
 	        ips200_show_float (70, 250,Inner_L.Actual,4,2);

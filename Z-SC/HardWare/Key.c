@@ -8,6 +8,7 @@
 #define KEY4                    (E5 )
 //发车标志位
 char Car_Flag=0;
+int Final_Speed=0;
 //按键初始化
 void Key_Init(){
 	gpio_init(KEY1, GPI, GPIO_HIGH, GPI_PULL_UP);                               // ??? KEY1 ?? ????? ????
@@ -35,9 +36,9 @@ void Scan_Key(){
 			}
 			else if(CS_Change_Flag==1){//调参情况下参数增减
 				switch(G_Num){
-					case 1:Inner_L.Kp-=0.01;ips200_show_float (70, 164,Inner_L.Kp,2,2);break;
-					case 2:Inner_L.Ki-=0.01;ips200_show_float (70, 180,Inner_L.Ki,2,2);break;
-					case 3:Inner_L.Kd-=0.01;ips200_show_float (70, 196,Inner_L.Kd,2,2);break;
+					case 1:Outer.Kp-=0.01;ips200_show_float (70, 164,Outer.Kp,2,2);break;
+					case 2:Outer.Ki-=0.01;ips200_show_float (70, 180,Outer.Ki,2,2);break;
+					case 3:Outer.Kd-=0.01;ips200_show_float (70, 196,Outer.Kd,2,2);break;
 					case 4:Speed-=100;ips200_show_float (70, 212,Speed,4,2);break;
 				}
 			}
@@ -54,9 +55,9 @@ void Scan_Key(){
 			}
 			else if(CS_Change_Flag==1){
 				switch(G_Num){
-					case 1:Inner_L.Kp+=0.01;ips200_show_float (70, 164,Inner_L.Kp,2,2);;break;
-					case 2:Inner_L.Ki+=0.01;ips200_show_float (70, 180,Inner_L.Ki,2,2);;break;
-					case 3:Inner_L.Kd+=0.01;ips200_show_float (70, 196,Inner_L.Kd,2,2);;break;
+					case 1:Outer.Kp+=0.01;ips200_show_float (70, 164,Outer.Kp,2,2);;break;
+					case 2:Outer.Ki+=0.01;ips200_show_float (70, 180,Outer.Ki,2,2);;break;
+					case 3:Outer.Kd+=0.01;ips200_show_float (70, 196,Outer.Kd,2,2);;break;
 					case 4:Speed+=100;ips200_show_float (70, 212,Speed,4,2);break;
 				}
 			}
@@ -85,12 +86,13 @@ void Scan_Key(){
 								if(Car_Flag==0){//发车确认
 									ips200_show_string(0, 300, " GO!");
 									Car_Flag=1;
-									Motor_SetSpeed(0,0); //
+									Final_Speed=Speed;
 									break;
 								}
 								else{
 									ips200_show_string(0, 300, "    ");
 									Car_Flag=0;
+									Final_Speed=0;
 									Motor_Stop();
 								}break;
 						case 2:C_Num=1;Dis_CD1();G_Num=1;break;

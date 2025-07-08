@@ -12,24 +12,24 @@ PID Inner_R={
 	.Kp=1.0,
 	.Ki=0.11,
 	.Kd=0,
-	.OutMax=4000,//限幅
-	.OutMin=-4000,
+	.OutMax=1500,//限幅
+	.OutMin=-1500,
 };
 //左轮pid结构体定义
 PID Inner_L={
 	.Kp=0.88,
 	.Ki=0.11,
 	.Kd=0,
-	.OutMax=4000,
-	.OutMin=-4000,
+	.OutMax=1500,
+	.OutMin=-1500,
 };
 //中线外环pid定义
 PID Outer={
-	.Kp=0,
+	.Kp=40,
 	.Ki=0,
 	.Kd=0,
-	.OutMax=4000,
-	.OutMin=-4000,
+	.OutMax=1000,
+	.OutMin=-1000,
 };
 //pid封装
 void PID_Update(PID *p){
