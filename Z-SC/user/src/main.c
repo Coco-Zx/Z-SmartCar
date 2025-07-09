@@ -88,30 +88,53 @@ int main (void)
 {
 	All_Init();//全部初始化
     Dis_CD0();//主页面菜单显示
-	pit_ms_init(TIM2_PIT,20);//屏幕刷新
+	pit_ms_init(TIM2_PIT,10);//屏幕刷新
 	pit_ms_init(TIM7_PIT,20);//按键
 	
 	Outer.Target=0;
     
-	void Kp_Change(float k);
 	while(1)
     {
 		
-//		if(mt9v03x_finish_flag&&C_Num==3)
-//		{
-//			memcpy(image_copy, mt9v03x_image, MT9V03X_H*MT9V03X_W);
-//			//filter();
-//			//uint8 threshold=DJthreshold();
-//			//ips200_show_int (100,230,threshold,3);
-//			//Set_image_T(threshold);
-//			//find_JD(image_copy);
-//			//find_BX(image_copy);
-//			ips200_show_gray_image(0, 0, (const uint8 *)image_copy, MT9V03X_W, MT9V03X_H, MT9V03X_W, MT9V03X_H,0);
-//			
-//			mt9v03x_finish_flag=0;
-//		}
-		//ips200_show_float (70, 290,Inner.Out,4,2);
-    //   printf("%f %f %f\r\n",Inner_L.Target,Inner_L.Actual,Inner_L.Out );
+		if(mt9v03x_finish_flag)
+		{
+			memcpy(image_copy, mt9v03x_image, MT9V03X_H*MT9V03X_W);
+			memcpy(image, mt9v03x_image, MT9V03X_H*MT9V03X_W);
+//			filter();
+			uint8 threshold=GetOTSU(image_copy);
+			ips200_show_int (150, 290, threshold,3);
+//			uint8 threshold=DJthreshold(image_copy);
+			Set_image_T(threshold);
+			find_JD(image);
+			find_BX(image);
+			M_W_Finally=M_Weight();
+			ips200_show_float (150, 160,M_W_Finally,4,2);
+			if(C_Num==2){
+				Draw_Line();
+			
+				ips200_show_float (70, 230,Inner_R.Actual,4,2);
+				ips200_show_float (70, 250,Inner_L.Actual,4,2);//实际速度输出
+				ips200_show_float (70, 270,Inner_R.Out,4,2);
+				ips200_show_float (70, 290,Inner_L.Out,4,2);
+				
+	
+				ips200_show_gray_image(0, 0, (const uint8 *)image_copy, MT9V03X_W, MT9V03X_H, MT9V03X_W, MT9V03X_H,0);
+		
+			}
+			if(C_Num==0){
+				Draw_Line();
+		
+				ips200_show_gray_image(0, 0, (const uint8 *)image, MT9V03X_W, MT9V03X_H, MT9V03X_W, MT9V03X_H,0);
+			
+		}
+
+			mt9v03x_finish_flag=0;
+		}
+
+	
+	
+
+//       printf("%f %f %f\r\n",Inner_L.Target,Inner_L.Actual,Inner_L.Out );
 		
     }
 }
@@ -139,7 +162,7 @@ void All_Init(){
         system_delay_ms(500);                                                   // 短延时快速闪灯表示异常
     }
         system_delay_ms(500);
-	ips200_show_string(0, 16, "init success.");
+	//ips200_show_string(0, 16, "init success.");
 	system_delay_ms(1000);  
 	
 	ips200_clear();
@@ -147,36 +170,40 @@ void All_Init(){
 	
 }
 
-
 void pit2_handler(){
-    T_Counter++;
-	if(mt9v03x_finish_flag&&C_Num==2)
-		{
-			memcpy(image_copy, mt9v03x_image, MT9V03X_H*MT9V03X_W);
-			//filter();
-			uint8 threshold=GetOTSU(image_copy);
-		//	uint8 threshold=DJthreshold(image_copy);
-			Set_image_T(threshold);
-			find_JD(image);
-			find_BX(image);
-			Draw_Line();
-			M_W_Finally=M_Weight();
-			
-			mt9v03x_finish_flag=0;
-		}
-	if(C_Num==2){
-		ips200_show_gray_image(0, 0, (const uint8 *)image_copy, MT9V03X_W, MT9V03X_H, MT9V03X_W, MT9V03X_H,0);
-	}
+//   
+//	if(mt9v03x_finish_flag)
+//		{
+//			memcpy(image_copy, mt9v03x_image, MT9V03X_H*MT9V03X_W);
+//			//filter();
+//			uint8 threshold=GetOTSU(image_copy);
+//		//	uint8 threshold=DJthreshold(image_copy);
+//			Set_image_T(threshold);
+//			find_JD(image);
+//			find_BX(image);
+//			M_W_Finally=M_Weight();
+//			
+//			mt9v03x_finish_flag=0;
+//		}
+//	if(C_Num==2){
+//		ips200_show_gray_image(0, 0, (const uint8 *)image_copy, MT9V03X_W, MT9V03X_H, MT9V03X_W, MT9V03X_H,0);
+//	}
+//	if(Car_Flag==1&&C_Num==0){
+//		Draw_Line();
+//		ips200_show_gray_image(0, 0, (const uint8 *)image, MT9V03X_W, MT9V03X_H, MT9V03X_W, MT9V03X_H,0);
+//	}
 	
 	
+	
+}
+void pit7_handler(){
+	 T_Counter++;
+	//ips200_show_float (120, 290, M_W_Finally,4,2);
+    key_scanner();
+	Scan_Key();
 	if(T_Counter%5==0){
 		Dis_GB();
 	}
-}
-void pit7_handler(){
-	ips200_show_float (120, 290, M_W_Finally,4,2);
-    key_scanner();
-	Scan_Key();
 }
 
 

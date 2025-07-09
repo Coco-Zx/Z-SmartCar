@@ -3,10 +3,10 @@
 
 #define JD_Search_Line  S_MT9V03X_H   //基点搜寻起始行
 #define BX_Search_Start S_MT9V03X_H   //边线搜寻起始行
-#define BX_Search_End   30			  //边线搜寻终止行
+#define BX_Search_End   20 			  //边线搜寻终止行
 #define BX_L_R          10            //左边线-右搜寻
-#define BX_L_L          5			  //左边线-左搜寻
-#define BX_R_R          5			  //右边线-右搜寻
+#define BX_L_L          10			  //左边线-左搜寻
+#define BX_R_R          10			  //右边线-右搜寻
 #define BX_R_L          10            //右边线-左搜寻
 #define M_M             93			  //中间行
 
@@ -33,7 +33,7 @@ void find_JD(uint8 index[S_MT9V03X_H][S_MT9V03X_W]){
 				JD_R=i;
 				break;
 			}
-			if(i-1==1){
+			if(i+1==S_MT9V03X_W-2){
 				JD_L=S_MT9V03X_W-2;
 				break;
 			}
@@ -56,7 +56,7 @@ void find_JD(uint8 index[S_MT9V03X_H][S_MT9V03X_W]){
 				JD_R=i;
 				break;
 			}
-			if(i-1==1){
+			if(i+1==S_MT9V03X_W-2){
 				JD_L=S_MT9V03X_W-2;
 				break;
 			}
@@ -79,7 +79,7 @@ void find_JD(uint8 index[S_MT9V03X_H][S_MT9V03X_W]){
 				JD_R=i;
 				break;
 			}
-			if(i-1==1){
+			if(i+1==S_MT9V03X_W-2){
 				JD_L=S_MT9V03X_W-2;
 				break;
 			}
@@ -126,9 +126,9 @@ void find_BX(uint8 index[S_MT9V03X_H][S_MT9V03X_W]){
 		//左边线往左找
 		if(L_Search_Flag==1){
 			for(uint8 j=Point_L;j>Point_L-BX_L_L;j--){
-				if(index[i][j-1]==0&&index[i][j]==255&&index[i][j+1]==255){
-				Point_L=j;
-				break;
+				if(index[i][j-1]==0&&index[i][j]==255&&index[i][j+1]==255&&j<S_MT9V03X_W-5){
+					Point_L=j;
+					break;
 			    }
 			    else if(j==1){
 					Point_L =1;
@@ -174,8 +174,8 @@ void find_BX(uint8 index[S_MT9V03X_H][S_MT9V03X_W]){
 		}
 		//右边线往右找
 		if(R_Search_Flag==1){
-			for(uint8 j=Point_R;j<Point_L+BX_R_R;j++){
-				if(index[i][j-1]==255&&index[i][j]==255&&index[i][j+1]==0){
+			for(uint8 j=Point_R;j<Point_R+BX_R_R;j++){
+				if(index[i][j-1]==255&&index[i][j]==255&&index[i][j+1]==0&&j>4){
 					Point_R=j;
 					break;
 			    }
@@ -217,9 +217,9 @@ void find_BX(uint8 index[S_MT9V03X_H][S_MT9V03X_W]){
 //画中线和边线函数
 void Draw_Line(){
 	for(uint8 i=S_MT9V03X_H-1;i>BX_Search_End;i--){
-		ips200_draw_point (BX_L_List[i],i,RGB565_YELLOW);
-		ips200_draw_point (BX_R_List[i],i,RGB565_GREEN);
-		ips200_draw_point (M_M_List[i],i,RGB565_RED);
+		ips200_draw_point (BX_L_List[i],i,RGB565_RED);
+		ips200_draw_point (BX_R_List[i],i,RGB565_RED);
+		ips200_draw_point (M_M_List[i],i,RGB565_GREEN);
 	}
 
 }
