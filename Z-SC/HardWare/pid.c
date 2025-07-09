@@ -29,8 +29,8 @@ PID Outer={
 	.Kp=30,
 	.Ki=0,
 	.Kd=0,
-	.OutMax=1000,
-	.OutMin=-1000,
+	.OutMax=400,
+	.OutMin=-400,
 };
 //pid封装
 void PID_Update(PID *p){

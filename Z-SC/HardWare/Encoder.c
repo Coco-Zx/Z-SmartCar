@@ -34,13 +34,10 @@ void pit6_handler(){
 	if(Final_Speed!=0){
            
 	
-	M_M=93;
+	M_M=96;
 	
 		Outer.Actual= M_M-M_W_Finally;
 		PID_Update(&Outer);
-		if(Outer.Out>600){
-			Outer.Out=600;
-		}
 		Inner_L.Target=Speed+Outer.Out;
 		Inner_R.Target=Speed-Outer.Out;
 		PID_Update(&Inner_L);    //PID
