@@ -20,7 +20,7 @@ void Encoder_Init(){
 	encoder_quad_init(TIM3_ENCODER, TIM3_ENCODER_CH1_B4, TIM3_ENCODER_CH2_B5);
 	encoder_quad_init(TIM4_ENCODER, TIM4_ENCODER_CH1_B6, TIM4_ENCODER_CH2_B7);
 	
-	pit_ms_init(TIM6_PIT,5);                                            
+	pit_ms_init(TIM6_PIT,10);                                            
 
     interrupt_set_priority(TIM6_IRQn, 0);                                 
 }
@@ -35,8 +35,8 @@ void pit6_handler(){
 	if(Car_Flag!=0){
            
 	
-		M_M=95;
-		if(Count%4==0){
+		M_M=97;
+		if(Count%2==0){
 			Outer.Actual= M_M-M_W_Finally;
 			PID_UpdateZ(&Outer);
 		}

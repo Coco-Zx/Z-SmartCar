@@ -7,30 +7,32 @@
 float Target,Actual,Out;
 float Kp=0,Ki=0,Kd=0;
 float Err0,Err1,ErrI,Err2;
-
+float limit =20;
 //右轮pid结构体定义
 PID Inner_R={
-	.Kp=1.0,
-	.Ki=0.11,
+	.Kp=1.98,
+	.Ki=0.21,
 	.Kd=0,
-	.OutMax=1500,//限幅
-	.OutMin=-1500,
+	.offset=620.0,
+	.OutMax=2000,//限幅
+	.OutMin=-2000,
 };
 //左轮pid结构体定义
 PID Inner_L={
-	.Kp=0.88,
-	.Ki=0.11,
+	.Kp=1.68,
+	.Ki=0.21,
 	.Kd=0,
-	.OutMax=1500,
-	.OutMin=-1500,
+	.offset=600.0,
+	.OutMax=2000,
+	.OutMin=-2000,
 };
 //中线外环pid定义
 PID Outer={
-	.Kp=0.5,
+	.Kp=4.89,
 	.Ki=0,
-	.Kd=0,
-	.OutMax=100,
-	.OutMin=-100,
+	.Kd=-0.09,
+	//.OutMax=limit,
+	//.OutMin=-limit,
 };
 //pid封装
 void PID_Update(PID *p){
@@ -46,6 +48,15 @@ void PID_Update(PID *p){
 	p->Out =p->Kp*p->Err0 
 		   +p->Ki*p->ErrI
 		   +p->Kd*(p->Err0-p->Err1);//输出
+	
+	if(p->Out>0){
+		p->Out=p->offset+p->Out;
+	}
+	if(p->Out<0){
+		p->Out=-p->offset+p->Out;
+	}
+	
+	
 	
 	if(p->Out>p->OutMax){
 		p->Out=p->OutMax;

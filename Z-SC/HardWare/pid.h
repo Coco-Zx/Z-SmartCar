@@ -2,7 +2,7 @@
 #define __PID_H
 extern float Kp,Ki,Kd;
 extern float Target,Actual,Out;
-
+extern float limit;
 typedef struct{
 	float Target;//目标输出
 	float Actual;//实际输出
@@ -17,6 +17,8 @@ typedef struct{
 	float Err2;
 	float ErrI;//积分误差累加
 	
+	float offset;
+		
 	float OutMax;
 	float OutMin;//限幅
 }PID;

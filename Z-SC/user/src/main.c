@@ -88,14 +88,15 @@ int main (void)
 {
 	All_Init();//全部初始化
     Dis_CD0();//主页面菜单显示
-	pit_ms_init(TIM2_PIT,10);//屏幕刷新
-	pit_ms_init(TIM7_PIT,20);//按键
+//	pit_ms_init(TIM2_PIT,10);//屏幕刷新
+	pit_ms_init(TIM7_PIT,50);//按键
 	
 	Outer.Target=0;
     
 	while(1)
     {
-		
+		Outer.OutMax=limit;
+		Outer.OutMin=-limit;
 		if(mt9v03x_finish_flag)
 		{
 			memcpy(image_copy, mt9v03x_image, MT9V03X_H*MT9V03X_W);
@@ -107,6 +108,7 @@ int main (void)
 			Set_image_T(threshold);
 			find_JD(image);
 			find_BX(image);
+			Draw_Line();
 			M_W_Finally=M_Weight();
 			ips200_show_float (150, 160,M_W_Finally,4,2);
 			if(C_Num==2){
@@ -123,7 +125,7 @@ int main (void)
 			}
 			if(C_Num==0){
 				
-				Draw_Line();
+				
 				ips200_show_gray_image(0, 0, (const uint8 *)image, MT9V03X_W, MT9V03X_H, MT9V03X_W, MT9V03X_H,0);
 			
 		}
