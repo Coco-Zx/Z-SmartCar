@@ -20,24 +20,27 @@ void Encoder_Init(){
 	encoder_quad_init(TIM3_ENCODER, TIM3_ENCODER_CH1_B4, TIM3_ENCODER_CH2_B5);
 	encoder_quad_init(TIM4_ENCODER, TIM4_ENCODER_CH1_B6, TIM4_ENCODER_CH2_B7);
 	
-	pit_ms_init(TIM6_PIT,50);                                            
+	pit_ms_init(TIM6_PIT,5);                                            
 
     interrupt_set_priority(TIM6_IRQn, 0);                                 
 }
 void pit6_handler(){
+	Count++;
 	E_Num1= -encoder_get_count(ENCODER_QUADDEC1);                  
     E_Num2= encoder_get_count(ENCODER_QUADDEC2);     //读取数值              
     encoder_clear_count(ENCODER_QUADDEC1);                         
     encoder_clear_count(ENCODER_QUADDEC2);            //清空计数   
 	Inner_L.Actual=E_Num2;
 	Inner_R.Actual=E_Num1;   //实际调速赋值	
-	if(Final_Speed!=0){
+	if(Car_Flag!=0){
            
 	
-	M_M=96;
-	
-		Outer.Actual= M_M-M_W_Finally;
-		PID_Update(&Outer);
+		M_M=95;
+		if(Count%4==0){
+			Outer.Actual= M_M-M_W_Finally;
+			PID_UpdateZ(&Outer);
+		}
+		
 		Inner_L.Target=Speed+Outer.Out;
 		Inner_R.Target=Speed-Outer.Out;
 		PID_Update(&Inner_L);    //PID

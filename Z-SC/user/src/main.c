@@ -110,7 +110,7 @@ int main (void)
 			M_W_Finally=M_Weight();
 			ips200_show_float (150, 160,M_W_Finally,4,2);
 			if(C_Num==2){
-				Draw_Line();
+				
 			
 				ips200_show_float (70, 230,Inner_R.Actual,4,2);
 				ips200_show_float (70, 250,Inner_L.Actual,4,2);//实际速度输出
@@ -122,8 +122,8 @@ int main (void)
 		
 			}
 			if(C_Num==0){
+				
 				Draw_Line();
-		
 				ips200_show_gray_image(0, 0, (const uint8 *)image, MT9V03X_W, MT9V03X_H, MT9V03X_W, MT9V03X_H,0);
 			
 		}

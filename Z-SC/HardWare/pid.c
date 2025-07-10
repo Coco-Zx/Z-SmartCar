@@ -26,11 +26,11 @@ PID Inner_L={
 };
 //中线外环pid定义
 PID Outer={
-	.Kp=30,
+	.Kp=0.5,
 	.Ki=0,
 	.Kd=0,
-	.OutMax=400,
-	.OutMin=-400,
+	.OutMax=100,
+	.OutMin=-100,
 };
 //pid封装
 void PID_Update(PID *p){
@@ -46,6 +46,29 @@ void PID_Update(PID *p){
 	p->Out =p->Kp*p->Err0 
 		   +p->Ki*p->ErrI
 		   +p->Kd*(p->Err0-p->Err1);//输出
+	
+	if(p->Out>p->OutMax){
+		p->Out=p->OutMax;
+	}
+	if(p->Out<p->OutMin){
+		p->Out=p->OutMin;//限幅
+	}
+}
+
+void PID_UpdateZ(PID *p){
+	p->Err2=Err1;
+	p->Err1=p->Err0;
+	p->Err0=p->Target - p->Actual;//数据读取
+	
+//	if(p->ErrI!=0){
+//		p->ErrI+=p->Err0;//积分项累加
+//	}
+//	else{
+//		p->ErrI=0;
+//	}
+	p->Out +=p->Kp*(p->Err0 -p->Err1)
+		   +p->Ki*p->Err0
+		   +p->Kd*(p->Err0-p->Err1*2+Err2);//输出
 	
 	if(p->Out>p->OutMax){
 		p->Out=p->OutMax;

@@ -5,8 +5,8 @@
 #define BX_Search_Start S_MT9V03X_H   //边线搜寻起始行
 #define BX_Search_End   20 			  //边线搜寻终止行
 #define BX_L_R          10            //左边线-右搜寻
-#define BX_L_L          10			  //左边线-左搜寻
-#define BX_R_R          10			  //右边线-右搜寻
+#define BX_L_L          5			  //左边线-左搜寻
+#define BX_R_R          5			  //右边线-右搜寻
 #define BX_R_L          10            //右边线-左搜寻
 #define M_M             93			  //中间行
 
@@ -34,13 +34,13 @@ void find_JD(uint8 index[S_MT9V03X_H][S_MT9V03X_W]){
 				break;
 			}
 			if(i+1==S_MT9V03X_W-2){
-				JD_L=S_MT9V03X_W-2;
+				JD_R=S_MT9V03X_W-2;
 				break;
 			}
 		}
 	}
 	//3/4找基点
-	if(index[JD_Search_Line-1][S_MT9V03X_W*3/4]==255&&index[JD_Search_Line-1][S_MT9V03X_W*3/4+1]==255&&index[JD_Search_Line-1][S_MT9V03X_W*3/4-1]==255){
+	else if(index[JD_Search_Line-1][S_MT9V03X_W*3/4]==255&&index[JD_Search_Line-1][S_MT9V03X_W*3/4+1]==255&&index[JD_Search_Line-1][S_MT9V03X_W*3/4-1]==255){
 		for(uint8 i=S_MT9V03X_W*3/4;i>0;i--){
 			if(index[JD_Search_Line-1][i-1]==0&&index[JD_Search_Line-1][i]==255&&index[JD_Search_Line-1][i+1]==255){
 				JD_L=i;
@@ -57,13 +57,13 @@ void find_JD(uint8 index[S_MT9V03X_H][S_MT9V03X_W]){
 				break;
 			}
 			if(i+1==S_MT9V03X_W-2){
-				JD_L=S_MT9V03X_W-2;
+				JD_R=S_MT9V03X_W-2;
 				break;
 			}
 		}
 	}
 	//1/4找基点
-	if(index[JD_Search_Line-1][S_MT9V03X_W*1/4]==255&&index[JD_Search_Line-1][S_MT9V03X_W*1/4+1]==255&&index[JD_Search_Line-1][S_MT9V03X_W*1/4-1]==255){
+	else if(index[JD_Search_Line-1][S_MT9V03X_W*1/4]==255&&index[JD_Search_Line-1][S_MT9V03X_W*1/4+1]==255&&index[JD_Search_Line-1][S_MT9V03X_W*1/4-1]==255){
 		for(uint8 i=S_MT9V03X_W*1/4;i>0;i--){
 			if(index[JD_Search_Line-1][i-1]==0&&index[JD_Search_Line-1][i]==255&&index[JD_Search_Line-1][i+1]==255){
 				JD_L=i;
@@ -80,7 +80,7 @@ void find_JD(uint8 index[S_MT9V03X_H][S_MT9V03X_W]){
 				break;
 			}
 			if(i+1==S_MT9V03X_W-2){
-				JD_L=S_MT9V03X_W-2;
+				JD_R=S_MT9V03X_W-2;
 				break;
 			}
 		}
@@ -164,7 +164,7 @@ void find_BX(uint8 index[S_MT9V03X_H][S_MT9V03X_W]){
 				break;
 			}
 			else if(j==1){
-				Point_L=4;
+				Point_R=4;
 				break;
 			}
 			else if(j==Point_R-BX_R_L+1){
@@ -184,7 +184,7 @@ void find_BX(uint8 index[S_MT9V03X_H][S_MT9V03X_W]){
 					MR_Search_Flag=1;
 					break;
 				}
-				else if(j==Point_L+BX_R_R-1){
+				else if(j==Point_R+BX_R_R-1){
 					MR_Search_Flag=1;
 					break;
 				}
