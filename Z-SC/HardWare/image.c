@@ -219,25 +219,38 @@ void find_BX(uint8 index[S_MT9V03X_H][S_MT9V03X_W]){
 void Deal_BX(){
 	uint8 DX_L=0;
 	uint8 DX_R=0;
+	uint8 GD_L_H=0;
+	uint8 GD_R_H=0;
+	uint8 GD_L_L=0;
+	uint8 GD_R_L=0;
 	for(uint8 i=DX_Search_Start;i>BX_Search_End;i-=3){
 		if(BX_R_List[i]==S_MT9V03X_W-2){
 			DX_R++;
+			GD_R_H=i;
 		}
 		if(BX_L_List[i]==1){
 			DX_L++;
+			GD_L_H=i;
 		}
 	}
 	for(uint8 i=DX_Search_Start;i<BX_Search_Start;i+=3){
 		if(BX_R_List[i]==S_MT9V03X_W-2){
 			DX_R++;
+			GD_R_L=i;
 		}
 		if(BX_L_List[i]==1){
 			DX_L++;
-		}if(BX_R_List[i]==S_MT9V03X_W-2){
-			DX_R++;
+			GD_L_L=i;
 		}
-		if(BX_L_List[i]==1){
-			DX_L++;
+	}
+	if(GD_L_H!=0&&GD_L_L!=0&&GD_R_H!=0&&GD_R_L!=0){
+		float  k_L=(GD_L_H-GD_L_L)/(BX_L_List[GD_L_H]-BX_L_List[GD_L_L]);
+		float  k_R=(GD_R_H-GD_R_L)/(BX_L_List[GD_R_H]-BX_L_List[GD_R_L]);
+		for(int8 i=GD_L_L;i<GD_L_H;i++){
+			BX_L_List[i]=k_L*(i-GD_L_L)+BX_L_List[GD_L_L];
+		}
+		for(int8 i=GD_R_L;i<GD_R_H;i++){
+			BX_R_List[i]=k_L*(i-GD_R_L)+BX_L_List[GD_R_L];
 		}
 	}
 }

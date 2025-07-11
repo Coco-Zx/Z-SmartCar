@@ -7,15 +7,15 @@
 float Target,Actual,Out;
 float Kp=0,Ki=0,Kd=0;
 float Err0,Err1,ErrI,Err2;
-float limit =20;
+float limit =3000;
 //右轮pid结构体定义
 PID Inner_R={
 	.Kp=1.98,
 	.Ki=0.21,
 	.Kd=0,
 	.offset=620.0,
-	.OutMax=2000,//限幅
-	.OutMin=-2000,
+	.OutMax=5000,//限幅
+	.OutMin=-5000,
 };
 //左轮pid结构体定义
 PID Inner_L={
@@ -23,14 +23,14 @@ PID Inner_L={
 	.Ki=0.21,
 	.Kd=0,
 	.offset=600.0,
-	.OutMax=2000,
-	.OutMin=-2000,
+	.OutMax=5000,
+	.OutMin=-5000,
 };
 //中线外环pid定义
 PID Outer={
-	.Kp=9.25,//4.89
+	.Kp=75,//4.89
 	.Ki=0,
-	.Kd=-0.09,
+	.Kd=0,
 	//.OutMax=limit,
 	//.OutMin=-limit,
 };

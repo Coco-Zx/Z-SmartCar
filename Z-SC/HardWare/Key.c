@@ -36,7 +36,7 @@ void Scan_Key(){
 			}
 			else if(CS_Change_Flag==1){//调参情况下参数增减
 				switch(G_Num){
-					case 1:Outer.Kp-=0.02;ips200_show_float (70, 164,Outer.Kp,2,2);break;
+					case 1:Outer.Kp-=1;ips200_show_float (70, 164,Outer.Kp,2,2);break;
 					case 2:limit-=5;ips200_show_float (70, 180,limit,2,2);break;
 					case 3:Outer.Kd-=0.01;ips200_show_float (70, 196,Outer.Kd,2,2);break;
 					case 4:Speed-=10;ips200_show_float (70, 212,Speed,4,2);break;
@@ -55,7 +55,7 @@ void Scan_Key(){
 			}
 			else if(CS_Change_Flag==1){
 				switch(G_Num){
-					case 1:Outer.Kp+=0.02;ips200_show_float (70, 164,Outer.Kp,2,2);;break;
+					case 1:Outer.Kp+=1;ips200_show_float (70, 164,Outer.Kp,2,2);;break;
 					case 2:limit+=5;ips200_show_float (70, 180,limit,2,2);;break;
 					case 3:Outer.Kd+=0.01;ips200_show_float (70, 196,Outer.Kd,2,2);;break;
 					case 4:Speed+=10;ips200_show_float (70, 212,Speed,4,2);break;

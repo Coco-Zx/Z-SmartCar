@@ -36,17 +36,17 @@ void pit6_handler(){
            
 	
 		M_M=100;
-		if(Count%2==0){
+		if(Count%1==0){
 			Outer.Actual= M_M-M_W_Finally;
 			PID_UpdateZ(&Outer);
 		}
 		
-		Inner_L.Target=Speed+Outer.Out;
-		Inner_R.Target=Speed-Outer.Out;
+		Inner_L.Target=Speed;
+		Inner_R.Target=Speed;
 		PID_Update(&Inner_L);    //PID
 		PID_Update(&Inner_R); 
-		MotorL_SetSpeed(Inner_L.Out);//左轮PID
-		MotorR_SetSpeed(Inner_R.Out);
+		MotorL_SetSpeed(Inner_L.Out+Outer.Out);//左轮PID
+		MotorR_SetSpeed(Inner_R.Out-Outer.Out);
 	
 	//ips200_show_float (70, 270,Inner_R.Out,4,2);
 	//ips200_show_float (70, 290,Inner_L.Out,4,2);

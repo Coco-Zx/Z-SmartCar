@@ -108,6 +108,7 @@ int main (void)
 			Set_image_T(threshold);
 			find_JD(image);
 			find_BX(image);
+			Deal_BX();
 			find_ZX();
 			Draw_Line();
 			M_W_Finally=M_Weight();
