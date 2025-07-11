@@ -28,7 +28,7 @@ PID Inner_L={
 };
 //中线外环pid定义
 PID Outer={
-	.Kp=4.89,
+	.Kp=9.25,//4.89
 	.Ki=0,
 	.Kd=-0.09,
 	//.OutMax=limit,

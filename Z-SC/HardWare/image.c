@@ -10,6 +10,8 @@
 #define BX_R_L          10            //右边线-左搜寻
 #define M_M             93			  //中间行
 
+#define DX_Search_Start S_MT9V03X_H/2   //丢线搜寻起始行
+
 uint8   BX_L_List[S_MT9V03X_H];//左边线
 uint8   BX_R_List[S_MT9V03X_H];//右边线
 uint8   M_M_List[S_MT9V03X_H];//中线
@@ -208,9 +210,40 @@ void find_BX(uint8 index[S_MT9V03X_H][S_MT9V03X_W]){
 		//猪肺画线显示边线和中线
 	   BX_L_List[i]=Limit(1,Point_L,S_MT9V03X_W-2);
 	   BX_R_List[i]=Limit(1,Point_R,S_MT9V03X_W-2);
-	   M_M_List[i]=Limit(1,(BX_L_List[i]+BX_R_List[i])/2,S_MT9V03X_W-2);
+	  
 	   
 	   
+	}
+}
+
+void Deal_BX(){
+	uint8 DX_L=0;
+	uint8 DX_R=0;
+	for(uint8 i=DX_Search_Start;i>BX_Search_End;i-=3){
+		if(BX_R_List[i]==S_MT9V03X_W-2){
+			DX_R++;
+		}
+		if(BX_L_List[i]==1){
+			DX_L++;
+		}
+	}
+	for(uint8 i=DX_Search_Start;i<BX_Search_Start;i+=3){
+		if(BX_R_List[i]==S_MT9V03X_W-2){
+			DX_R++;
+		}
+		if(BX_L_List[i]==1){
+			DX_L++;
+		}if(BX_R_List[i]==S_MT9V03X_W-2){
+			DX_R++;
+		}
+		if(BX_L_List[i]==1){
+			DX_L++;
+		}
+	}
+}
+void find_ZX(){
+	for(uint8 i=BX_Search_Start-1;i>BX_Search_End;i--){
+		M_M_List[i]=Limit(1,(BX_L_List[i]+BX_R_List[i])/2,S_MT9V03X_W-2);
 	}
 }
 
