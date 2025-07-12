@@ -6,7 +6,9 @@ extern uint8 M_W_Finally;
 void find_JD(uint8 index[S_MT9V03X_H][S_MT9V03X_W]);
 void find_BX(uint8 index[S_MT9V03X_H][S_MT9V03X_W]);
 void find_ZX();
-void Deal_BX();
+void Deal_DX();
+void Deal_GD();
+void Deal_Cross();
 void Draw_Line();
 uint8 M_Weight();
 #endif

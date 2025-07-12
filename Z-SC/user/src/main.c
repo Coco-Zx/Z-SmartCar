@@ -41,6 +41,7 @@
 #include "YUdeal.h" 
 #include "pid.h"
 #include "image.h"
+#include "buzzer.h"
 // 打开新的工程或者工程移动了位置务必执行以下操作
 // 第一步 关闭上面所有打开的文件
 // 第二步 project->clean  等待下方进度条走完
@@ -79,6 +80,7 @@
 
 uint8_t T_Counter=0;//定时器计数
 
+
 //函数声明
 void All_Init();
 
@@ -108,7 +110,8 @@ int main (void)
 			Set_image_T(threshold);
 			find_JD(image);
 			find_BX(image);
-			Deal_BX();
+			Deal_DX();
+			Deal_Cross();
 			find_ZX();
 			Draw_Line();
 			M_W_Finally=M_Weight();
@@ -135,7 +138,7 @@ int main (void)
 			mt9v03x_finish_flag=0;
 		}
 
-	
+	Buzzer();
 	
 
 //       printf("%f %f %f\r\n",Inner_L.Target,Inner_L.Actual,Inner_L.Out );
@@ -152,6 +155,10 @@ void All_Init(){
 	Key_Init();
 	Motor_Init();
 	Encoder_Init();
+	Buzzer_Init();
+	
+	
+	
 	//摄像头初始化
 	while(1)
     {

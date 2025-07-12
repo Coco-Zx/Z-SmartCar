@@ -1,16 +1,21 @@
 #include "zf_common_headfile.h"
 #include "YUdeal.h"
+#include "buzzer.h"
 
 #define JD_Search_Line  S_MT9V03X_H   //基点搜寻起始行
 #define BX_Search_Start S_MT9V03X_H   //边线搜寻起始行
 #define BX_Search_End   20 			  //边线搜寻终止行
+#define DX_Search_Start S_MT9V03X_H   //边线搜寻起始行
+#define DX_Search_End   20 			  //边线搜寻终止行
 #define BX_L_R          10            //左边线-右搜寻
 #define BX_L_L          5			  //左边线-左搜寻
 #define BX_R_R          5			  //右边线-右搜寻
 #define BX_R_L          10            //右边线-左搜寻
 #define M_M             93			  //中间行
 
-#define DX_Search_Start S_MT9V03X_H/2   //丢线搜寻起始行
+#define GD_Change_Min   3
+#define GD_Change_Max   10
+
 
 uint8   BX_L_List[S_MT9V03X_H];//左边线
 uint8   BX_R_List[S_MT9V03X_H];//右边线
@@ -216,44 +221,130 @@ void find_BX(uint8 index[S_MT9V03X_H][S_MT9V03X_W]){
 	}
 }
 
-void Deal_BX(){
-	uint8 DX_L=0;
-	uint8 DX_R=0;
-	uint8 GD_L_H=0;
-	uint8 GD_R_H=0;
-	uint8 GD_L_L=0;
-	uint8 GD_R_L=0;
-	for(uint8 i=DX_Search_Start;i>BX_Search_End;i-=3){
-		if(BX_R_List[i]==S_MT9V03X_W-2){
-			DX_R++;
-			GD_R_H=i;
-		}
+uint8 DX_L_Count;
+uint8 DX_R_Count;
+uint8 DX_M_Count;
+	
+uint8 DX_L_Start;
+uint8 DX_R_Start;
+uint8 DX_M_Start;
+void Deal_DX(){
+	DX_L_Count=0;
+	DX_R_Count=0;
+	DX_M_Count=0;
+	
+	DX_L_Start=0;
+	DX_R_Start=0;
+	DX_M_Start=0;
+	
+	
+	uint8 DX_L_Flag[(DX_Search_Start-DX_Search_End)/2]={0};
+	uint8 DX_R_Flag[(DX_Search_Start-DX_Search_End)/2]={0};
+	
+	for(uint8 i=DX_Search_Start;i>DX_Search_End;i-=2){
 		if(BX_L_List[i]==1){
-			DX_L++;
-			GD_L_H=i;
+			DX_L_Flag[i]=1;
+			DX_L_Count++;
+			if(DX_L_Start==0){
+				DX_L_Start=i;
+			}
 		}
-	}
-	for(uint8 i=DX_Search_Start;i<BX_Search_Start;i+=3){
 		if(BX_R_List[i]==S_MT9V03X_W-2){
-			DX_R++;
-			GD_R_L=i;
+			DX_R_Flag[i]=1;
+			DX_R_Count++;
+			if(DX_R_Start==0){
+				DX_R_Start=i;
+			}
 		}
-		if(BX_L_List[i]==1){
-			DX_L++;
-			GD_L_L=i;
-		}
-	}
-	if(GD_L_H!=0&&GD_L_L!=0&&GD_R_H!=0&&GD_R_L!=0){
-		float  k_L=(GD_L_H-GD_L_L)/(BX_L_List[GD_L_H]-BX_L_List[GD_L_L]);
-		float  k_R=(GD_R_H-GD_R_L)/(BX_L_List[GD_R_H]-BX_L_List[GD_R_L]);
-		for(int8 i=GD_L_L;i<GD_L_H;i++){
-			BX_L_List[i]=k_L*(i-GD_L_L)+BX_L_List[GD_L_L];
-		}
-		for(int8 i=GD_R_L;i<GD_R_H;i++){
-			BX_R_List[i]=k_L*(i-GD_R_L)+BX_L_List[GD_R_L];
+		if(DX_L_Flag[i]==1&&DX_R_Flag[i]==1){
+			DX_M_Count++;
+			if(DX_M_Start==0){
+				DX_M_Start=i;
+			}
 		}
 	}
 }
+uint8 GD_L_H;
+uint8 GD_R_H;
+uint8 GD_L_L;
+uint8 GD_R_L;
+
+void Deal_GD(){
+	GD_L_H=0;
+	GD_R_H=0;
+	GD_L_L=0;
+	GD_R_L=0;
+	
+	for(uint8 i=DX_L_Start;i<DX_Search_Start;i++){
+		if(BX_L_List[i+1]-BX_L_List[i]>GD_Change_Max){
+			if(BX_L_List[i+2]-BX_L_List[i+1]<GD_Change_Max){
+				GD_L_L=i+1;
+			}
+		}
+		if(abs(BX_R_List[i+1]-BX_R_List[i])>GD_Change_Max){
+			if(abs(BX_R_List[i+2]-BX_R_List[i+1])<GD_Change_Max){
+				GD_R_L=i+1;
+			}
+		}
+	}
+	for(uint8 i=DX_L_Start;i>DX_Search_End;i--){
+		if(BX_L_List[i-1]-BX_L_List[i]>GD_Change_Max){
+			if(BX_L_List[i-2]-BX_L_List[i-1]<GD_Change_Max){
+				GD_L_H=i-1;
+			}
+		}
+		if(abs(BX_R_List[i-1]-BX_R_List[i])>GD_Change_Max){
+			if(abs(BX_R_List[i-2]-BX_R_List[i-1])<GD_Change_Max){
+				GD_R_H=i+1;
+			}
+		}
+	}
+}
+
+
+void BX_L(uint8 BX_Start_X,uint8 BX_End_X,uint8 BX_Start_Y,uint8 BX_End_Y){
+	float K_L=(BX_End_Y-BX_Start_Y)/(BX_End_X-BX_Start_X);
+	for(uint8 i=BX_Start_X;i<=BX_End_X;i++){
+		BX_L_List[i]=BX_L_List[BX_Start_X]+(int)(K_L*(i-BX_Start_X));
+	}
+}
+
+void BX_R(uint8 BX_Start_X,uint8 BX_End_X,uint8 BX_Start_Y,uint8 BX_End_Y){
+	float K_R=(BX_End_Y-BX_Start_Y)/(BX_End_X-BX_Start_X);
+	for(uint8 i=BX_Start_X;i<=BX_End_X;i++){
+		BX_R_List[i]=BX_R_List[BX_Start_X]+(int)(K_R*(i-BX_Start_X));
+	}
+}
+
+
+void Deal_Cross(){
+	int Cross_Flag=0;
+	if(Cross_Flag==0){
+		if(DX_M_Count>3){
+			Deal_GD();
+		}
+		if(GD_L_H&&GD_R_H){
+			Cross_Flag=1;
+			Buzzer_On();
+			if(GD_L_L&&GD_R_L){
+				BX_L(GD_L_H,GD_L_L,BX_L_List[GD_L_H],BX_L_List[GD_L_L]);
+				BX_R(GD_R_H,GD_R_L,BX_R_List[GD_R_H],BX_R_List[GD_R_L]);
+			}
+			if(GD_L_L&&!GD_R_L){
+				BX_L(GD_L_H,GD_L_L,BX_L_List[GD_L_H],BX_L_List[GD_L_L]);
+				BX_R(GD_R_H,S_MT9V03X_H,BX_R_List[GD_R_H],BX_R_List[S_MT9V03X_H-1]);
+			}
+			if(!GD_L_L&&GD_R_L){
+				BX_L(GD_L_H,S_MT9V03X_H,BX_L_List[GD_L_H],BX_L_List[S_MT9V03X_H-1]);
+				BX_R(GD_R_H,GD_R_L,BX_R_List[GD_R_H],BX_R_List[GD_R_L]);
+			}
+			if(!GD_L_L&&!GD_R_L){
+				BX_R(GD_R_H,S_MT9V03X_H,BX_R_List[GD_R_H],BX_R_List[S_MT9V03X_H-1]);
+				BX_L(GD_L_H,S_MT9V03X_H,BX_L_List[GD_L_H],BX_L_List[S_MT9V03X_H-1]);
+			}
+		}
+	}
+}	
 void find_ZX(){
 	for(uint8 i=BX_Search_Start-1;i>BX_Search_End;i--){
 		M_M_List[i]=Limit(1,(BX_L_List[i]+BX_R_List[i])/2,S_MT9V03X_W-2);
@@ -285,7 +376,7 @@ uint8 M_W_List[120]=
 	6,6,6,6,6,6,6,6,6,6,
 	1,1,1,1,1,1,1,1,1,1,
 };
-uint8 Last_M_Out=94;//中线权重上一次输出
+uint8 Last_M_Out=97;//中线权重上一次输出
 uint8 M_W_Finally;
 //中线权重计算
 uint8 M_Weight(){
