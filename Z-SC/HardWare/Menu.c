@@ -62,7 +62,7 @@ void Dis_CD3(){
 			
 		
 			ips200_show_float (70, 164,Outer.Kp,2,2);
-			ips200_show_float (70, 180,limit,2,2);
+			ips200_show_float (70, 180,Outer.Ki,2,2);
 			ips200_show_float (70, 196,Outer.Kd,2,2);
 			ips200_show_float (70, 212,Speed,4,2);
 	

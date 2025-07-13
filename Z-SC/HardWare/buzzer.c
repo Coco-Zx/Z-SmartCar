@@ -5,7 +5,7 @@ void Buzzer_Init(){
 	gpio_init(BEEP, GPO, GPIO_LOW, GPO_PUSH_PULL);
 }
 void Buzzer_On(){
-	count_buzzer=10;
+	count_buzzer=25;
 
 }
 void Buzzer(){

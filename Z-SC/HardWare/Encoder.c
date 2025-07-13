@@ -35,7 +35,7 @@ void pit6_handler(){
 	if(Car_Flag!=0){
            
 	
-		M_M=100;
+		M_M=94;
 		if(Count%1==0){
 			Outer.Actual= M_M-M_W_Finally;
 			PID_UpdateZ(&Outer);

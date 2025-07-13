@@ -97,8 +97,11 @@ int main (void)
     
 	while(1)
     {
-		Outer.OutMax=limit;
-		Outer.OutMin=-limit;
+		ips200_show_int (180,132,Cross_Flag,3);
+//		if(DX_M_Start!=0){
+//			Buzzer_On();
+//		}
+		//Buzzer_On();
 		if(mt9v03x_finish_flag)
 		{
 			memcpy(image_copy, mt9v03x_image, MT9V03X_H*MT9V03X_W);
@@ -111,7 +114,7 @@ int main (void)
 			find_JD(image);
 			find_BX(image);
 			Deal_DX();
-			Deal_Cross();
+			//Deal_Cross();
 			find_ZX();
 			Draw_Line();
 			M_W_Finally=M_Weight();

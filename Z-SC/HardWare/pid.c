@@ -7,7 +7,7 @@
 float Target,Actual,Out;
 float Kp=0,Ki=0,Kd=0;
 float Err0,Err1,ErrI,Err2;
-float limit =3000;
+
 //右轮pid结构体定义
 PID Inner_R={
 	.Kp=1.98,
@@ -31,8 +31,8 @@ PID Outer={
 	.Kp=75,//4.89
 	.Ki=0,
 	.Kd=0,
-	//.OutMax=limit,
-	//.OutMin=-limit,
+	.OutMax=3000,
+	.OutMin=-3000,
 };
 //pid封装
 void PID_Update(PID *p){

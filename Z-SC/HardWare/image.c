@@ -13,9 +13,10 @@
 #define BX_R_L          10            //右边线-左搜寻
 #define M_M             93			  //中间行
 
-#define GD_Change_Min   3
+#define GD_Change_Min   5
 #define GD_Change_Max   10
 
+#define array_size  (DX_Search_Start - DX_Search_End) / 2
 
 uint8   BX_L_List[S_MT9V03X_H];//左边线
 uint8   BX_R_List[S_MT9V03X_H];//右边线
@@ -236,32 +237,40 @@ void Deal_DX(){
 	DX_L_Start=0;
 	DX_R_Start=0;
 	DX_M_Start=0;
-	
-	
-	uint8 DX_L_Flag[(DX_Search_Start-DX_Search_End)/2]={0};
-	uint8 DX_R_Flag[(DX_Search_Start-DX_Search_End)/2]={0};
-	
-	for(uint8 i=DX_Search_Start;i>DX_Search_End;i-=2){
-		if(BX_L_List[i]==1){
-			DX_L_Flag[i]=1;
-			DX_L_Count++;
-			if(DX_L_Start==0){
-				DX_L_Start=i;
-			}
-		}
+
+    // 计算实际需要的数组大小（考虑步长2）
+  
+    uint8 DX_L_Flag[array_size] = {0};
+    uint8 DX_R_Flag[array_size] = {0};
+
+    // 使用转换后的索引进行遍历
+    for (uint8 i = DX_Search_Start, idx = 0; i > DX_Search_End; i -= 2, idx++) {
+        // 左线检测
+		if(idx >= array_size) break;
+        if (BX_L_List[i] == 1) {
+            DX_L_Flag[idx] = 1;
+            DX_L_Count++;
+            if (DX_L_Start == 0) {
+                DX_L_Start = i;
+            }
+			ips200_show_int (180, 280,DX_L_Start,3);
+        }
 		if(BX_R_List[i]==S_MT9V03X_W-2){
-			DX_R_Flag[i]=1;
+			DX_R_Flag[idx]=1;
 			DX_R_Count++;
 			if(DX_R_Start==0){
 				DX_R_Start=i;
 			}
+			ips200_show_int (180, 300,DX_R_Start,3);
 		}
-		if(DX_L_Flag[i]==1&&DX_R_Flag[i]==1){
+		if(DX_L_Flag[idx]==1&&DX_R_Flag[idx]==1){
 			DX_M_Count++;
 			if(DX_M_Start==0){
 				DX_M_Start=i;
+				ips200_show_int (180, 260,DX_M_Start,3);
 			}
 		}
+		
 	}
 }
 uint8 GD_L_H;
@@ -277,25 +286,36 @@ void Deal_GD(){
 	
 	for(uint8 i=DX_L_Start;i<DX_Search_Start;i++){
 		if(BX_L_List[i+1]-BX_L_List[i]>GD_Change_Max){
-			if(BX_L_List[i+2]-BX_L_List[i+1]<GD_Change_Max){
+			if(BX_L_List[i+2]-BX_L_List[i+1]<GD_Change_Min){
 				GD_L_L=i+1;
+				
+				break;
 			}
 		}
+	}
+	for(uint8 i=DX_L_Start;i<DX_Search_Start;i++){
 		if(abs(BX_R_List[i+1]-BX_R_List[i])>GD_Change_Max){
-			if(abs(BX_R_List[i+2]-BX_R_List[i+1])<GD_Change_Max){
+			if(abs(BX_R_List[i+2]-BX_R_List[i+1])<GD_Change_Min){
 				GD_R_L=i+1;
+				break;
 			}
 		}
 	}
 	for(uint8 i=DX_L_Start;i>DX_Search_End;i--){
 		if(BX_L_List[i-1]-BX_L_List[i]>GD_Change_Max){
-			if(BX_L_List[i-2]-BX_L_List[i-1]<GD_Change_Max){
+			if(BX_L_List[i-2]-BX_L_List[i-1]<GD_Change_Min){
 				GD_L_H=i-1;
+				
+				break;
 			}
 		}
+	}
+	for(uint8 i=DX_L_Start;i>DX_Search_End;i--){
 		if(abs(BX_R_List[i-1]-BX_R_List[i])>GD_Change_Max){
-			if(abs(BX_R_List[i-2]-BX_R_List[i-1])<GD_Change_Max){
-				GD_R_H=i+1;
+			if(abs(BX_R_List[i-2]-BX_R_List[i-1])<GD_Change_Min){
+				GD_R_H=i-1;
+				
+				break;
 			}
 		}
 	}
@@ -303,29 +323,36 @@ void Deal_GD(){
 
 
 void BX_L(uint8 BX_Start_X,uint8 BX_End_X,uint8 BX_Start_Y,uint8 BX_End_Y){
-	float K_L=(BX_End_Y-BX_Start_Y)/(BX_End_X-BX_Start_X);
+	float K_L=(float)(BX_End_Y - BX_Start_Y) / (BX_End_X - BX_Start_X);
 	for(uint8 i=BX_Start_X;i<=BX_End_X;i++){
 		BX_L_List[i]=BX_L_List[BX_Start_X]+(int)(K_L*(i-BX_Start_X));
 	}
 }
 
 void BX_R(uint8 BX_Start_X,uint8 BX_End_X,uint8 BX_Start_Y,uint8 BX_End_Y){
-	float K_R=(BX_End_Y-BX_Start_Y)/(BX_End_X-BX_Start_X);
+	float K_R=(float)(BX_End_Y - BX_Start_Y) / (BX_End_X - BX_Start_X);
 	for(uint8 i=BX_Start_X;i<=BX_End_X;i++){
 		BX_R_List[i]=BX_R_List[BX_Start_X]+(int)(K_R*(i-BX_Start_X));
 	}
 }
 
-
+int Cross_Flag=0;
 void Deal_Cross(){
-	int Cross_Flag=0;
-	if(Cross_Flag==0){
+	
+	
 		if(DX_M_Count>3){
 			Deal_GD();
-		}
-		if(GD_L_H&&GD_R_H){
-			Cross_Flag=1;
+			
+			ips200_show_int (180,180 ,GD_L_L,3);
+			ips200_show_int (180,200 ,GD_R_L,3);
+			ips200_show_int (180,220 ,GD_L_H,3);
+			ips200_show_int (180,240 ,GD_R_H,3);
 			Buzzer_On();
+			
+		}
+		if(GD_L_H>0&&GD_R_H>0){
+			Cross_Flag=1;
+			
 			if(GD_L_L&&GD_R_L){
 				BX_L(GD_L_H,GD_L_L,BX_L_List[GD_L_H],BX_L_List[GD_L_L]);
 				BX_R(GD_R_H,GD_R_L,BX_R_List[GD_R_H],BX_R_List[GD_R_L]);
@@ -343,7 +370,7 @@ void Deal_Cross(){
 				BX_L(GD_L_H,S_MT9V03X_H,BX_L_List[GD_L_H],BX_L_List[S_MT9V03X_H-1]);
 			}
 		}
-	}
+	
 }	
 void find_ZX(){
 	for(uint8 i=BX_Search_Start-1;i>BX_Search_End;i--){
@@ -355,7 +382,11 @@ void find_ZX(){
 void Draw_Line(){
 	for(uint8 i=S_MT9V03X_H-1;i>BX_Search_End;i--){
 		ips200_draw_point (BX_L_List[i],i,RGB565_RED);
+		ips200_draw_point (BX_L_List[i]+1,i,RGB565_RED);
 		ips200_draw_point (BX_R_List[i],i,RGB565_RED);
+		ips200_draw_point (BX_R_List[i]-1,i,RGB565_RED);
+		ips200_draw_point (M_M_List[i]+1,i,RGB565_GREEN);
+		ips200_draw_point (M_M_List[i]-1,i,RGB565_GREEN);
 		ips200_draw_point (M_M_List[i],i,RGB565_GREEN);
 	}
 
