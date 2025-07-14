@@ -35,7 +35,7 @@ void pit6_handler(){
 	if(Car_Flag!=0){
            
 	
-		PID_UpdateZ(&Outer);
+		PID_Update(&Outer);
 		
 		Inner_L.Target=Speed;
 		Inner_R.Target=Speed;
