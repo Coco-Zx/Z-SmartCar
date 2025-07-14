@@ -2,6 +2,7 @@
 #include "Motor.h" 
 #include "Encoder.h"
 #include "pid.h"
+#include "image.h" 
 int G_Num=1;//光标序号
 char C_Num=0;//菜单序号
 char CS_Change_Flag=0;//参数改变标志位
@@ -51,7 +52,7 @@ void Dis_CD3(){
 			ips200_show_string(10, 132, "Setting   ");
 			ips200_show_string(0, 164, ">");
 			ips200_show_string(10, 164, "Kp=       ");
-			ips200_show_string(10, 180, "limit=    ");
+			ips200_show_string(10, 180, "QZ=    ");
 			ips200_show_string(10, 196, "Kd=       ");
 			ips200_show_string(10, 212, "Speed=    ");
 	
@@ -62,7 +63,7 @@ void Dis_CD3(){
 			
 		
 			ips200_show_float (70, 164,Outer.Kp,2,2);
-			ips200_show_float (70, 180,Outer.Ki,2,2);
+			ips200_show_int (70, 180,QZ,3);
 			ips200_show_float (70, 196,Outer.Kd,2,2);
 			ips200_show_float (70, 212,Speed,4,2);
 	

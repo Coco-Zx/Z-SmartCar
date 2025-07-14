@@ -10,7 +10,7 @@ float Err0,Err1,ErrI,Err2;
 
 //右轮pid结构体定义
 PID Inner_R={
-	.Kp=1.98,
+	.Kp=2.00,//1.98
 	.Ki=0.21,
 	.Kd=0,
 	.offset=620.0,
@@ -19,7 +19,7 @@ PID Inner_R={
 };
 //左轮pid结构体定义
 PID Inner_L={
-	.Kp=1.68,
+	.Kp=1.70,//1.68
 	.Ki=0.21,
 	.Kd=0,
 	.offset=600.0,
@@ -28,7 +28,7 @@ PID Inner_L={
 };
 //中线外环pid定义
 PID Outer={
-	.Kp=75,//4.89
+	.Kp=72,//4.89
 	.Ki=0,
 	.Kd=0,
 	.OutMax=3000,

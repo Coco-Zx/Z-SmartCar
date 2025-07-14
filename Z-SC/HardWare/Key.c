@@ -2,6 +2,7 @@
 #include "Menu.h"
 #include "Motor.h" 
 #include "pid.h"
+#include "image.h" 
 #define KEY1                    (E2 )
 #define KEY2                    (E3 )
 #define KEY3                    (E4 )
@@ -37,7 +38,7 @@ void Scan_Key(){
 			else if(CS_Change_Flag==1){//调参情况下参数增减
 				switch(G_Num){
 					case 1:Outer.Kp-=1;ips200_show_float (70, 164,Outer.Kp,2,2);break;
-					case 2:Outer.Ki-=0.01;ips200_show_float (70, 180,Outer.Ki,2,2);break;
+					case 2:QZ-=1;ips200_show_int (70, 180,QZ,3);break;
 					case 3:Outer.Kd-=0.01;ips200_show_float (70, 196,Outer.Kd,2,2);break;
 					case 4:Speed-=10;ips200_show_float (70, 212,Speed,4,2);break;
 				}
@@ -56,7 +57,7 @@ void Scan_Key(){
 			else if(CS_Change_Flag==1){
 				switch(G_Num){
 					case 1:Outer.Kp+=1;ips200_show_float (70, 164,Outer.Kp,2,2);;break;
-					case 2:Outer.Ki+=0.01;ips200_show_float (70, 180,Outer.Ki,2,2);;break;
+					case 2:QZ+=1;ips200_show_int (70, 180,QZ,3);;break;
 					case 3:Outer.Kd+=0.01;ips200_show_float (70, 196,Outer.Kd,2,2);;break;
 					case 4:Speed+=10;ips200_show_float (70, 212,Speed,4,2);break;
 				}
@@ -92,7 +93,9 @@ void Scan_Key(){
 								else{
 									ips200_show_string(0, 300, "    ");
 									Car_Flag=0;
-							//		Final_Speed=0;
+									MotorL_SetSpeed(Speed);
+									MotorR_SetSpeed(Speed);
+									system_delay_ms(1000);
 									Motor_Stop();
 								}break;
 						case 2:C_Num=1;Dis_CD1();G_Num=1;break;

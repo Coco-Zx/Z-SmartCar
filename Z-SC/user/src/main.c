@@ -96,14 +96,12 @@ int main (void)
 	Outer.Target=0;
     
 	while(1)
-    {
+    {                    
 		ips200_show_int (180,132,Cross_Flag,3);
 //		if(DX_M_Start!=0){
 //			Buzzer_On();
 //		}
 		//Buzzer_On();
-		if(mt9v03x_finish_flag)
-		{
 			memcpy(image_copy, mt9v03x_image, MT9V03X_H*MT9V03X_W);
 			memcpy(image, mt9v03x_image, MT9V03X_H*MT9V03X_W);
 //			filter();
@@ -111,6 +109,8 @@ int main (void)
 			ips200_show_int (150, 290, threshold,3);
 //			uint8 threshold=DJthreshold(image_copy);
 			Set_image_T(threshold);
+			Protect();
+			Stop();
 			find_JD(image);
 			find_BX(image);
 			Deal_DX();
@@ -118,7 +118,10 @@ int main (void)
 			find_ZX();
 			Draw_Line();
 			M_W_Finally=M_Weight();
-			ips200_show_float (150, 160,M_W_Finally,4,2);
+			Outer.Actual= 93-M_W_Finally;
+			ips200_show_float (150, 160,Outer.Actual,4,2);
+		if(mt9v03x_finish_flag)
+		{
 			if(C_Num==2){
 				
 			

@@ -1,7 +1,8 @@
 #include "zf_common_headfile.h"
 #include "YUdeal.h"
 #include "buzzer.h"
-
+#include "key.h"                                                                 
+#include "Motor.h"        
 #define JD_Search_Line  S_MT9V03X_H   //基点搜寻起始行
 #define BX_Search_Start S_MT9V03X_H   //边线搜寻起始行
 #define BX_Search_End   20 			  //边线搜寻终止行
@@ -244,7 +245,7 @@ void Deal_DX(){
     uint8 DX_R_Flag[array_size] = {0};
 
     // 使用转换后的索引进行遍历
-    for (uint8 i = DX_Search_Start, idx = 0; i > DX_Search_End; i -= 2, idx++) {
+    for (uint8 i = DX_Search_Start-1, idx = 0; i > DX_Search_End; i -= 2, idx++) {
         // 左线检测
 		if(idx >= array_size) break;
         if (BX_L_List[i] == 1) {
@@ -293,7 +294,7 @@ void Deal_GD(){
 			}
 		}
 	}
-	for(uint8 i=DX_L_Start;i<DX_Search_Start;i++){
+	for(uint8 i=DX_R_Start;i<DX_Search_Start;i++){
 		if(abs(BX_R_List[i+1]-BX_R_List[i])>GD_Change_Max){
 			if(abs(BX_R_List[i+2]-BX_R_List[i+1])<GD_Change_Min){
 				GD_R_L=i+1;
@@ -310,7 +311,7 @@ void Deal_GD(){
 			}
 		}
 	}
-	for(uint8 i=DX_L_Start;i>DX_Search_End;i--){
+	for(uint8 i=DX_R_Start;i>DX_Search_End;i--){
 		if(abs(BX_R_List[i-1]-BX_R_List[i])>GD_Change_Max){
 			if(abs(BX_R_List[i-2]-BX_R_List[i-1])<GD_Change_Min){
 				GD_R_H=i-1;
@@ -343,11 +344,11 @@ void Deal_Cross(){
 		if(DX_M_Count>3){
 			Deal_GD();
 			
-			ips200_show_int (180,180 ,GD_L_L,3);
-			ips200_show_int (180,200 ,GD_R_L,3);
-			ips200_show_int (180,220 ,GD_L_H,3);
-			ips200_show_int (180,240 ,GD_R_H,3);
-			Buzzer_On();
+//			ips200_show_int (180,180 ,GD_L_L,3);
+//			ips200_show_int (180,200 ,GD_R_L,3);
+//			ips200_show_int (180,220 ,GD_L_H,3);
+//			ips200_show_int (180,240 ,GD_R_H,3);
+//			Buzzer_On();
 			
 		}
 		if(GD_L_H>0&&GD_R_H>0){
@@ -359,15 +360,15 @@ void Deal_Cross(){
 			}
 			if(GD_L_L&&!GD_R_L){
 				BX_L(GD_L_H,GD_L_L,BX_L_List[GD_L_H],BX_L_List[GD_L_L]);
-				BX_R(GD_R_H,S_MT9V03X_H,BX_R_List[GD_R_H],BX_R_List[S_MT9V03X_H-1]);
+				BX_R(GD_R_H,S_MT9V03X_H-1,BX_R_List[GD_R_H],BX_R_List[S_MT9V03X_H-1]);
 			}
 			if(!GD_L_L&&GD_R_L){
-				BX_L(GD_L_H,S_MT9V03X_H,BX_L_List[GD_L_H],BX_L_List[S_MT9V03X_H-1]);
+				BX_L(GD_L_H,S_MT9V03X_H-1,BX_L_List[GD_L_H],BX_L_List[S_MT9V03X_H-1]);
 				BX_R(GD_R_H,GD_R_L,BX_R_List[GD_R_H],BX_R_List[GD_R_L]);
 			}
 			if(!GD_L_L&&!GD_R_L){
-				BX_R(GD_R_H,S_MT9V03X_H,BX_R_List[GD_R_H],BX_R_List[S_MT9V03X_H-1]);
-				BX_L(GD_L_H,S_MT9V03X_H,BX_L_List[GD_L_H],BX_L_List[S_MT9V03X_H-1]);
+				BX_R(GD_R_H,S_MT9V03X_H-1,BX_R_List[GD_R_H],BX_R_List[S_MT9V03X_H-1]);
+				BX_L(GD_L_H,S_MT9V03X_H-1,BX_L_List[GD_L_H],BX_L_List[S_MT9V03X_H-1]);
 			}
 		}
 	
@@ -409,18 +410,60 @@ uint8 M_W_List[120]=
 };
 uint8 Last_M_Out=97;//中线权重上一次输出
 uint8 M_W_Finally;
+int QZ=75;
 //中线权重计算
-uint8 M_Weight(){
-	uint8 M_Out;
-	uint8 M_Value;
-	uint32 M_W_Sum=0;
-	uint32 W_Sum=0;
-	for(uint8 i=S_MT9V03X_H-1;i>BX_Search_End;i--){
-		M_W_Sum+=M_M_List[i]*M_W_List[i];
-		W_Sum+=M_W_List[i];
+
+
+void Protect(){
+	uint8 Counter=0;
+	for(uint8 i=118;i>110;i--){
+		if(image[i][S_MT9V03X_W/2]==0){
+			Counter++;
+		}
 	}
-	M_Value=(uint8)(M_W_Sum/W_Sum);
-	M_Out=Last_M_Out*0.2+M_Value*0.8;
-	Last_M_Out=M_Out;
+	if(Counter>5){
+		Car_Flag=0;
+		Motor_Stop();
+	}
+}
+
+void Stop(){
+	uint8 Counter=0;
+	uint8 flag=0;
+	for(uint8 i=1;i<187;i++){
+		if(image[S_MT9V03X_H/2][i]==255&&flag==0){
+			flag=1;
+		}
+		if(image[S_MT9V03X_H/2][i]==0&&flag==1){
+			Counter++;
+			flag=0;
+		}
+	}
+	if(Counter>5){
+		Car_Flag=0;
+		Motor_Stop();
+	}
+}
+float M_Weight(){
+	float M_Out;
+	uint32 M_W_Sum=0;
+	for(uint8 i=QZ;i>QZ-5;i--){
+		M_W_Sum+=M_M_List[i];
+	}
+	M_Out=M_W_Sum/5;
 	return M_Out;
 }
+//float M_Weight(){
+//	uint8 M_Out;
+//	uint8 M_Value;
+//	uint32 M_W_Sum=0;
+//	uint32 W_Sum=0;
+//	for(uint8 i=S_MT9V03X_H-1;i>BX_Search_End;i--){
+//		M_W_Sum+=M_M_List[i]*M_W_List[i];
+//		W_Sum+=M_W_List[i];
+//	}
+//	M_Value=(uint8)(M_W_Sum/W_Sum);
+//	M_Out=Last_M_Out*0.2+M_Value*0.8;
+//	Last_M_Out=M_Out;
+//	return M_Out;
+//}
