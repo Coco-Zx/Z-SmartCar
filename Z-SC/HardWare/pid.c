@@ -13,22 +13,22 @@ PID Inner_R={
 	.Kp=0.88,
 	.Ki=0.29,
 	.Kd=0,
-	.OutMax=2500,//限幅
-	.OutMin=-2500,
+	.OutMax=3000,//限幅
+	.OutMin=-3000,
 };
 //左轮pid结构体定义
 PID Inner_L={
 	.Kp=0.60,
 	.Ki=0.32,
 	.Kd=0,
-	.OutMax=2500,
-	.OutMin=-2500,
+	.OutMax=3000,
+	.OutMin=-3000,
 };
 //中线外环pid定义
 PID Outer={
 	.Kp=29,//4.89
 	.Ki=0,
-	.Kd=1560,
+	.Kd=560,
 	.OutMax=3000,
 	.OutMin=-3000,
 };

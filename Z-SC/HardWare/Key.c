@@ -39,7 +39,7 @@ void Scan_Key(){
 				switch(G_Num){
 					case 1:Outer.Kp-=1;ips200_show_float (70, 164,Outer.Kp,2,2);break;
 					case 2:QZ-=1;ips200_show_int (70, 180,QZ,3);break;
-					case 3:Outer.Kd-=2;ips200_show_float (70, 196,Outer.Kd,3,2);break;
+					case 3:Outer.Kd-=10;ips200_show_float (70, 196,Outer.Kd,3,2);break;
 					case 4:Speed-=50;ips200_show_float (70, 212,Speed,4,2);break;
 				}
 			}
@@ -58,7 +58,7 @@ void Scan_Key(){
 				switch(G_Num){
 					case 1:Outer.Kp+=1;ips200_show_float (70, 164,Outer.Kp,2,2);;break;
 					case 2:QZ+=1;ips200_show_int (70, 180,QZ,3);;break;
-					case 3:Outer.Kd+=2;ips200_show_float (70, 196,Outer.Kd,3,2);;break;
+					case 3:Outer.Kd+=10;ips200_show_float (70, 196,Outer.Kd,3,2);;break;
 					case 4:Speed+=50;ips200_show_float (70, 212,Speed,4,2);break;
 				}
 			}
