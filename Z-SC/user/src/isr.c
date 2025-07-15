@@ -104,8 +104,7 @@ void TIM5_IRQHandler (void)
 //-------------------------------------------------------------------------------------------------------------------
 void TIM6_IRQHandler (void)
 {
-	extern void pit6_handler (void);
-    pit6_handler();
+
    
     TIM6->SR &= ~TIM6->SR;                                                      // 清空中断状态
 }

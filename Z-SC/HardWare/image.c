@@ -410,7 +410,7 @@ uint8 M_W_List[120]=
 };
 uint8 Last_M_Out=97;//中线权重上一次输出
 uint8 M_W_Finally;
-int QZ=75;
+int QZ=60;
 //中线权重计算
 
 
@@ -423,6 +423,7 @@ void Protect(){
 	}
 	if(Counter>5){
 		Car_Flag=0;
+		ips200_show_string(0, 300, " ST!");
 		Motor_Stop();
 	}
 }
@@ -441,6 +442,7 @@ void Stop(){
 	}
 	if(Counter>5){
 		Car_Flag=0;
+		ips200_show_string(0, 300, " ST!");
 		Motor_Stop();
 	}
 }

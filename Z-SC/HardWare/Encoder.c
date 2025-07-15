@@ -19,19 +19,16 @@ int M_M;
 void Encoder_Init(){
 	encoder_quad_init(TIM3_ENCODER, TIM3_ENCODER_CH1_B4, TIM3_ENCODER_CH2_B5);
 	encoder_quad_init(TIM4_ENCODER, TIM4_ENCODER_CH1_B6, TIM4_ENCODER_CH2_B7);
-	
-	pit_ms_init(TIM6_PIT,15);                                            
-
-    interrupt_set_priority(TIM6_IRQn, 0);                                 
+	                          
 }
-void pit6_handler(){
+void pit2_handler(){
 	Count++;
 	E_Num1= -encoder_get_count(ENCODER_QUADDEC1);                  
     E_Num2= encoder_get_count(ENCODER_QUADDEC2);     //读取数值              
     encoder_clear_count(ENCODER_QUADDEC1);                         
     encoder_clear_count(ENCODER_QUADDEC2);            //清空计数   
-	Inner_L.Actual=E_Num2;
-	Inner_R.Actual=E_Num1;   //实际调速赋值	
+	Inner_L.Actual=(E_Num2+E_Num1)/2;
+	Inner_R.Actual=(E_Num2+E_Num1)/2;   //实际调速赋值	
 	if(Car_Flag!=0){
            
 	

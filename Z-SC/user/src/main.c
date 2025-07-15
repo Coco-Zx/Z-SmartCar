@@ -90,7 +90,7 @@ int main (void)
 {
 	All_Init();//全部初始化
     Dis_CD0();//主页面菜单显示
-//	pit_ms_init(TIM2_PIT,10);//屏幕刷新
+	pit_ms_init(TIM2_PIT,15);//屏幕刷新
 	pit_ms_init(TIM7_PIT,50);//按键
 	
 	Outer.Target=0;
@@ -116,19 +116,18 @@ int main (void)
 			Deal_DX();
 			//Deal_Cross();
 			find_ZX();
-			Draw_Line();
 			M_W_Finally=M_Weight();
 			Outer.Actual= 93-M_W_Finally;
 			ips200_show_float (150, 160,Outer.Actual,4,2);
-		if(mt9v03x_finish_flag)
+		if(mt9v03x_finish_flag&&Car_Flag ==0)
 		{
 			if(C_Num==2){
 				
 			
-				ips200_show_float (70, 230,Inner_R.Actual,4,2);
-				ips200_show_float (70, 250,Inner_L.Actual,4,2);//实际速度输出
-				ips200_show_float (70, 270,Inner_R.Out,4,2);
-				ips200_show_float (70, 290,Inner_L.Out,4,2);
+//				ips200_show_float (70, 230,Inner_R.Actual,4,2);
+//				ips200_show_float (70, 250,Inner_L.Actual,4,2);//实际速度输出
+//				ips200_show_float (70, 270,Inner_R.Out,4,2);
+//				ips200_show_float (70, 290,Inner_L.Out,4,2);
 				
 	
 				ips200_show_gray_image(0, 0, (const uint8 *)image_copy, MT9V03X_W, MT9V03X_H, MT9V03X_W, MT9V03X_H,0);
@@ -136,7 +135,7 @@ int main (void)
 			}
 			if(C_Num==0){
 				
-				
+				Draw_Line();
 				ips200_show_gray_image(0, 0, (const uint8 *)image, MT9V03X_W, MT9V03X_H, MT9V03X_W, MT9V03X_H,0);
 			
 		}
@@ -187,39 +186,15 @@ void All_Init(){
 	
 }
 
-void pit2_handler(){
-//   
-//	if(mt9v03x_finish_flag)
-//		{
-//			memcpy(image_copy, mt9v03x_image, MT9V03X_H*MT9V03X_W);
-//			//filter();
-//			uint8 threshold=GetOTSU(image_copy);
-//		//	uint8 threshold=DJthreshold(image_copy);
-//			Set_image_T(threshold);
-//			find_JD(image);
-//			find_BX(image);
-//			M_W_Finally=M_Weight();
-//			
-//			mt9v03x_finish_flag=0;
-//		}
-//	if(C_Num==2){
-//		ips200_show_gray_image(0, 0, (const uint8 *)image_copy, MT9V03X_W, MT9V03X_H, MT9V03X_W, MT9V03X_H,0);
-//	}
-//	if(Car_Flag==1&&C_Num==0){
-//		Draw_Line();
-//		ips200_show_gray_image(0, 0, (const uint8 *)image, MT9V03X_W, MT9V03X_H, MT9V03X_W, MT9V03X_H,0);
-//	}
-	
-	
-	
-}
 void pit7_handler(){
+	if(Car_Flag ==0){
 	 T_Counter++;
 	//ips200_show_float (120, 290, M_W_Finally,4,2);
     key_scanner();
 	Scan_Key();
 	if(T_Counter%5==0){
 		Dis_GB();
+		}
 	}
 }
 
