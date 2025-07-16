@@ -15,5 +15,6 @@ void Deal_Cross();
 void Draw_Line();
 void Protect();
 void Stop();
+void QZ_Limit();
 float M_Weight();
 #endif

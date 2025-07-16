@@ -116,6 +116,7 @@ int main (void)
 			Deal_DX();
 			Deal_Cross();
 			find_ZX();
+			QZ_Limit();
 			M_W_Finally=M_Weight();
 			Outer.Actual= 93-M_W_Finally;
 			ips200_show_float (150, 160,Outer.Actual,4,2);

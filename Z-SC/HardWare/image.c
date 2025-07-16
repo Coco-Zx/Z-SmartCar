@@ -13,12 +13,12 @@
 #define BX_R_R          5			  //右边线-右搜寻
 #define BX_R_L          10            //右边线-左搜寻
 #define M_M             93			  //中间行
-
+#define ZX_Limit        5
 #define GD_Change_Min   5
 #define GD_Change_Max   7
 
 #define array_size  (DX_Search_Start - DX_Search_End) / 2
-
+uint8               QZ_L=0;
 uint8   BX_L_List[S_MT9V03X_H];//左边线
 uint8   BX_R_List[S_MT9V03X_H];//右边线
 uint8   M_M_List[S_MT9V03X_H];//中线
@@ -393,6 +393,14 @@ void find_ZX(){
 	}
 }
 
+void QZ_Limit(){
+	for(uint8 i=BX_Search_End;i<BX_Search_Start-6;i++){
+		if(abs(M_M_List[i+1]-M_M_List[i])>ZX_Limit){
+			QZ_L = i+1+4;
+			break;
+		}
+	}
+}
 //画中线和边线函数
 void Draw_Line(){
 	for(uint8 i=S_MT9V03X_H-1;i>BX_Search_End;i--){
@@ -462,10 +470,16 @@ void Stop(){
 }
 float M_Weight(){
 	float M_Out;
+	int temp=QZ;
 	uint32 M_W_Sum=0;
+	if(QZ>QZ_L){
+		QZ=QZ_L;
+	}
 	for(uint8 i=QZ;i>QZ-5;i--){
 		M_W_Sum+=M_M_List[i];
 	}
+	QZ=temp;
+	QZ_L=QZ;
 	M_Out=M_W_Sum/5;
 	return M_Out;
 }
