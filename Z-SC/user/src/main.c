@@ -114,7 +114,7 @@ int main (void)
 			find_JD(image);
 			find_BX(image);
 			Deal_DX();
-			//Deal_Cross();
+			Deal_Cross();
 			find_ZX();
 			M_W_Finally=M_Weight();
 			Outer.Actual= 93-M_W_Finally;

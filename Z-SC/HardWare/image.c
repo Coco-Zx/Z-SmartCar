@@ -6,7 +6,7 @@
 #define JD_Search_Line  S_MT9V03X_H   //基点搜寻起始行
 #define BX_Search_Start S_MT9V03X_H   //边线搜寻起始行
 #define BX_Search_End   20 			  //边线搜寻终止行
-#define DX_Search_Start S_MT9V03X_H   //边线搜寻起始行
+#define DX_Search_Start S_MT9V03X_H-10   //边线搜寻起始行
 #define DX_Search_End   20 			  //边线搜寻终止行
 #define BX_L_R          10            //左边线-右搜寻
 #define BX_L_L          5			  //左边线-左搜寻
@@ -15,7 +15,7 @@
 #define M_M             93			  //中间行
 
 #define GD_Change_Min   5
-#define GD_Change_Max   10
+#define GD_Change_Max   7
 
 #define array_size  (DX_Search_Start - DX_Search_End) / 2
 
@@ -241,43 +241,43 @@ void Deal_DX(){
 
     // 计算实际需要的数组大小（考虑步长2）
   
-    uint8 DX_L_Flag[array_size] = {0};
-    uint8 DX_R_Flag[array_size] = {0};
+    uint8 DX_L_Flag=0;
+    uint8 DX_R_Flag=0;
 
     // 使用转换后的索引进行遍历
-    for (uint8 i = DX_Search_Start-1, idx = 0; i > DX_Search_End; i -= 2, idx++) {
+    for (uint8 i = DX_Search_Start-1; i > DX_Search_End; i -= 2) {
         // 左线检测
-		if(idx >= array_size) break;
         if (BX_L_List[i] == 1) {
-            DX_L_Flag[idx] = 1;
+            DX_L_Flag= 1;
             DX_L_Count++;
             if (DX_L_Start == 0) {
                 DX_L_Start = i;
             }
-			ips200_show_int (180, 280,DX_L_Start,3);
+			ips200_show_int (180, 260,DX_L_Start,3);
         }
 		if(BX_R_List[i]==S_MT9V03X_W-2){
-			DX_R_Flag[idx]=1;
+			DX_R_Flag=1;
 			DX_R_Count++;
 			if(DX_R_Start==0){
 				DX_R_Start=i;
 			}
-			ips200_show_int (180, 300,DX_R_Start,3);
+			ips200_show_int (180, 280,DX_R_Start,3);
 		}
-		if(DX_L_Flag[idx]==1&&DX_R_Flag[idx]==1){
+		if(DX_L_Flag==1&&DX_R_Flag==1){
 			DX_M_Count++;
 			if(DX_M_Start==0){
 				DX_M_Start=i;
-				ips200_show_int (180, 260,DX_M_Start,3);
+				ips200_show_int (180, 300,DX_M_Start,3);
 			}
 		}
-		
+		DX_L_Flag=0;
+		DX_R_Flag=0;
 	}
 }
 uint8 GD_L_H;
 uint8 GD_R_H;
-uint8 GD_L_L;
-uint8 GD_R_L;
+uint8 GD_L_L=DX_Search_Start-1;
+uint8 GD_R_L=DX_Search_Start-1;
 
 void Deal_GD(){
 	GD_L_H=0;
@@ -285,38 +285,46 @@ void Deal_GD(){
 	GD_L_L=0;
 	GD_R_L=0;
 	
-	for(uint8 i=DX_L_Start;i<DX_Search_Start;i++){
+	for(uint8 i=DX_L_Start;i+3<DX_Search_Start;i++){
 		if(BX_L_List[i+1]-BX_L_List[i]>GD_Change_Max){
 			if(BX_L_List[i+2]-BX_L_List[i+1]<GD_Change_Min){
-				GD_L_L=i+1;
+				if(BX_L_List[i+3]-BX_L_List[i+2]<GD_Change_Min){
+					GD_L_L=i+1;
 				
-				break;
+					break;
+				}
 			}
 		}
 	}
-	for(uint8 i=DX_R_Start;i<DX_Search_Start;i++){
+	for(uint8 i=DX_R_Start;i+3<DX_Search_Start;i++){
 		if(abs(BX_R_List[i+1]-BX_R_List[i])>GD_Change_Max){
 			if(abs(BX_R_List[i+2]-BX_R_List[i+1])<GD_Change_Min){
-				GD_R_L=i+1;
-				break;
+				if(abs(BX_R_List[i+3]-BX_R_List[i+2])<GD_Change_Min){
+					GD_R_L=i+1;
+					break;
+				}
 			}
 		}
 	}
-	for(uint8 i=DX_L_Start;i>DX_Search_End;i--){
+	for(uint8 i=DX_L_Start;i-3>DX_Search_End;i--){
 		if(BX_L_List[i-1]-BX_L_List[i]>GD_Change_Max){
 			if(BX_L_List[i-2]-BX_L_List[i-1]<GD_Change_Min){
-				GD_L_H=i-1;
+				if(BX_L_List[i-3]-BX_L_List[i-2]<GD_Change_Min){
+					GD_L_H=i-1;
 				
-				break;
+					break;
+				}
 			}
 		}
 	}
-	for(uint8 i=DX_R_Start;i>DX_Search_End;i--){
+	for(uint8 i=DX_R_Start;i-3>DX_Search_End;i--){
 		if(abs(BX_R_List[i-1]-BX_R_List[i])>GD_Change_Max){
 			if(abs(BX_R_List[i-2]-BX_R_List[i-1])<GD_Change_Min){
-				GD_R_H=i-1;
+				if(abs(BX_R_List[i-3]-BX_R_List[i-2])<GD_Change_Min){
+					GD_R_H=i-1;
 				
-				break;
+					break;
+				}
 			}
 		}
 	}
@@ -340,10 +348,13 @@ void BX_R(uint8 BX_Start_X,uint8 BX_End_X,uint8 BX_Start_Y,uint8 BX_End_Y){
 int Cross_Flag=0;
 void Deal_Cross(){
 	
-	
-		if(DX_M_Count>3){
+		Cross_Flag=0;
+		if(DX_M_Count>4
+			&&image[DX_M_Start][S_MT9V03X_W/2]==255&&image[DX_M_Start][S_MT9V03X_W/2+1]==255&&image[DX_M_Start][S_MT9V03X_W/2-1]==255
+			&&image[DX_M_Start-4][S_MT9V03X_W/2]==255&&image[DX_M_Start-4][S_MT9V03X_W/2+1]==255&&image[DX_M_Start-4][S_MT9V03X_W/2-1]==255){
 			Deal_GD();
-			
+			ips200_show_int (180,240 ,DX_M_Start,3);
+			DX_M_Count=0;
 //			ips200_show_int (180,180 ,GD_L_L,3);
 //			ips200_show_int (180,200 ,GD_R_L,3);
 //			ips200_show_int (180,220 ,GD_L_H,3);
@@ -353,7 +364,7 @@ void Deal_Cross(){
 		}
 		if(GD_L_H>0&&GD_R_H>0){
 			Cross_Flag=1;
-			
+			Buzzer_On();
 			if(GD_L_L&&GD_R_L){
 				BX_L(GD_L_H,GD_L_L,BX_L_List[GD_L_H],BX_L_List[GD_L_L]);
 				BX_R(GD_R_H,GD_R_L,BX_R_List[GD_R_H],BX_R_List[GD_R_L]);
@@ -371,7 +382,10 @@ void Deal_Cross(){
 				BX_L(GD_L_H,S_MT9V03X_H-1,BX_L_List[GD_L_H],BX_L_List[S_MT9V03X_H-1]);
 			}
 		}
-	
+		GD_L_H=0;
+		GD_R_H=0;
+		GD_L_L=0;
+	    GD_R_L=0;
 }	
 void find_ZX(){
 	for(uint8 i=BX_Search_Start-1;i>BX_Search_End;i--){
