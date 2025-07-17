@@ -97,7 +97,7 @@ int main (void)
     
 	while(1)
     {                    
-		ips200_show_int (180,132,Cross_Flag,3);
+		ips200_show_int (180,132,stage,3);
 //		if(DX_M_Start!=0){
 //			Buzzer_On();
 //		}
@@ -115,6 +115,7 @@ int main (void)
 			find_BX(image);
 			Deal_DX();
 			Deal_Cross();
+			Deal_Circle();
 			find_ZX();
 			QZ_Limit();
 			M_W_Finally=M_Weight();

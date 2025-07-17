@@ -230,6 +230,12 @@ uint8 DX_M_Count;
 uint8 DX_L_Start;
 uint8 DX_R_Start;
 uint8 DX_M_Start;
+
+uint8 DX_L_End;
+uint8 DX_R_End;
+uint8 DX_M_End;
+
+
 void Deal_DX(){
 	DX_L_Count=0;
 	DX_R_Count=0;
@@ -238,37 +244,45 @@ void Deal_DX(){
 	DX_L_Start=0;
 	DX_R_Start=0;
 	DX_M_Start=0;
+	
+	DX_L_End=0;
+	DX_R_End=0;
+	DX_M_End=0;
 
     // 计算实际需要的数组大小（考虑步长2）
   
     uint8 DX_L_Flag=0;
     uint8 DX_R_Flag=0;
 
-    // 使用转换后的索引进行遍历
     for (uint8 i = DX_Search_Start-1; i > DX_Search_End; i -= 2) {
         // 左线检测
         if (BX_L_List[i] == 1) {
             DX_L_Flag= 1;
+			
             DX_L_Count++;
+			
             if (DX_L_Start == 0) {
                 DX_L_Start = i;
             }
-			ips200_show_int (180, 260,DX_L_Start,3);
+		//	ips200_show_int (180, 260,DX_L_End,3);
         }
 		if(BX_R_List[i]==S_MT9V03X_W-2){
 			DX_R_Flag=1;
 			DX_R_Count++;
+			
 			if(DX_R_Start==0){
 				DX_R_Start=i;
 			}
-			ips200_show_int (180, 280,DX_R_Start,3);
+		//	ips200_show_int (180, 280,DX_R_End,3);
 		}
 		if(DX_L_Flag==1&&DX_R_Flag==1){
 			DX_M_Count++;
+			
 			if(DX_M_Start==0){
 				DX_M_Start=i;
-				ips200_show_int (180, 300,DX_M_Start,3);
+				
 			}
+		//	ips200_show_int (180, 300,DX_M_End,3);
 		}
 		DX_L_Flag=0;
 		DX_R_Flag=0;
@@ -365,7 +379,7 @@ void Deal_Cross(){
 		}
 		if(GD_L_H>0&&GD_R_H>0){
 			Cross_Flag=1;
-			Buzzer_On();
+			//Buzzer_On();
 			if(GD_L_L&&GD_R_L){
 				BX_L(GD_L_H,GD_L_L,BX_L_List[GD_L_H],BX_L_List[GD_L_L]);
 				BX_R(GD_R_H,GD_R_L,BX_R_List[GD_R_H],BX_R_List[GD_R_L]);
@@ -388,6 +402,82 @@ void Deal_Cross(){
 		GD_L_L=0;
 	    GD_R_L=0;
 }	
+uint8 A_Point;
+uint8 B_Point;
+uint8 C_Point;
+uint8 Find_B(){
+	B_Point=0;
+	for(uint8 i=BX_Search_End;i<BX_Search_End+10;i++){
+		if(BX_R_List[i+1]-BX_R_List[i]>5){
+			B_Point=i;
+		}
+	}
+	ips200_show_int (180,140,B_Point,3);
+	return B_Point;
+} 
+
+uint8 Find_A(){
+	A_Point=0;
+	for(uint8 i=BX_Search_Start-1;i>BX_Search_Start-38;i--){
+		if(BX_R_List[i-1]-BX_R_List[i]>5){
+			A_Point=i;
+		}
+	}
+	ips200_show_int (180,180,A_Point,3);
+	return A_Point;
+} 
+
+uint8 Find_C(){
+	C_Point=0;
+	uint8 find_Flag=0;
+	for(uint8 i=60;i>BX_Search_End+6;i--){
+		if(BX_R_List[i-1]<=BX_R_List[i]){
+			if(BX_R_List[i-2]<=BX_R_List[i-1]){
+				if(BX_R_List[i-3]<=BX_R_List[i-2]){
+					C_Point=i-3;
+				}
+			}
+		}
+		if(BX_R_List[C_Point-1]>BX_R_List[C_Point]){
+			if(BX_R_List[C_Point-2]>BX_R_List[C_Point-1]){
+				if(BX_R_List[C_Point-3]>BX_R_List[C_Point-2]){
+					
+					find_Flag=1;
+					ips200_show_int (180,200,C_Point,3);
+					return C_Point;
+				}
+			}
+		}
+	}
+	return find_Flag;
+} 
+uint8 stage=0;
+void Deal_Circle(){
+	if(DX_L_Count==0&&DX_R_Count>5&&stage==0){
+		stage=1;
+	}
+	if(stage==1&&Find_A()&&Find_C()){
+//	if((stage==1&&A_Point&&C_Point)||(stage==1&&C_Point)){
+		stage=2;
+	}
+	
+	if(stage==2){
+		if(Find_C()&&Find_A()){
+			BX_R(C_Point,A_Point,BX_R_List[C_Point],BX_R_List[A_Point]);
+		}
+		else if(Find_C()){
+			BX_R(C_Point,S_MT9V03X_H-1,BX_R_List[C_Point],BX_R_List[S_MT9V03X_H-1]);
+		}
+		if(Find_B()&&B_Point<40){
+			 stage=3;
+		}
+//	Buzzer_On();
+//		stage=0;
+	}
+	if(stage==3&&Find_B()){
+	//	BX_L(B_Point,S_MT9V03X_H-1,BX_R_List[B_Point],BX_L_List[S_MT9V03X_H-1]);
+	}
+}
 void find_ZX(){
 	for(uint8 i=BX_Search_Start-1;i>BX_Search_End;i--){
 		M_M_List[i]=Limit(1,(BX_L_List[i]+BX_R_List[i])/2,S_MT9V03X_W-2);
