@@ -345,6 +345,7 @@ void BX_R(uint8 BX_Start_X,uint8 BX_End_X,uint8 BX_Start_Y,uint8 BX_End_Y){
 	}
 }
 
+int QZ=60;
 int Cross_Flag=0;
 void Deal_Cross(){
 	
@@ -353,7 +354,7 @@ void Deal_Cross(){
 			&&image[DX_M_Start][S_MT9V03X_W/2]==255&&image[DX_M_Start][S_MT9V03X_W/2+1]==255&&image[DX_M_Start][S_MT9V03X_W/2-1]==255
 			&&image[DX_M_Start-4][S_MT9V03X_W/2]==255&&image[DX_M_Start-4][S_MT9V03X_W/2+1]==255&&image[DX_M_Start-4][S_MT9V03X_W/2-1]==255){
 			Deal_GD();
-			ips200_show_int (180,240 ,DX_M_Start,3);
+			
 			DX_M_Count=0;
 //			ips200_show_int (180,180 ,GD_L_L,3);
 //			ips200_show_int (180,200 ,GD_R_L,3);
@@ -394,7 +395,7 @@ void find_ZX(){
 }
 
 void QZ_Limit(){
-	for(uint8 i=BX_Search_End;i<BX_Search_Start-6;i++){
+	for(uint8 i=BX_Search_Start-6;i>BX_Search_End;i--){
 		if(abs(M_M_List[i+1]-M_M_List[i])>ZX_Limit){
 			QZ_L = i+1+4;
 			break;
@@ -432,7 +433,7 @@ uint8 M_W_List[120]=
 };
 uint8 Last_M_Out=97;//中线权重上一次输出
 uint8 M_W_Finally;
-int QZ=60;
+
 //中线权重计算
 
 
@@ -472,9 +473,10 @@ float M_Weight(){
 	float M_Out;
 	int temp=QZ;
 	uint32 M_W_Sum=0;
-	if(QZ>QZ_L){
+	if(QZ<QZ_L){
 		QZ=QZ_L;
 	}
+	ips200_show_int (180,240 ,QZ,3);
 	for(uint8 i=QZ;i>QZ-5;i--){
 		M_W_Sum+=M_M_List[i];
 	}

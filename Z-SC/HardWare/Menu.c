@@ -9,7 +9,7 @@ char CS_Change_Flag=0;//参数改变标志位
 
 
 
-float Speed=200.0;
+float Speed=240.0;
 //主菜单显示
 void Dis_CD0(){
 	
