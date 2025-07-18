@@ -381,7 +381,7 @@ void BX_R(uint8 BX_Start_X,uint8 BX_End_X,uint8 BX_Start_Y,uint8 BX_End_Y){
 	}
 }
 
-int QZ=60;
+int QZ=65;
 int Cross_Flag=0;
 void Deal_Cross(){
 	
@@ -429,13 +429,16 @@ uint8 B_Point;
 uint8 C_Point;
 uint8 Find_B(){
 	B_Point=0;
-	for(uint8 i=BX_Search_End;i<BX_Search_End+40;i++){
+	for(uint8 i=BX_Search_End;i<BX_Search_End+55;i++){
 		if(BX_R_List[i+1]-BX_R_List[i]>8){
 			B_Point=i;
 		}
 	}
 	ips200_show_int (180,220,B_Point,3);
-	return B_Point;
+	if(BX_R_List[B_Point]>40){
+		return B_Point;
+	}
+	return 0;
 } 
 
 uint8 Find_A(){
@@ -480,6 +483,7 @@ void Deal_Circle(){
 	if(stage==1&&Find_A()&&Find_C()){
 //	if((stage==1&&A_Point&&C_Point)||(stage==1&&C_Point)){
 		stage=2;
+		Buzzer_On();
 	}
 	
 	if(stage==2){
@@ -497,6 +501,9 @@ void Deal_Circle(){
 	}
 	if(stage==3&&Find_B()){
 		BX_RL(B_Point,S_MT9V03X_H-1,BX_R_List[B_Point],BX_L_List[S_MT9V03X_H-1]);
+	}
+	if(stage==3&&!Find_B()){
+		stage=0;
 	}
 }
 void find_ZX(){

@@ -119,7 +119,7 @@ int main (void)
 			find_ZX();
 			QZ_Limit();
 			M_W_Finally=M_Weight();
-			Outer.Actual= 93-M_W_Finally;
+			Outer.Actual=97-M_W_Finally;
 			ips200_show_float (150, 160,Outer.Actual,4,2);
 		if(mt9v03x_finish_flag&&Car_Flag ==0)
 		{
