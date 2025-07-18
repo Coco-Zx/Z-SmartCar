@@ -346,9 +346,31 @@ void Deal_GD(){
 
 
 void BX_L(uint8 BX_Start_X,uint8 BX_End_X,uint8 BX_Start_Y,uint8 BX_End_Y){
+	int temp;
 	float K_L=(float)(BX_End_Y - BX_Start_Y) / (BX_End_X - BX_Start_X);
 	for(uint8 i=BX_Start_X;i<=BX_End_X;i++){
-		BX_L_List[i]=BX_L_List[BX_Start_X]+(int)(K_L*(i-BX_Start_X));
+		temp=BX_L_List[BX_Start_X]+(int)(K_L*(i-BX_Start_X));
+		if(temp>240){
+			temp=240;
+		}
+		if(temp<0){
+			temp=0;
+		}
+		BX_L_List[i]=temp;
+	}
+}
+void BX_RL(uint8 BX_Start_X,uint8 BX_End_X,uint8 BX_Start_Y,uint8 BX_End_Y){
+	int temp;
+	float K_L=(float)(BX_End_Y - BX_Start_Y) / (BX_End_X - BX_Start_X);
+	for(uint8 i=BX_Start_X;i<=BX_End_X;i++){
+		temp=BX_R_List[BX_Start_X]+(int)(K_L*(i-BX_Start_X));
+		if(temp>240){
+			temp=240;
+		}
+		if(temp<0){
+			temp=0;
+		}
+		BX_L_List[i]=temp;
 	}
 }
 
@@ -407,12 +429,12 @@ uint8 B_Point;
 uint8 C_Point;
 uint8 Find_B(){
 	B_Point=0;
-	for(uint8 i=BX_Search_End;i<BX_Search_End+10;i++){
-		if(BX_R_List[i+1]-BX_R_List[i]>5){
+	for(uint8 i=BX_Search_End;i<BX_Search_End+40;i++){
+		if(BX_R_List[i+1]-BX_R_List[i]>8){
 			B_Point=i;
 		}
 	}
-	ips200_show_int (180,140,B_Point,3);
+	ips200_show_int (180,220,B_Point,3);
 	return B_Point;
 } 
 
@@ -429,7 +451,7 @@ uint8 Find_A(){
 
 uint8 Find_C(){
 	C_Point=0;
-	uint8 find_Flag=0;
+	
 	for(uint8 i=60;i>BX_Search_End+6;i--){
 		if(BX_R_List[i-1]<=BX_R_List[i]){
 			if(BX_R_List[i-2]<=BX_R_List[i-1]){
@@ -439,17 +461,16 @@ uint8 Find_C(){
 			}
 		}
 		if(BX_R_List[C_Point-1]>BX_R_List[C_Point]){
-			if(BX_R_List[C_Point-2]>BX_R_List[C_Point-1]){
-				if(BX_R_List[C_Point-3]>BX_R_List[C_Point-2]){
+			if(BX_R_List[C_Point-3]>BX_R_List[C_Point-1]){
+				
 					
-					find_Flag=1;
 					ips200_show_int (180,200,C_Point,3);
 					return C_Point;
-				}
+				
 			}
 		}
 	}
-	return find_Flag;
+	return 0;
 } 
 uint8 stage=0;
 void Deal_Circle(){
@@ -468,14 +489,14 @@ void Deal_Circle(){
 		else if(Find_C()){
 			BX_R(C_Point,S_MT9V03X_H-1,BX_R_List[C_Point],BX_R_List[S_MT9V03X_H-1]);
 		}
-		if(Find_B()&&B_Point<40){
+		if(Find_B()&&B_Point>=45){
 			 stage=3;
 		}
 //	Buzzer_On();
 //		stage=0;
 	}
 	if(stage==3&&Find_B()){
-	//	BX_L(B_Point,S_MT9V03X_H-1,BX_R_List[B_Point],BX_L_List[S_MT9V03X_H-1]);
+		BX_RL(B_Point,S_MT9V03X_H-1,BX_R_List[B_Point],BX_L_List[S_MT9V03X_H-1]);
 	}
 }
 void find_ZX(){
