@@ -138,8 +138,8 @@ uint8 GetOTSU (uint8 index[S_MT9V03X_H][S_MT9V03X_W])
 
     for (MinValue = 0; MinValue < 256 && HistoGram[MinValue] == 0; MinValue++);        //获取最小灰度的值
     for (MaxValue = 255; MaxValue > MinValue && HistoGram[MaxValue] == 0; MaxValue--); //获取最大灰度的值
-	ips200_show_int (150, 200, MinValue,3);
-	ips200_show_int (150, 220, MaxValue,3);
+//	ips200_show_int (150, 200, MinValue,3);
+//	ips200_show_int (150, 220, MaxValue,3);
     if (MaxValue == MinValue)
         return MaxValue;         // 图像中只有一个颜色
     if (MinValue + 1 == MaxValue)

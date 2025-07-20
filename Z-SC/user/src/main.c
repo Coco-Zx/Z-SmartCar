@@ -106,7 +106,7 @@ int main (void)
 			memcpy(image, mt9v03x_image, MT9V03X_H*MT9V03X_W);
 //			filter();
 			uint8 threshold=GetOTSU(image_copy);
-			ips200_show_int (150, 290, threshold,3);
+//			ips200_show_int (150, 290, threshold,3);
 //			uint8 threshold=DJthreshold(image_copy);
 			Set_image_T(threshold);
 			Protect();
