@@ -6,6 +6,7 @@ extern uint8 M_W_Finally;
 extern uint8 DX_M_Start;
 extern int Cross_Flag;
 extern int QZ;
+extern int Circle_Flag;
 extern uint8 stage;
 void find_JD(uint8 index[S_MT9V03X_H][S_MT9V03X_W]);
 void find_BX(uint8 index[S_MT9V03X_H][S_MT9V03X_W]);

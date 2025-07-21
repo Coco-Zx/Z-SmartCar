@@ -92,7 +92,8 @@ int main (void)
     Dis_CD0();//主页面菜单显示
 	pit_ms_init(TIM2_PIT,15);//屏幕刷新
 	pit_ms_init(TIM7_PIT,50);//按键
-	
+	Mode=1;
+	ips200_show_int (100, 150,Mode,1);
 	Outer.Target=0;
     
 	while(1)
@@ -115,7 +116,11 @@ int main (void)
 			find_BX(image);
 			Deal_DX();
 			Deal_Cross();
+		
 			Deal_Circle();
+			Cross_Flag=0;
+			
+			Circle_Flag=0;
 			find_ZX();
 			QZ_Limit();
 			M_W_Finally=M_Weight();

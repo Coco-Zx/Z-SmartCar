@@ -9,6 +9,7 @@
 #define KEY4                    (E5 )
 //发车标志位
 char Car_Flag=0;
+int Mode=1;
 int Final_Speed=0;
 //按键初始化
 void Key_Init(){
@@ -103,6 +104,15 @@ void Scan_Key(){
 						case 4:C_Num=3;Dis_CD3();G_Num=1;break;
 					}
 				}break;
+				case 1:
+				{
+					switch(G_Num){
+						case 1:Mode=1;ips200_show_int (100, 150,Mode,1);break;
+						case 2:Mode=2;ips200_show_int (100, 150,Mode,1);break;
+						case 3:Mode=3;ips200_show_int (100, 150,Mode,1);break;
+					}
+				
+				}
 				case 3:
 				{//调参确认
 					
