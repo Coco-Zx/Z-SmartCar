@@ -116,8 +116,9 @@ int main (void)
 			find_BX(image);
 			Deal_DX();
 			Deal_Cross();
-		
+			
 			Deal_Circle();
+			
 			Cross_Flag=0;
 			
 			Circle_Flag=0;
