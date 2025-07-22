@@ -94,9 +94,9 @@ void Scan_Key(){
 								else{
 									ips200_show_string(0, 300, "    ");
 									Car_Flag=0;
-									MotorL_SetSpeed(Speed);
-									MotorR_SetSpeed(Speed);
-									system_delay_ms(1000);
+//									MotorL_SetSpeed(Speed);
+//									MotorR_SetSpeed(Speed);
+//									system_delay_ms(1000);
 									Motor_Stop();
 								}break;
 						case 2:C_Num=1;Dis_CD1();G_Num=1;break;

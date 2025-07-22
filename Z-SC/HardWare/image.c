@@ -24,6 +24,8 @@ uint8   BX_R_List[S_MT9V03X_H];//右边线
 uint8   M_M_List[S_MT9V03X_H];//中线
 
 uint8 JD_L,JD_R;//左右基点
+
+
 void find_JD(uint8 index[S_MT9V03X_H][S_MT9V03X_W]){
 	//1/2处找基点
 	if(index[JD_Search_Line-1][S_MT9V03X_W/2]==255&&index[JD_Search_Line-1][S_MT9V03X_W/2+1]==255&&index[JD_Search_Line-1][S_MT9V03X_W/2-1]==255){
@@ -677,7 +679,8 @@ void Protect(){
 		Motor_Stop();
 	}
 }
-
+int S_stage=0;
+int S_Flag=0;
 void Stop(){
 	uint8 Counter=0;
 	uint8 flag=0;
@@ -691,11 +694,26 @@ void Stop(){
 		}
 	}
 	if(Counter>5){
-		Car_Flag=0;
-		ips200_show_string(0, 300, " ST!");
-		Motor_Stop();
+		S_Flag=1;
 	}
+	else{
+		S_Flag=0;
+	}
+	if(S_Flag==1&&S_stage==0){
+		S_stage=1;
+	}
+	if(S_stage==1&&S_Flag==0){
+		S_stage=2;
+	}
+	if(S_stage==2&&S_Flag==1){
+		
+			Car_Flag=0;
+			ips200_show_string(0, 300, " ST!");
+			Motor_Stop();
+	}
+		
 }
+
 float M_Weight(){
 	float M_Out;
 	int temp=QZ;

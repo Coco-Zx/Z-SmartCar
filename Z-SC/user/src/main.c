@@ -90,7 +90,7 @@ int main (void)
 {
 	All_Init();//全部初始化
     Dis_CD0();//主页面菜单显示
-	pit_ms_init(TIM2_PIT,15);//屏幕刷新
+	pit_ms_init(TIM2_PIT,15);//
 	pit_ms_init(TIM7_PIT,50);//按键
 	Mode=1;
 	ips200_show_int (100, 150,Mode,1);
