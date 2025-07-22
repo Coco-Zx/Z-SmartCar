@@ -10,6 +10,9 @@ float Err0,Err1,ErrI,Err2;
 
 //右轮pid结构体定义
 PID Inner_R={
+	.ErrI=0,
+	.Err1=0,
+	.Err0=0,
 	.Kp=0.88,
 	.Ki=0.29,
 	.Kd=0,
@@ -18,6 +21,9 @@ PID Inner_R={
 };
 //左轮pid结构体定义
 PID Inner_L={
+	.ErrI=0,
+	.Err1=0,
+	.Err0=0,
 	.Kp=0.60,
 	.Ki=0.32,
 	.Kd=0,
