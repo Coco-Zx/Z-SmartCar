@@ -87,6 +87,7 @@ void Scan_Key(){
 						case 1:
 								if(Car_Flag==0){//发车确认
 									ips200_show_string(0, 300, " GO!");
+									S_stage=0;
 									Car_Flag=1;
 							//		Final_Speed=Speed;
 									break;

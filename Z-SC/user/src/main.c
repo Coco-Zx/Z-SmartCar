@@ -98,7 +98,7 @@ int main (void)
     
 	while(1)
     {                    
-		ips200_show_int (180,132,stage,3);
+		ips200_show_int (180,132,stage_L,3);
 //		if(DX_M_Start!=0){
 //			Buzzer_On();
 //		}
@@ -117,7 +117,7 @@ int main (void)
 			Deal_DX();
 			Deal_Cross();
 			
-			Deal_Circle();
+			Deal_Circle_R();
 			
 			Cross_Flag=0;
 			
@@ -127,6 +127,8 @@ int main (void)
 			M_W_Finally=M_Weight();
 			Outer.Actual=97-M_W_Finally;
 			ips200_show_float (150, 160,Outer.Actual,4,2);
+			ips200_show_int (150, 240,S_stage,1);
+			
 		if(mt9v03x_finish_flag&&Car_Flag ==0)
 		{
 			if(C_Num==2){

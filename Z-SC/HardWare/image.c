@@ -460,6 +460,88 @@ uint8 Find_B(){
 	return 0;
 } 
 
+uint8 Find_BL(){
+	B_Point=0;
+	for(uint8 i=BX_Search_End;i<BX_Search_End+55;i++){
+		if(BX_L_List[i+1]-BX_L_List[i]>8){
+			B_Point=i;
+		}
+	}
+	//ips200_show_int (180,220,B_Point,3);
+	if(BX_L_List[B_Point]>40){
+		return B_Point;
+	}
+	return 0;
+} 
+
+uint8 Find_AL(){
+	A_Point=0;
+	for(uint8 i=BX_Search_Start-1;i>BX_Search_Start-38;i--){
+		if(BX_L_List[i-1]-BX_L_List[i]>5){
+			A_Point=i;
+		}
+	}
+	//ips200_show_int (180,180,A_Point,3);
+	return A_Point;
+} 
+
+uint8 Find_CL(){
+	C_Point=0;
+	
+	for(uint8 i=60;i>BX_Search_End+6;i--){
+		if(BX_L_List[i-1]<=BX_L_List[i]){
+			if(BX_L_List[i-2]<=BX_L_List[i-1]){
+				if(BX_L_List[i-3]<=BX_L_List[i-2]){
+					C_Point=i-3;
+				}
+			}
+		}
+		if(BX_L_List[C_Point-1]>BX_L_List[C_Point]){
+			if(BX_L_List[C_Point-3]>BX_L_List[C_Point-1]){
+				
+					
+					//ips200_show_int (180,200,C_Point,3);
+					return C_Point;
+				
+			}
+		}
+	}
+	return 0;
+} 
+
+uint8 Find_DL(){
+	D_Point=0;
+	
+	for(uint8 i=BX_Search_Start;i>BX_Search_Start-90;i--){
+		if(abs(BX_R_List[i-1]-BX_R_List[i])>5){
+			if(BX_R_List[D_Point]>25){
+				ips200_show_int (180,220,D_Point,3);
+				return D_Point;
+			}
+		}
+		if(BX_R_List[i-1]>BX_R_List[i]){
+			if(BX_R_List[i-2]>BX_R_List[i-1]){
+				
+					D_Point=i-2;
+				if(BX_R_List[D_Point-1]<BX_R_List[D_Point]){
+					if(BX_R_List[D_Point-2]<BX_R_List[D_Point-1]){
+						if(BX_R_List[D_Point]>25){
+						ips200_show_int (180,220,D_Point,3);
+							return D_Point;
+						}
+				
+					}
+				}
+				
+			}
+		}
+		
+		
+	}
+	return 0;
+	
+} 
+
 uint8 Find_A(){
 	A_Point=0;
 	for(uint8 i=BX_Search_Start-1;i>BX_Search_Start-38;i--){
@@ -527,29 +609,28 @@ uint8 Find_D(){
 	return 0;
 	
 } 
-uint8 stage=0;
-int flag=0;
-void Deal_Circle(){
-	ips200_show_int (180, 300,DX_L_Start,3);
-	if(stage>=2){
+uint8 stage_R=0;
+void Deal_Circle_R(){
+//	ips200_show_int (180, 300,DX_L_Start,3);
+	if(stage_R>=2){
 		Circle_Flag=1;
 	}
-	if(DX_L_Count==0&&DX_R_Count>5&&stage==0){
-		stage=1;
-		if(stage==1&&Find_A()&&Find_C()){
+	if(DX_L_Count==0&&DX_R_Count>5&&stage_R==0){
+		stage_R=1;
+		if(stage_R==1&&Find_A()&&Find_C()){
 //	if(DX_L_Count==0&&stage==1&&Find_A()&&Find_C()){
 //	if((stage==1&&A_Point&&C_Point)||(stage==1&&C_Point)){
-		stage=2;
+		stage_R=2;
 
 		Buzzer_On();
 		}
 		else{
-			stage=0;
+			stage_R=0;
 		}
 	}
 	
 	
-	if(stage==2){
+	if(stage_R==2){
 	
 		if(Find_C()&&Find_A()){
 			BX_R(C_Point,A_Point,BX_R_List[C_Point],BX_R_List[A_Point]);
@@ -558,19 +639,19 @@ void Deal_Circle(){
 			BX_R(C_Point,S_MT9V03X_H-1,BX_R_List[C_Point],BX_R_List[S_MT9V03X_H-1]);
 		}
 		if(Find_B()&&B_Point>=35){
-			 stage=3;
+			 stage_R=3;
 		}
 //	Buzzer_On();
 //		stage=0;
 	}
-	if(stage==3&&Find_B()){
+	if(stage_R==3&&Find_B()){
 		
 		BX_RL(B_Point,S_MT9V03X_H-1,BX_R_List[B_Point],BX_L_List[S_MT9V03X_H-1]);
 	}
-	if(stage==3&&!Find_B()){
-		stage=4;
+	if(stage_R==3&&!Find_B()){
+		stage_R=4;
 	}
-	if(stage==4&&Find_D()){
+	if(stage_R==4&&Find_D()){
 		uint8 Point=50;
 		for(uint8 i=BX_Search_Start;i>BX_Search_End;i--){
 			if(BX_R_List[i]==S_MT9V03X_W-2&&image[i-1][S_MT9V03X_W-2]==0){
@@ -580,13 +661,12 @@ void Deal_Circle(){
 			}
 		}
 		ips200_show_int (180,240,Point,3);
-		flag=1;
 		BX_RL(Point,D_Point,BX_R_List[Point],BX_L_List[D_Point]);
 	}
-	if(stage==4&&DX_L_Start>100){
-		stage=5;
+	if(stage_R==4&&DX_L_Start>100){
+		stage_R=5;
 	}
-	if(stage==5){
+	if(stage_R==5){
 		uint8 Point=50;
 		for(uint8 i=BX_Search_Start;i>BX_Search_End;i--){
 			if(BX_R_List[i]==S_MT9V03X_W-2&&image[i-1][S_MT9V03X_W-2]==0){
@@ -598,24 +678,85 @@ void Deal_Circle(){
 		
 		BX_RL(Point,S_MT9V03X_H-1,BX_R_List[Point],BX_L_List[S_MT9V03X_H-1]);
 		if(DX_L_Count==0){
-			stage=0;
+			stage_R=0;
 		}
 	}
-//	if(stage==4&&!Find_D()&&flag==1){
-//		stage=5;
-//		uint8 Point=50;
-//		for(uint8 i=BX_Search_Start;i>BX_Search_End+2;i--){
-//			if(BX_R_List[i]==S_MT9V03X_W-2&&image[i-1][S_MT9V03X_W-2]==0){
-//				Point=i;
-//				
-//				break;
-//			}
-//		}
-//		BX_RLB(Point,S_MT9V03X_H-1,S_MT9V03X_W,BX_L_List[S_MT9V03X_H-1]);
-//		if(DX_L_Count<=3){
-//			stage=0;
-//		}
-//	}
+
+}
+
+uint8 stage_L=0;
+void Deal_Circle_L(){
+//	ips200_show_int (180, 300,DX_L_Start,3);
+	if(stage_L>=2){
+		Circle_Flag=1;
+	}
+	if(DX_R_Count==0&&DX_L_Count>5&&stage_L==0){
+		stage_L=1;
+		if(stage_L==1&&Find_A()&&Find_C()){
+//	if(DX_L_Count==0&&stage==1&&Find_A()&&Find_C()){
+//	if((stage==1&&A_Point&&C_Point)||(stage==1&&C_Point)){
+		stage_L=2;
+
+		Buzzer_On();
+		}
+		else{
+			stage_L=0;
+		}
+	}
+	
+	
+	if(stage_L==2){
+	
+		if(Find_C()&&Find_A()){
+			BX_L(C_Point,A_Point,BX_R_List[C_Point],BX_R_List[A_Point]);
+		}
+		else if(Find_C()){
+			BX_L(C_Point,S_MT9V03X_H-1,BX_R_List[C_Point],BX_R_List[S_MT9V03X_H-1]);
+		}
+		if(Find_B()&&B_Point>=35){
+			 stage_L=3;
+		}
+//	Buzzer_On();
+//		stage=0;
+	}
+	if(stage_L==3&&Find_B()){
+		
+		BX_RL(B_Point,S_MT9V03X_H-1,BX_R_List[B_Point],BX_L_List[S_MT9V03X_H-1]);
+	}
+	if(stage_R==3&&!Find_B()){
+		stage_L=4;
+	}
+	if(stage_L==4&&Find_D()){
+		uint8 Point=50;
+		for(uint8 i=BX_Search_Start;i>BX_Search_End;i--){
+			if(BX_L_List[i]==S_MT9V03X_W-2&&image[i-1][S_MT9V03X_W-2]==0){
+				Point=i;
+				
+				break;
+			}
+		}
+		ips200_show_int (180,240,Point,3);
+		BX_RL(Point,D_Point,BX_R_List[Point],BX_L_List[D_Point]);
+	}
+	if(stage_R==4&&DX_L_Start>100){
+		stage_L=5;
+	}
+	if(stage_L==5){
+		uint8 Point=50;
+		for(uint8 i=BX_Search_Start;i>BX_Search_End;i--){
+			if(BX_L_List[i]==S_MT9V03X_W-2&&image[i-1][S_MT9V03X_W-2]==0){
+				Point=i;
+				
+				break;
+			}
+		}
+		
+		BX_RL(Point,S_MT9V03X_H-1,BX_R_List[Point],BX_L_List[S_MT9V03X_H-1]);
+		if(DX_R_Count==0){
+			stage_R=0;
+		}
+	}
+
 }
 void find_ZX(){
 	for(uint8 i=BX_Search_Start-1;i>BX_Search_End;i--){
@@ -668,12 +809,12 @@ uint8 M_W_Finally;
 
 void Protect(){
 	uint8 Counter=0;
-	for(uint8 i=118;i>110;i--){
-		if(image[i][S_MT9V03X_W/2]==0){
+	for(uint8 i=80;i<100;i++){
+		if(image[S_MT9V03X_H-2][i]==0){
 			Counter++;
 		}
 	}
-	if(Counter>5){
+	if(Car_Flag==1&&Counter>15){
 		Car_Flag=0;
 		ips200_show_string(0, 300, " ST!");
 		Motor_Stop();
@@ -699,14 +840,14 @@ void Stop(){
 	else{
 		S_Flag=0;
 	}
-	if(S_Flag==1&&S_stage==0){
+	if(S_stage==0&&S_Flag==1){
 		S_stage=1;
 	}
 	if(S_stage==1&&S_Flag==0){
 		S_stage=2;
 	}
 	if(S_stage==2&&S_Flag==1){
-		
+			S_stage=0;
 			Car_Flag=0;
 			ips200_show_string(0, 300, " ST!");
 			Motor_Stop();
