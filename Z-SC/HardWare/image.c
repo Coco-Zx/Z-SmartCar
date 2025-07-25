@@ -363,9 +363,9 @@ void BX_L(uint8 BX_Start_X,uint8 BX_End_X,uint8 BX_Start_Y,uint8 BX_End_Y){
 }
 void BX_RL(uint8 BX_Start_X,uint8 BX_End_X,uint8 BX_Start_Y,uint8 BX_End_Y){
 	int temp;
-	float K_L=(float)(BX_End_Y - BX_Start_Y) / (BX_End_X - BX_Start_X);
+	float K_R=(float)(BX_End_Y - BX_Start_Y) / (BX_End_X - BX_Start_X);
 	for(uint8 i=BX_Start_X;i<=BX_End_X;i++){
-		temp=BX_R_List[BX_Start_X]+(int)(K_L*(i-BX_Start_X));
+		temp=BX_R_List[BX_Start_X]+(int)(K_R*(i-BX_Start_X));
 		if(temp>240){
 			temp=240;
 		}
@@ -373,6 +373,21 @@ void BX_RL(uint8 BX_Start_X,uint8 BX_End_X,uint8 BX_Start_Y,uint8 BX_End_Y){
 			temp=0;
 		}
 		BX_L_List[i]=temp;
+	}
+}
+
+void BX_LR(uint8 BX_Start_X,uint8 BX_End_X,uint8 BX_Start_Y,uint8 BX_End_Y){
+	int temp;
+	float K_L=(float)(BX_End_Y - BX_Start_Y) / (BX_End_X - BX_Start_X);
+	for(uint8 i=BX_Start_X;i<=BX_End_X;i++){
+		temp=BX_L_List[BX_Start_X]+(int)(K_L*(i-BX_Start_X));
+		if(temp>240){
+			temp=240;
+		}
+		if(temp<0){
+			temp=0;
+		}
+		BX_R_List[i]=temp;
 	}
 }
 
@@ -692,7 +707,7 @@ void Deal_Circle_L(){
 	}
 	if(DX_R_Count==0&&DX_L_Count>5&&stage_L==0){
 		stage_L=1;
-		if(stage_L==1&&Find_A()&&Find_C()){
+		if(stage_L==1&&Find_AL()&&Find_CL()){
 //	if(DX_L_Count==0&&stage==1&&Find_A()&&Find_C()){
 //	if((stage==1&&A_Point&&C_Point)||(stage==1&&C_Point)){
 		stage_L=2;
@@ -707,26 +722,26 @@ void Deal_Circle_L(){
 	
 	if(stage_L==2){
 	
-		if(Find_C()&&Find_A()){
-			BX_L(C_Point,A_Point,BX_R_List[C_Point],BX_R_List[A_Point]);
+		if(Find_CL()&&Find_AL()){
+			BX_L(C_Point,A_Point,BX_L_List[C_Point],BX_L_List[A_Point]);
 		}
-		else if(Find_C()){
-			BX_L(C_Point,S_MT9V03X_H-1,BX_R_List[C_Point],BX_R_List[S_MT9V03X_H-1]);
+		else if(Find_CL()){
+			BX_L(C_Point,S_MT9V03X_H-1,BX_L_List[C_Point],BX_L_List[S_MT9V03X_H-1]);
 		}
-		if(Find_B()&&B_Point>=35){
+		if(Find_BL()&&B_Point>=35){
 			 stage_L=3;
 		}
 //	Buzzer_On();
 //		stage=0;
 	}
-	if(stage_L==3&&Find_B()){
+	if(stage_L==3&&Find_BL()){
 		
-		BX_RL(B_Point,S_MT9V03X_H-1,BX_R_List[B_Point],BX_L_List[S_MT9V03X_H-1]);
+		BX_LR(B_Point,S_MT9V03X_H-1,BX_L_List[B_Point],BX_R_List[S_MT9V03X_H-1]);
 	}
-	if(stage_R==3&&!Find_B()){
+	if(stage_R==3&&!Find_BL()){
 		stage_L=4;
 	}
-	if(stage_L==4&&Find_D()){
+	if(stage_L==4&&Find_DL()){
 		uint8 Point=50;
 		for(uint8 i=BX_Search_Start;i>BX_Search_End;i--){
 			if(BX_L_List[i]==S_MT9V03X_W-2&&image[i-1][S_MT9V03X_W-2]==0){
@@ -736,9 +751,9 @@ void Deal_Circle_L(){
 			}
 		}
 		ips200_show_int (180,240,Point,3);
-		BX_RL(Point,D_Point,BX_R_List[Point],BX_L_List[D_Point]);
+		BX_LR(Point,D_Point,BX_L_List[Point],BX_R_List[D_Point]);
 	}
-	if(stage_R==4&&DX_L_Start>100){
+	if(stage_R==4&&DX_R_Start>100){
 		stage_L=5;
 	}
 	if(stage_L==5){
@@ -751,7 +766,7 @@ void Deal_Circle_L(){
 			}
 		}
 		
-		BX_RL(Point,S_MT9V03X_H-1,BX_R_List[Point],BX_L_List[S_MT9V03X_H-1]);
+		BX_LR(Point,S_MT9V03X_H-1,BX_L_List[Point],BX_R_List[S_MT9V03X_H-1]);
 		if(DX_R_Count==0){
 			stage_R=0;
 		}
@@ -826,10 +841,10 @@ void Stop(){
 	uint8 Counter=0;
 	uint8 flag=0;
 	for(uint8 i=1;i<187;i++){
-		if(image[S_MT9V03X_H/2][i]==255&&flag==0){
+		if(image[S_MT9V03X_H-5][i]==255&&flag==0){
 			flag=1;
 		}
-		if(image[S_MT9V03X_H/2][i]==0&&flag==1){
+		if(image[S_MT9V03X_H-5][i]==0&&flag==1){
 			Counter++;
 			flag=0;
 		}
@@ -847,6 +862,7 @@ void Stop(){
 		S_stage=2;
 	}
 	if(S_stage==2&&S_Flag==1){
+			Buzzer_On();
 			S_stage=0;
 			Car_Flag=0;
 			ips200_show_string(0, 300, " ST!");

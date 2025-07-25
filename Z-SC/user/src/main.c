@@ -95,10 +95,14 @@ int main (void)
 	Mode=1;
 	ips200_show_int (100, 150,Mode,1);
 	Outer.Target=0;
-    
+    Z_Kp=30;
+	Z_Kd=400;
+	W_Kp=65;
+	W_Kd=620;
 	while(1)
     {                    
-		ips200_show_int (180,132,stage_L,3);
+		ips200_show_int (180,132,stage_R,3);
+		ips200_show_int (200,132,stage_L,3);
 //		if(DX_M_Start!=0){
 //			Buzzer_On();
 //		}
@@ -118,6 +122,7 @@ int main (void)
 			Deal_Cross();
 			
 			Deal_Circle_R();
+			Deal_Circle_L();
 			
 			Cross_Flag=0;
 			
@@ -126,6 +131,7 @@ int main (void)
 			QZ_Limit();
 			M_W_Finally=M_Weight();
 			Outer.Actual=97-M_W_Finally;
+			pid_update();
 			ips200_show_float (150, 160,Outer.Actual,4,2);
 			ips200_show_int (150, 240,S_stage,1);
 			

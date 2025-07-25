@@ -34,8 +34,8 @@ void pit2_handler(){
 	
 		PID_Update(&Outer);
 		
-		Inner_L.Target=Speed;
-		Inner_R.Target=Speed;
+		Inner_L.Target=Final_Speed;
+		Inner_R.Target=Final_Speed;
 		PID_Update(&Inner_L);    //PID
 		PID_Update(&Inner_R); 
 		MotorL_SetSpeed(Inner_L.Out+Outer.Out);//左轮PID

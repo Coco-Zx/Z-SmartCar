@@ -3,6 +3,10 @@
 extern float Kp,Ki,Kd;
 extern float Target,Actual,Out;
 extern float limit;
+extern float Z_Kp;
+extern float Z_Kd;
+extern float W_Kp;
+extern float W_Kd;
 typedef struct{
 	float Target;//目标输出
 	float Actual;//实际输出
@@ -23,6 +27,7 @@ typedef struct{
 	float OutMin;//限幅
 }PID;
 extern PID Inner_L,Inner_R,Outer;
+void pid_update();
 void Kp_Change(float k);
 void PID_Update(PID *p);
 void PID_UpdateZ(PID *p);

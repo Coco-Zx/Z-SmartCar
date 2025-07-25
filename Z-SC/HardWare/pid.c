@@ -4,9 +4,14 @@
 #include "Encoder.h"
 #include "Motor.h"
 #include "image.h" 
+#include "key.h" 
 float Target,Actual,Out;
 float Kp=0,Ki=0,Kd=0;
 float Err0,Err1,ErrI,Err2;
+float Z_Kp;
+float Z_Kd;
+float W_Kp;
+float W_Kd;
 
 //右轮pid结构体定义
 PID Inner_R={
@@ -38,6 +43,18 @@ PID Outer={
 	.OutMax=4000,
 	.OutMin=-4000,
 };
+void pid_update(){
+	if(Outer.Actual<10&&Outer.Actual>-10){
+		Final_Speed=Speed+30;
+		Outer.Kp=Z_Kp;
+		Outer.Kd=Z_Kd;
+	}
+	else {
+		Final_Speed=Speed-10;
+		Outer.Kp=W_Kp;
+		Outer.Kd=W_Kd;
+	}
+}
 //pid封装
 void PID_Update(PID *p){
 	p->Err1=p->Err0;
