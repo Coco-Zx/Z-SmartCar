@@ -72,68 +72,61 @@
 #define LED1                    (H2 )
 #define LED2                    (B13)
 
-
-
-#define SWITCH1                 (D3 )
-#define SWITCH2                 (D4 )
-
-
 uint8_t T_Counter=0;//定时器计数
-
 
 //函数声明
 void All_Init();
-
-
 
 int main (void)
 {
 	All_Init();//全部初始化
     Dis_CD0();//主页面菜单显示
-	pit_ms_init(TIM2_PIT,15);//
-	pit_ms_init(TIM7_PIT,50);//按键
+	pit_ms_init(TIM2_PIT,15);//控制环刷新
+	pit_ms_init(TIM7_PIT,50);//按键刷新
 	Mode=1;
 	ips200_show_int (100, 150,Mode,1);
 	Outer.Target=0;
-    Z_Kp=30;
+	
+    Z_Kp=30;//pid分段
 	Z_Kd=400;
 	W_Kp=65;
 	W_Kd=620;
+	
 	while(1)
     {                    
-		ips200_show_int (180,132,stage_R,3);
+		ips200_show_int (180,132,stage_R,3);//左右圆环状态位
 		ips200_show_int (200,132,stage_L,3);
 //		if(DX_M_Start!=0){
 //			Buzzer_On();
 //		}
 		//Buzzer_On();
-			memcpy(image_copy, mt9v03x_image, MT9V03X_H*MT9V03X_W);
+			memcpy(image_copy, mt9v03x_image, MT9V03X_H*MT9V03X_W);//图像复制
 			memcpy(image, mt9v03x_image, MT9V03X_H*MT9V03X_W);
 //			filter();
-			uint8 threshold=GetOTSU(image_copy);
+			uint8 threshold=GetOTSU(image_copy);//大津法
 //			ips200_show_int (150, 290, threshold,3);
 //			uint8 threshold=DJthreshold(image_copy);
 			Set_image_T(threshold);
-			Protect();
-			Stop();
-			find_JD(image);
-			find_BX(image);
-			Deal_DX();
-			Deal_Cross();
+			Protect();//保护
+			Stop();//斑马线停车
+			find_JD(image);//找边线基点
+			find_BX(image);//爬边线
+			Deal_DX();//丢线
+			Deal_Cross();//十字
 			
-			Deal_Circle_R();
-			Deal_Circle_L();
+			Deal_Circle_R();//右环岛
+			//Deal_Circle_L();//左环岛
 			
-			Cross_Flag=0;
+			Cross_Flag=0;//十字标志位清0
 			
-			Circle_Flag=0;
-			find_ZX();
-			QZ_Limit();
+			Circle_Flag=0;//环岛标志位清0
+			find_ZX();//中线
+			QZ_Limit();//动态前瞻
 			M_W_Finally=M_Weight();
-			Outer.Actual=97-M_W_Finally;
-			pid_update();
+			Outer.Actual=97-M_W_Finally;//中线误差
+			pid_update();//分段pid
 			ips200_show_float (150, 160,Outer.Actual,4,2);
-			ips200_show_int (150, 240,S_stage,1);
+			ips200_show_int (150, 240,S_stage,1);//停车标志位
 			
 		if(mt9v03x_finish_flag&&Car_Flag ==0)
 		{
@@ -151,7 +144,7 @@ int main (void)
 			}
 			if(C_Num==0){
 				
-				Draw_Line();
+				Draw_Line();//画线
 				ips200_show_gray_image(0, 0, (const uint8 *)image, MT9V03X_W, MT9V03X_H, MT9V03X_W, MT9V03X_H,0);
 			
 		}
@@ -159,7 +152,7 @@ int main (void)
 			mt9v03x_finish_flag=0;
 		}
 
-	Buzzer();
+		Buzzer();//蜂鸣器
 	
 
 //       printf("%f %f %f\r\n",Inner_L.Target,Inner_L.Actual,Inner_L.Out );
@@ -201,7 +194,7 @@ void All_Init(){
 	
 	
 }
-
+//按键中断
 void pit7_handler(){
 	if(Car_Flag ==0){
 	 T_Counter++;

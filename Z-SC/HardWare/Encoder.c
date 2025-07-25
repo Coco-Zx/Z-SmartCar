@@ -18,9 +18,11 @@ int M_M;
 //编码器初始化
 void Encoder_Init(){
 	encoder_quad_init(TIM3_ENCODER, TIM3_ENCODER_CH1_B4, TIM3_ENCODER_CH2_B5);
-	encoder_quad_init(TIM4_ENCODER, TIM4_ENCODER_CH1_B6, TIM4_ENCODER_CH2_B7);
+	encoder_dir_init(TIM4_ENCODER, TIM4_ENCODER_CH1_B6, TIM4_ENCODER_CH2_B7);
 	                          
 }
+
+//编码器读取与pid控制
 void pit2_handler(){
 	Count++;
 	E_Num1= -encoder_get_count(ENCODER_QUADDEC1);                  

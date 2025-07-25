@@ -71,7 +71,7 @@ void filter(){//图像处理滤波
 //	ips200_show_int (100,230,threshold,3);
 //	return threshold;
 //}
-
+//大津法
 uint8 DJthreshold(uint8 index[S_MT9V03X_H][S_MT9V03X_W]){
 	uint8 threshold;
 	uint8 gray_value;
@@ -110,7 +110,7 @@ uint8 DJthreshold(uint8 index[S_MT9V03X_H][S_MT9V03X_W]){
 	}
 	return threshold;
 }
-
+//大津法
 uint8 GetOTSU (uint8 index[S_MT9V03X_H][S_MT9V03X_W])
 {
     signed short i, j;
@@ -173,6 +173,7 @@ uint8 GetOTSU (uint8 index[S_MT9V03X_H][S_MT9V03X_W])
     }
     return Threshold;                        //返回最佳阈值;
 }
+
 void Set_image_T(uint8 value){//二值化转换
 	uint8 temp_value;
 	uint16 i;

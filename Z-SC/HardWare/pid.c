@@ -43,14 +43,16 @@ PID Outer={
 	.OutMax=4000,
 	.OutMin=-4000,
 };
+
+//分段pid
 void pid_update(){
 	if(Outer.Actual<10&&Outer.Actual>-10){
-		Final_Speed=Speed+30;
+		Final_Speed=Speed+25;
 		Outer.Kp=Z_Kp;
 		Outer.Kd=Z_Kd;
 	}
 	else {
-		Final_Speed=Speed-10;
+		Final_Speed=Speed-15;
 		Outer.Kp=W_Kp;
 		Outer.Kd=W_Kd;
 	}
