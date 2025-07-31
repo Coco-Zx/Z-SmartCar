@@ -27,10 +27,12 @@ typedef struct{
 	float OutMin;//限幅
 }PID;
 extern PID Inner_L,Inner_R,Outer;
-void pid_update();
+
 void Kp_Change(float k);
 void PID_Update(PID *p);
 void PID_UpdateZ(PID *p);
+void pid_update();
+
 void pid_W();
 void pid_Z();
 #endif

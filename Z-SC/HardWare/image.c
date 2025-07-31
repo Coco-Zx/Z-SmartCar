@@ -6,19 +6,19 @@
 #define JD_Search_Line  S_MT9V03X_H   //基点搜寻起始行
 #define BX_Search_Start S_MT9V03X_H   //边线搜寻起始行
 #define BX_Search_End   20 			  //边线搜寻终止行
-#define DX_Search_Start S_MT9V03X_H-10   //边线搜寻起始行
-#define DX_Search_End   20 			  //边线搜寻终止行
+#define DX_Search_Start S_MT9V03X_H-10//丢线搜寻起始行
+#define DX_Search_End   20 			  //丢线搜寻终止行
 #define BX_L_R          10            //左边线-右搜寻
 #define BX_L_L          5			  //左边线-左搜寻
 #define BX_R_R          5			  //右边线-右搜寻
 #define BX_R_L          10            //右边线-左搜寻
 #define M_M             93			  //中间行
-#define ZX_Limit        5
-#define GD_Change_Min   5
+#define ZX_Limit        5             //有效前瞻判定阈值
+#define GD_Change_Min   5			  //拐点判定
 #define GD_Change_Max   7
 
 #define array_size  (DX_Search_Start - DX_Search_End) / 2
-uint8               QZ_L=0;
+uint8   QZ_L=0;
 uint8   BX_L_List[S_MT9V03X_H];//左边线
 uint8   BX_R_List[S_MT9V03X_H];//右边线
 uint8   M_M_List[S_MT9V03X_H];//中线
@@ -832,7 +832,7 @@ uint8 M_W_Finally;
 
 //中线权重计算
 
-
+//出界保护函数
 void Protect(){
 	uint8 Counter=0;
 	for(uint8 i=80;i<100;i++){
@@ -846,6 +846,7 @@ void Protect(){
 		Motor_Stop();
 	}
 }
+//斑马线停车函数
 int S_stage=0;
 int S_Flag=0;
 void Stop(){

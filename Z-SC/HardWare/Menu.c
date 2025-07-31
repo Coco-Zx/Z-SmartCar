@@ -41,8 +41,6 @@ void Dis_CD2(){
 			ips200_show_string(10, 196, "          ");
 			ips200_show_string(10, 212, "          ");
 	
-			ips200_show_int (70, 164,E_Num1,5);
-			ips200_show_int (70, 180,E_Num2,5);
 			
 		
 }

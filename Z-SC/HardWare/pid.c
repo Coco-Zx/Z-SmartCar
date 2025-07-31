@@ -110,11 +110,12 @@ void PID_UpdateZ(PID *p){
 
 
 int Kp_base=30;
+
 void Kp_Change(float k){
 	Outer.Kp=Kp_base+(M_M-M_W_Finally)*k;
 }
 
-
+//
 
 //以下未封装
 
@@ -122,7 +123,7 @@ void Kp_Change(float k){
 void pid_W(){
 	
 	
-	Actual=E_Num1;
+	Actual=E_NumR;
 	
 	Err1=Err0;
 	Err0=Target -Actual;
@@ -155,7 +156,7 @@ void pid_W(){
 void pid_Z(){
 	
 	
-	Actual=E_Num1;
+	Actual=E_NumR;
 	
 	Err2=Err1;
 	Err1=Err0;
