@@ -180,7 +180,7 @@ void All_Init(){
         }
         else
         {
-            break;
+            break;//www
         }
         system_delay_ms(500);                                                   // 短延时快速闪灯表示异常
     }

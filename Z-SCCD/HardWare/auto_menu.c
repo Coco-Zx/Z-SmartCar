@@ -38,7 +38,45 @@ param_set   my_param_set[MEM_SIZE];
 uint8       my_index[MEM_SIZE*2];
 static int  static_cnt=0;
 #endif
-
+#define FLASH_SECTION_INDEX       (127)                                         // 存储数据用的扇区 倒数第一个扇区
+#define FLASH_PAGE_INDEX          (3)                                           // 存储数据用的页码 倒数第一个页码
+void menu_save(void)
+{
+    if(flash_check(FLASH_SECTION_INDEX, FLASH_PAGE_INDEX))                      // 判断是否有数据
+    {
+        flash_erase_page(FLASH_SECTION_INDEX, FLASH_PAGE_INDEX);                // 擦除这一页
+    }
+    flash_buffer_clear(); //擦除缓存区
+    //写入缓冲区
+    flash_union_buffer[0].float_type  = Inner_R.Kp;
+    flash_union_buffer[1].float_type  = Inner_R.Ki;
+    flash_union_buffer[2].float_type  = Inner_R.Kd;
+    flash_union_buffer[3].int32_type  = Z_Kp;
+    flash_union_buffer[4].int32_type  = Z_Kd;
+    flash_union_buffer[5].int32_type  = W_Kp;
+	flash_union_buffer[6].int32_type  = W_Kd;
+	flash_union_buffer[7].float_type  = Speed;
+    flash_union_buffer[8].int32_type  = QZ;
+    flash_write_page_from_buffer(FLASH_SECTION_INDEX, FLASH_PAGE_INDEX);        // 向指定 Flash 扇区的页码写入缓冲区数据
+}
+void menu_load(void)
+{
+    if(flash_check(FLASH_SECTION_INDEX, FLASH_PAGE_INDEX))                      // 判断是否有数据
+    {
+     flash_read_page_to_buffer(FLASH_SECTION_INDEX, FLASH_PAGE_INDEX);           // 将数据从 flash 读取到缓冲区ad_page_to_buffer;
+    //参数读出
+    Inner_R.Kp=flash_union_buffer[0].float_type;
+    Inner_R.Ki=flash_union_buffer[1].float_type;
+    Inner_R.Kd=flash_union_buffer[2].float_type;
+    Z_Kp=flash_union_buffer[3].int32_type;
+    Z_Kd=flash_union_buffer[4].int32_type;
+    W_Kp=flash_union_buffer[5].int32_type;
+    W_Kd=flash_union_buffer[6].int32_type;
+	Speed=flash_union_buffer[7].float_type;
+	QZ=flash_union_buffer[8].int32_type;
+    flash_buffer_clear(); //擦除缓存区
+    }
+}
 //函数数组指针
 void (*current_operation_menu)(void);
 
@@ -558,6 +596,7 @@ void menu_init()
     index_xy_init();
 
     /*-----------------配置flash---------------*/
+	menu_load();
     #ifdef USE_FLASH
     flash_init_wz();
     #endif
@@ -656,5 +695,6 @@ void FUN_INIT(){
 	fun_init(View	    ,"View");
 	fun_init(day_night	,"day_night");
 	fun_init(rand_color	,"rand_color");
-	
+	fun_init(menu_save	,"menu_save");
+	fun_init(menu_load	,"menu_load");
 }
