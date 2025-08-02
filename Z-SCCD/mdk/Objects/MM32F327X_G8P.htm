@@ -3,9 +3,9 @@
 <title>Static Call Graph - [.\Objects\MM32F327X_G8P.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Objects\MM32F327X_G8P.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6230001: Last Updated: Sat Aug  2 17:15:23 2025
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6230001: Last Updated: Sat Aug  2 17:27:06 2025
 <BR><P>
-<H3>Maximum Stack Usage =       1072 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
+<H3>Maximum Stack Usage =       1080 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
 main &rArr; show_process &rArr; fun_menu &rArr; change_value &rArr; ips200_show_float &rArr; func_float_to_str &rArr; debug_assert_handler &rArr; debug_output &rArr; sprintf
 <P>
@@ -1008,7 +1008,7 @@ Global Symbols
 <BR>[Address Reference Count : 1]<UL><LI> startup_mm32f3277g.o(RESET)
 </UL>
 <P><STRONG><a name="[25]"></a>TIM2_IRQHandler</STRONG> (Thumb, 22 bytes, Stack size 8 bytes, isr.o(.text.TIM2_IRQHandler))
-<BR><BR>[Stack]<UL><LI>Max Depth = 832<LI>Call Chain = TIM2_IRQHandler &rArr; pit2_handler &rArr; imu660ra_get_gyro &rArr; imu660ra_read_registers &rArr; spi_read_8bit_registers &rArr; debug_assert_handler &rArr; debug_output &rArr; sprintf
+<BR><BR>[Stack]<UL><LI>Max Depth = 840<LI>Call Chain = TIM2_IRQHandler &rArr; pit2_handler &rArr; imu660ra_get_gyro &rArr; imu660ra_read_registers &rArr; spi_read_8bit_registers &rArr; debug_assert_handler &rArr; debug_output &rArr; sprintf
 </UL>
 <BR>[Calls]<UL><LI><a href="#[a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pit2_handler
 </UL>
@@ -1870,8 +1870,8 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[113]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;menu_init
 </UL>
 
-<P><STRONG><a name="[49]"></a>main</STRONG> (Thumb, 506 bytes, Stack size 80 bytes, main.o(.text.main))
-<BR><BR>[Stack]<UL><LI>Max Depth = 1072<LI>Call Chain = main &rArr; show_process &rArr; fun_menu &rArr; change_value &rArr; ips200_show_float &rArr; func_float_to_str &rArr; debug_assert_handler &rArr; debug_output &rArr; sprintf
+<P><STRONG><a name="[49]"></a>main</STRONG> (Thumb, 532 bytes, Stack size 88 bytes, main.o(.text.main))
+<BR><BR>[Stack]<UL><LI>Max Depth = 1080<LI>Call Chain = main &rArr; show_process &rArr; fun_menu &rArr; change_value &rArr; ips200_show_float &rArr; func_float_to_str &rArr; debug_assert_handler &rArr; debug_output &rArr; sprintf
 </UL>
 <BR>[Calls]<UL><LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Buzzer
 <LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Draw_Line
@@ -1977,8 +1977,8 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mt9v03x_init
 </UL>
 
-<P><STRONG><a name="[a6]"></a>pit2_handler</STRONG> (Thumb, 410 bytes, Stack size 56 bytes, encoder.o(.text.pit2_handler))
-<BR><BR>[Stack]<UL><LI>Max Depth = 824<LI>Call Chain = pit2_handler &rArr; imu660ra_get_gyro &rArr; imu660ra_read_registers &rArr; spi_read_8bit_registers &rArr; debug_assert_handler &rArr; debug_output &rArr; sprintf
+<P><STRONG><a name="[a6]"></a>pit2_handler</STRONG> (Thumb, 362 bytes, Stack size 64 bytes, encoder.o(.text.pit2_handler))
+<BR><BR>[Stack]<UL><LI>Max Depth = 832<LI>Call Chain = pit2_handler &rArr; imu660ra_get_gyro &rArr; imu660ra_read_registers &rArr; spi_read_8bit_registers &rArr; debug_assert_handler &rArr; debug_output &rArr; sprintf
 </UL>
 <BR>[Calls]<UL><LI><a href="#[12a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;encoder_clear_count
 <LI><a href="#[da]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;encoder_get_count
