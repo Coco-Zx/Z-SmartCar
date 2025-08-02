@@ -22,26 +22,25 @@ void Encoder_Init(){
 	encoder_dir_init(TIM4_ENCODER, TIM4_ENCODER_CH1_B6, TIM4_ENCODER_CH2_B7);
 	                          
 }
-
+float GKD=0;
 //编码器读取与pid控制
 void pit2_handler(){
 	Counter++;
 	imu660ra_get_gyro();
-	ips200_show_int(20,200,imu660ra_gyro_x,3);
-	ips200_show_int(20,200,imu660ra_gyro_y,3);
-	ips200_show_int(20,200,imu660ra_gyro_z,3);
-	if(Counter%5==0){
+	
+	if(Counter%1==0){
 		E_NumR= -encoder_get_count(ENCODER_QUADDEC1);                  
 		E_NumL= encoder_get_count(ENCODER_QUADDEC2);     //读取数值              
 		encoder_clear_count(ENCODER_QUADDEC1);                         
 		encoder_clear_count(ENCODER_QUADDEC2);            //清空计数   
 		Inner_L.Actual=(E_NumL+E_NumR)/2;
 		Inner_R.Actual=(E_NumL+E_NumR)/2;   //实际调速赋值	
+		Outer.Actual=97-M_W_Finally;//中线误差
 		if(Car_Flag!=0){
-			Outer.Actual=97-M_W_Finally;//中线误差
+			
 			PID_UpdateImage(&Outer);
-			Inner_L.Target=Final_Speed;
-			Inner_R.Target=Final_Speed;
+			Inner_L.Target=Speed;
+			Inner_R.Target=Speed;
 			PID_Update(&Inner_L);    
 			PID_Update(&Inner_R); //PID
 //			MotorL_SetSpeed(Inner_L.Out+Outer.Out);//左轮PID
@@ -49,8 +48,8 @@ void pit2_handler(){
 		}
 	}
 	if(Car_Flag!=0){
-		MotorL_SetSpeed(Inner_L.Out+Outer.Out);//左轮PID
-		MotorR_SetSpeed(Inner_R.Out-Outer.Out);
+		MotorL_SetSpeed(Inner_L.Out+Outer.Out+GKD*imu660ra_gyro_z);//左轮PID
+		MotorR_SetSpeed(Inner_R.Out-Outer.Out-GKD*imu660ra_gyro_z);
 	}
 }
 

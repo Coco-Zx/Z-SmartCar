@@ -5,6 +5,7 @@
 #include "image.h"  
 #include "YUdeal.h"
 #include "Motor.h" 
+#include "Encoder.h"  
 //按键信号量及按键反馈信号量
 #ifdef  MENU_USE_RTT
 extern rt_sem_t key1_sem;
@@ -51,13 +52,14 @@ void menu_save(void)
     flash_union_buffer[0].float_type  = Inner_R.Kp;
     flash_union_buffer[1].float_type  = Inner_R.Ki;
     flash_union_buffer[2].float_type  = Inner_R.Kd;
-    flash_union_buffer[3].int32_type  = Z_Kp;
-    flash_union_buffer[4].int32_type  = Z_Kd;
-    flash_union_buffer[5].int32_type  = W_Kp;
-	flash_union_buffer[6].int32_type  = W_Kd;
+    flash_union_buffer[3].float_type  = Outer.Kp;
+    flash_union_buffer[4].float_type  = Outer.Kp2;
+    flash_union_buffer[5].float_type  = Outer.Kd;
+	flash_union_buffer[6].float_type  = GKD;
 	flash_union_buffer[7].float_type  = Speed;
     flash_union_buffer[8].int32_type  = QZ;
     flash_write_page_from_buffer(FLASH_SECTION_INDEX, FLASH_PAGE_INDEX);        // 向指定 Flash 扇区的页码写入缓冲区数据
+	
 }
 void menu_load(void)
 {
@@ -68,10 +70,10 @@ void menu_load(void)
     Inner_R.Kp=flash_union_buffer[0].float_type;
     Inner_R.Ki=flash_union_buffer[1].float_type;
     Inner_R.Kd=flash_union_buffer[2].float_type;
-    Z_Kp=flash_union_buffer[3].int32_type;
-    Z_Kd=flash_union_buffer[4].int32_type;
-    W_Kp=flash_union_buffer[5].int32_type;
-    W_Kd=flash_union_buffer[6].int32_type;
+    Outer.Kp=flash_union_buffer[3].float_type;
+    Outer.Kp2=flash_union_buffer[4].float_type;
+    Outer.Kd=flash_union_buffer[5].float_type;
+    GKD=flash_union_buffer[6].float_type;
 	Speed=flash_union_buffer[7].float_type;
 	QZ=flash_union_buffer[8].int32_type;
     flash_buffer_clear(); //擦除缓存区
@@ -596,7 +598,7 @@ void menu_init()
     index_xy_init();
 
     /*-----------------配置flash---------------*/
-	menu_load();
+    menu_load();
     #ifdef USE_FLASH
     flash_init_wz();
     #endif
@@ -671,20 +673,17 @@ void NULL_FUN(){
 
 }
 
-float Speed=300.0;//
+float Speed=0;//
 void UNIT_SET(){
 	//菜单单元调参参数初始化
     unit_param_set(&Inner_R.Kp,TYPE_FLOAT ,0.01  ,2  ,2,NORMAL_PAR,"Inner_R.Kp");
     unit_param_set(&Inner_R.Ki,TYPE_FLOAT ,0.01  ,2  ,2,NORMAL_PAR,"Inner_R.Ki");
     unit_param_set(&Inner_R.Kd,TYPE_FLOAT ,0.01  ,2  ,2,NORMAL_PAR,"Inner_R.Kd");
-    unit_param_set(&Inner_L.Kp,TYPE_FLOAT ,0.01  ,2  ,2,NORMAL_PAR,"Inner_L.Kp");
-    unit_param_set(&Inner_L.Ki,TYPE_FLOAT ,0.01  ,2  ,2,NORMAL_PAR,"Inner_L.Ki");
-    unit_param_set(&Inner_L.Kd,TYPE_FLOAT ,0.01  ,2  ,2,NORMAL_PAR,"Inner_L.Kd");
-	unit_param_set(&Z_Kp,TYPE_INT ,2  ,2  ,2,NORMAL_PAR,"Z_Kp");
-    unit_param_set(&Z_Kd,TYPE_INT ,2  ,3  ,2,NORMAL_PAR,"Z_Kd");
-    unit_param_set(&W_Kp,TYPE_INT ,2  ,2  ,2,NORMAL_PAR,"W_Kp");
-	unit_param_set(&W_Kd,TYPE_INT ,2  ,3  ,2,NORMAL_PAR,"W_Kd");
-	unit_param_set(&Speed,TYPE_FLOAT ,10 ,3 ,2,NORMAL_PAR,"Speed");
+    unit_param_set(&Outer.Kp,TYPE_FLOAT ,0.01  ,3  ,2,NORMAL_PAR,"Outer.Kp");
+    unit_param_set(&Outer.Kp2,TYPE_FLOAT ,0.01  ,2  ,2,NORMAL_PAR,"Outer.Kp2");
+    unit_param_set(&Outer.Kd,TYPE_FLOAT ,0.01  ,3  ,2,NORMAL_PAR,"Outer.Kd");
+	unit_param_set(&GKD,TYPE_FLOAT ,0.001  ,2  ,3,NORMAL_PAR,"GKD");
+	unit_param_set(&Speed,TYPE_FLOAT ,10 ,4 ,2,NORMAL_PAR,"Speed");
     unit_param_set(&QZ,TYPE_INT ,1  ,2  ,0,NORMAL_PAR,"QZ");
 	unit_param_set(&OTSU,TYPE_INT ,1  ,3  ,0,NORMAL_PAR,"OTSU");
 }

@@ -78,4 +78,4 @@
   ..\..\libraries\components\fatfs\source\ffconf.h \
   ..\..\libraries\components\fatfs\source\ff.h ..\HardWare\auto_menu.h \
   ..\HardWare\key.h ..\HardWare\pid.h ..\HardWare\image.h \
-  ..\HardWare\YUdeal.h ..\HardWare\Motor.h
+  ..\HardWare\YUdeal.h ..\HardWare\Motor.h ..\HardWare\Encoder.h

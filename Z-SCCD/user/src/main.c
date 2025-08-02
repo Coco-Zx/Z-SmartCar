@@ -86,7 +86,7 @@ int main (void)
    
     
     //Dis_CD0();//主页面菜单显示
-	pit_ms_init(TIM2_PIT,3);//控制环刷新
+	pit_ms_init(TIM2_PIT,15);//控制环刷新
 	pit_ms_init(TIM7_PIT,50);//按键刷新
 	Outer.Target=0;
 
@@ -95,8 +95,12 @@ int main (void)
     
 	
 	while(1)
-    {       
-        show_process(NULL);		
+    {      
+			
+        show_process(NULL);	
+//		ips200_show_int(20,240,imu660ra_gyro_x,3);
+//		ips200_show_int(20,260,imu660ra_gyro_y,3);
+//		ips200_show_int(20,280,imu660ra_gyro_z,3);
 		ips200_show_int (180,132,stage_R,3);//左右圆环状态位
 		ips200_show_int (200,132,stage_L,3);
 //		if(DX_M_Start!=0){

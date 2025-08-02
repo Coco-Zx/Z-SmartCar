@@ -38,9 +38,9 @@ PID Inner_L={
 };
 //中线外环pid定义
 PIDImage Outer={
-	.Kp=63,//49//4.89
+	.Kp=0,//49//4.89
 	.Kp2=0,
-	.Kd=630,//580
+	.Kd=0,//580
 	.OutMax=4000,
 	.OutMin=-4000,
 };
