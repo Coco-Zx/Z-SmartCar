@@ -37,27 +37,27 @@ PID Inner_L={
 	.OutMin=-4000,
 };
 //中线外环pid定义
-PID Outer={
+PIDImage Outer={
 	.Kp=63,//49//4.89
-	.Ki=0,
+	.Kp2=0,
 	.Kd=630,//580
 	.OutMax=4000,
 	.OutMin=-4000,
 };
 
 //分段pid
-void pid_update(){
-	if(Outer.Actual<10&&Outer.Actual>-10){
-		Final_Speed=Speed+25;
-		Outer.Kp=Z_Kp;
-		Outer.Kd=Z_Kd;
-	}
-	else {
-		Final_Speed=Speed-15;
-		Outer.Kp=W_Kp;
-		Outer.Kd=W_Kd;
-	}
-}
+//void pid_update(){
+//	if(Outer.Actual<10&&Outer.Actual>-10){
+//		Final_Speed=Speed+25;
+//		Outer.Kp=Z_Kp;
+//		Outer.Kd=Z_Kd;
+//	}
+//	else {
+//		Final_Speed=Speed-15;
+//		Outer.Kp=W_Kp;
+//		Outer.Kd=W_Kd;
+//	}
+//}
 //pid封装
 void PID_Update(PID *p){
 	p->Err1=p->Err0;
@@ -73,9 +73,26 @@ void PID_Update(PID *p){
 		   +p->Ki*p->ErrI
 		   +p->Kd*(p->Err0-p->Err1);//输出
 	
+	if(p->Out>p->OutMax){
+		p->Out=p->OutMax;
+	}
+	if(p->Out<p->OutMin){
+		p->Out=p->OutMin;//限幅
+	}
+}
+void PID_UpdateImage(PIDImage *p){
+	p->Err1=p->Err0;
+	p->Err0=p->Target - p->Actual;//数据读取
 	
-	
-	
+//	if(p->ErrI!=0){
+		p->ErrI+=p->Err0;//积分项累加
+//	}
+//	else{
+//		p->ErrI=0;
+//	}
+	p->Out =p->Kp*p->Err0 
+		   +p->Kp2*p->Err0*p->Err0
+		   +p->Kd*(p->Err0-p->Err1);//输出
 	
 	if(p->Out>p->OutMax){
 		p->Out=p->OutMax;
@@ -84,7 +101,6 @@ void PID_Update(PID *p){
 		p->Out=p->OutMin;//限幅
 	}
 }
-
 void PID_UpdateZ(PID *p){
 	p->Err2=Err1;
 	p->Err1=p->Err0;

@@ -82,11 +82,11 @@ int main (void)
 {
 	All_Init();//全部初始化
 	menu_init();
-
+	imu660ra_init();
    
     
     //Dis_CD0();//主页面菜单显示
-	pit_ms_init(TIM2_PIT,15);//控制环刷新
+	pit_ms_init(TIM2_PIT,3);//控制环刷新
 	pit_ms_init(TIM7_PIT,50);//按键刷新
 	Outer.Target=0;
 
@@ -126,8 +126,8 @@ int main (void)
 			find_ZX();//中线
 			QZ_Limit();//动态前瞻
 			M_W_Finally=M_Weight();
-			Outer.Actual=97-M_W_Finally;//中线误差
-			pid_update();//分段pid
+//			Outer.Actual=97-M_W_Finally;//中线误差
+//			pid_update();//分段pid
 			ips200_show_float (150, 200,Outer.Actual,4,2);
 			ips200_show_int (150, 240,S_stage,1);//停车标志位
 			
