@@ -28,7 +28,7 @@ void pit2_handler(){
 	Counter++;
 	imu660ra_get_gyro();
 	
-	if(Counter%1==0){
+	
 		E_NumR= -encoder_get_count(ENCODER_QUADDEC1);                  
 		E_NumL= encoder_get_count(ENCODER_QUADDEC2);     //读取数值              
 		encoder_clear_count(ENCODER_QUADDEC1);                         
@@ -46,7 +46,7 @@ void pit2_handler(){
 //			MotorL_SetSpeed(Inner_L.Out+Outer.Out);//左轮PID
 //			MotorR_SetSpeed(Inner_R.Out-Outer.Out);
 		}
-	}
+	
 	if(Car_Flag!=0){
 		MotorL_SetSpeed(Inner_L.Out+Outer.Out+GKD*imu660ra_gyro_z);//左轮PID
 		MotorR_SetSpeed(Inner_R.Out-Outer.Out-GKD*imu660ra_gyro_z);

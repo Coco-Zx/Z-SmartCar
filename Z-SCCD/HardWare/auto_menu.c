@@ -679,9 +679,9 @@ void UNIT_SET(){
     unit_param_set(&Inner_R.Kp,TYPE_FLOAT ,0.01  ,2  ,2,NORMAL_PAR,"Inner_R.Kp");
     unit_param_set(&Inner_R.Ki,TYPE_FLOAT ,0.01  ,2  ,2,NORMAL_PAR,"Inner_R.Ki");
     unit_param_set(&Inner_R.Kd,TYPE_FLOAT ,0.01  ,2  ,2,NORMAL_PAR,"Inner_R.Kd");
-    unit_param_set(&Outer.Kp,TYPE_FLOAT ,0.01  ,3  ,2,NORMAL_PAR,"Outer.Kp");
+    unit_param_set(&Outer.Kp,TYPE_FLOAT ,1  ,3  ,2,NORMAL_PAR,"Outer.Kp");
     unit_param_set(&Outer.Kp2,TYPE_FLOAT ,0.01  ,2  ,2,NORMAL_PAR,"Outer.Kp2");
-    unit_param_set(&Outer.Kd,TYPE_FLOAT ,0.01  ,3  ,2,NORMAL_PAR,"Outer.Kd");
+    unit_param_set(&Outer.Kd,TYPE_FLOAT ,5  ,3  ,2,NORMAL_PAR,"Outer.Kd");
 	unit_param_set(&GKD,TYPE_FLOAT ,0.001  ,2  ,3,NORMAL_PAR,"GKD");
 	unit_param_set(&Speed,TYPE_FLOAT ,10 ,4 ,2,NORMAL_PAR,"Speed");
     unit_param_set(&QZ,TYPE_INT ,1  ,2  ,0,NORMAL_PAR,"QZ");

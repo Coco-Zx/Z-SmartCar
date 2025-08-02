@@ -103,6 +103,8 @@ int main (void)
 //		ips200_show_int(20,280,imu660ra_gyro_z,3);
 		ips200_show_int (180,132,stage_R,3);//左右圆环状态位
 		ips200_show_int (200,132,stage_L,3);
+		ips200_show_float (150, 200,Outer.Actual,4,2);
+		ips200_show_int (150, 240,S_stage,1);//停车标志位
 //		if(DX_M_Start!=0){
 //			Buzzer_On();
 //		}
@@ -132,8 +134,7 @@ int main (void)
 			M_W_Finally=M_Weight();
 //			Outer.Actual=97-M_W_Finally;//中线误差
 //			pid_update();//分段pid
-			ips200_show_float (150, 200,Outer.Actual,4,2);
-			ips200_show_int (150, 240,S_stage,1);//停车标志位
+			
 			
 		if(mt9v03x_finish_flag&&Car_Flag ==0)
 		{
