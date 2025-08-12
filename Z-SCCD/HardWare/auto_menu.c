@@ -56,8 +56,9 @@ void menu_save(void)
     flash_union_buffer[4].float_type  = Outer.Kp2;
     flash_union_buffer[5].float_type  = Outer.Kd;
 	flash_union_buffer[6].float_type  = GKD;
-	flash_union_buffer[7].float_type  = Speed;
-    flash_union_buffer[8].int32_type  = QZ;
+	flash_union_buffer[7].float_type  = SpeedMax;
+	flash_union_buffer[8].float_type  = SpeedMin;
+    flash_union_buffer[9].int32_type  = QZ;
     flash_write_page_from_buffer(FLASH_SECTION_INDEX, FLASH_PAGE_INDEX);        // 向指定 Flash 扇区的页码写入缓冲区数据
 	
 }
@@ -74,8 +75,9 @@ void menu_load(void)
     Outer.Kp2=flash_union_buffer[4].float_type;
     Outer.Kd=flash_union_buffer[5].float_type;
     GKD=flash_union_buffer[6].float_type;
-	Speed=flash_union_buffer[7].float_type;
-	QZ=flash_union_buffer[8].int32_type;
+	SpeedMax=flash_union_buffer[7].float_type;
+	SpeedMin=flash_union_buffer[8].float_type;
+	QZ=flash_union_buffer[9].int32_type;
     flash_buffer_clear(); //擦除缓存区
     }
 }
@@ -598,7 +600,7 @@ void menu_init()
     index_xy_init();
 
     /*-----------------配置flash---------------*/
-    menu_load();
+ menu_load();
     #ifdef USE_FLASH
     flash_init_wz();
     #endif
@@ -651,14 +653,15 @@ void View(){
     }
 }
 char Car_Flag=0;
+int ZXMax=0;
 void Car_Go(){
     if(IS_OK){
-		if(Car_Flag==0
-			
-		
-		){
+		if(Car_Flag==0){
+			ZXMax=0;
+			pid_Reset();
 			S_stage=0;
 			stage_R=0;
+			stage_L=0;
 			Car_Flag=1;
 		}
 		else{
@@ -673,7 +676,8 @@ void NULL_FUN(){
 
 }
 
-float Speed=0;//
+float SpeedMax=280;
+float SpeedMin=160;
 void UNIT_SET(){
 	//菜单单元调参参数初始化
     unit_param_set(&Inner_R.Kp,TYPE_FLOAT ,0.01  ,2  ,2,NORMAL_PAR,"Inner_R.Kp");
@@ -683,9 +687,11 @@ void UNIT_SET(){
     unit_param_set(&Outer.Kp2,TYPE_FLOAT ,0.01  ,2  ,2,NORMAL_PAR,"Outer.Kp2");
     unit_param_set(&Outer.Kd,TYPE_FLOAT ,5  ,3  ,2,NORMAL_PAR,"Outer.Kd");
 	unit_param_set(&GKD,TYPE_FLOAT ,0.001  ,2  ,3,NORMAL_PAR,"GKD");
-	unit_param_set(&Speed,TYPE_FLOAT ,10 ,4 ,2,NORMAL_PAR,"Speed");
-    unit_param_set(&QZ,TYPE_INT ,1  ,2  ,0,NORMAL_PAR,"QZ");
+	unit_param_set(&QZ,TYPE_INT ,1  ,2  ,0,NORMAL_PAR,"QZ");
 	unit_param_set(&OTSU,TYPE_INT ,1  ,3  ,0,NORMAL_PAR,"OTSU");
+	unit_param_set(&ZXM,TYPE_INT ,1  ,4 ,0,NORMAL_PAR,"ZXM");
+	unit_param_set(&SpeedMax,TYPE_FLOAT ,10 ,4 ,2,NORMAL_PAR,"SpeedMax");
+    unit_param_set(&SpeedMin,TYPE_FLOAT ,10 ,4 ,2,NORMAL_PAR,"SpeedMin");
 }
 
 void FUN_INIT(){

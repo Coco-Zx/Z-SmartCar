@@ -4,6 +4,7 @@
 #include "key.h"                                                                 
 #include "Motor.h"  
 #include "Encoder.h" 
+#include "pid.h" 
 #define JD_Search_Line  S_MT9V03X_H   //基点搜寻起始行
 #define BX_Search_Start S_MT9V03X_H   //边线搜寻起始行
 #define BX_Search_End   20 			  //边线搜寻终止行
@@ -634,8 +635,18 @@ uint8 Find_DL(){
 	return 0;
 	
 } 
-
-
+int Type_Flag=0;
+int Type_Deal(){
+	if(DX_L_Start<S_MT9V03X_H/2&&DX_R_Start<S_MT9V03X_H/2){
+		if(abs((int)Outer.Actual)<6){
+			Type_Flag=1;
+		}
+	}
+	else{
+			Type_Flag=0;
+	}
+	return Type_Flag;
+} 
 uint8 stage_R=0;
 void Deal_Circle_R(){
 //	ips200_show_int (180, 300,DX_L_Start,3);
@@ -687,7 +698,7 @@ void Deal_Circle_R(){
 				break;
 			}
 		}
-		ips200_show_int (180,240,Point,3);
+	//	ips200_show_int (180,240,Point,3);
 		BX_RL(Point,D_PointR,BX_R_List[Point],BX_L_List[D_PointR]);
 	}
 	if(stage_R==4&&DX_L_Start>100){
@@ -762,7 +773,7 @@ void Deal_Circle_L(){
 				break;
 			}
 		}
-		ips200_show_int (180,240,Point,3);
+		//ips200_show_int (180,240,Point,3);
 		BX_LR(Point,D_PointL,BX_L_List[Point],BX_R_List[D_PointL]);
 	}
 	if(stage_R==4&&DX_R_Start>100){

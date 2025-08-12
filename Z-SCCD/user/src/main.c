@@ -74,6 +74,9 @@
 #define LED2                    (B13)
 
 uint8_t T_Counter=0;//定时器计数
+uint8_t Counter_O=0;
+uint8 threshold;
+
 
 //函数声明
 void All_Init();
@@ -86,8 +89,8 @@ int main (void)
    
     
     //Dis_CD0();//主页面菜单显示
-	pit_ms_init(TIM2_PIT,15);//控制环刷新
-	pit_ms_init(TIM7_PIT,50);//按键刷新
+	pit_ms_init(TIM2_PIT,10);//控制环刷新
+	pit_ms_init(TIM7_PIT,1);//
 	Outer.Target=0;
 
 	ips200_set_color(RGB565_WHITE,RGB565_BLACK);
@@ -96,23 +99,32 @@ int main (void)
 	
 	while(1)
     {      
-			
+		if(ZX>ZXMax){
+			ZXMax=ZX;
+		}
+		ips200_show_int (150, 240,ZXMax,4);//停车标志位
+		Counter_O++;
         show_process(NULL);	
 //		ips200_show_int(20,240,imu660ra_gyro_x,3);
 //		ips200_show_int(20,260,imu660ra_gyro_y,3);
 //		ips200_show_int(20,280,imu660ra_gyro_z,3);
-		ips200_show_int (180,132,stage_R,3);//左右圆环状态位
-		ips200_show_int (200,132,stage_L,3);
+		
+//		ips200_show_int (180,132,stage_R,3);//左右圆环状态位
+//		ips200_show_int (200,132,stage_L,3);
 		ips200_show_float (150, 200,Outer.Actual,4,2);
-		ips200_show_int (150, 240,S_stage,1);//停车标志位
+//		ips200_show_int (150, 240,S_stage,1);//停车标志位
+		ips200_show_int (150, 260,imu660ra_gyro_z,5);
 //		if(DX_M_Start!=0){
 //			Buzzer_On();
 //		}
 		//Buzzer_On();
 			memcpy(image_copy, mt9v03x_image, MT9V03X_H*MT9V03X_W);//图像复制
-			memcpy(image, mt9v03x_image, MT9V03X_H*MT9V03X_W);
+			memcpy(image,image_copy, MT9V03X_H*MT9V03X_W);
 //			filter();
-			uint8 threshold=GetOTSU(image_copy);//大津法
+		if(Counter_O==5){
+			Counter_O=0;
+			threshold=GetOTSU(image_copy);//大津法
+		}
 //			ips200_show_int (150, 290, threshold,3);
 //			uint8 threshold=DJthreshold(image_copy);
 			Set_image_T(threshold);
@@ -203,15 +215,27 @@ void All_Init(){
 	
 }
 ////按键中断
+int filtered_gyro_z;
+int TLY_Out;
 void pit7_handler(){
-////if(Car_Flag ==0){
-//	 T_Counter++;
-//	//ips200_show_float (120, 290, M_W_Finally,4,2);
-//    key_scanner();
-////	if(T_Counter%5==0){
-//	//	Dis_GB();
-//	//	}
-//	//}
+	
+	imu660ra_get_gyro();
+	if(abs(imu660ra_gyro_z)<=18){
+		imu660ra_gyro_z=0;
+	}
+	filtered_gyro_z = 0.8 * filtered_gyro_z + 0.2 * imu660ra_gyro_z;
+	TLY_Out=GKD*filtered_gyro_z;
+	if(TLY_Out>=2500){
+		TLY_Out=2500;
+	}
+	if(TLY_Out<=-2500){
+		TLY_Out=-2500;
+	}
+	ZX=Outer.Out+TLY_Out;
+	if(Car_Flag!=0){
+	MotorL_SetSpeed(Inner_L.Out+Outer.Out+TLY_Out);//左轮PID
+	MotorR_SetSpeed(Inner_R.Out-Outer.Out-TLY_Out);
+	}
 }
 
 

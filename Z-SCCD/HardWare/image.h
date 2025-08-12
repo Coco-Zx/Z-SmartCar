@@ -10,6 +10,7 @@ extern int QZ;
 extern int Circle_Flag;
 extern uint8 stage_L;
 extern uint8 stage_R;
+int Type_Deal();
 void find_JD(uint8 index[S_MT9V03X_H][S_MT9V03X_W]);
 void find_BX(uint8 index[S_MT9V03X_H][S_MT9V03X_W]);
 void find_ZX();

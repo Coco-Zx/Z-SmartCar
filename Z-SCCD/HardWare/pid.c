@@ -19,32 +19,36 @@ PID Inner_R={
 	.ErrI=0,
 	.Err1=0,
 	.Err0=0,
-	.Kp=3.68,//0.88
-	.Ki=0.11,//0.29,
+	.Kp=4.38,//3.68,//0.88
+	.Ki=0.38,//0.29,
 	.Kd=0,
-	.OutMax=4000,//限幅
-	.OutMin=-4000,
+	.OutMax=5000,//限幅
+	.OutMin=-5000,
 };
 //左轮pid结构体定义
 PID Inner_L={
 	.ErrI=0,
 	.Err1=0,
 	.Err0=0,
-	.Kp=3.68,//0.60
-	.Ki=0.11,//0.32
+	.Kp=4.38,//0.60
+	.Ki=0.38,//0.32
 	.Kd=0,
-	.OutMax=4000,
-	.OutMin=-4000,
+	.OutMax=5000,
+	.OutMin=-5000,
 };
 //中线外环pid定义
 PIDImage Outer={
-	.Kp=0,//49//4.89
-	.Kp2=0,
-	.Kd=0,//580
-	.OutMax=4000,
-	.OutMin=-4000,
+	.Kp=188,//49//4.89
+	.Kp2=3.38,
+	.Kd=440,//580
+	.OutMax=6000,
+	.OutMin=-6000,
 };
 
+void pid_Reset(){
+	Inner_L.ErrI=0;
+	Inner_R.ErrI=0;
+}
 //分段pid
 //void pid_update(){
 //	if(Outer.Actual<10&&Outer.Actual>-10){
@@ -88,10 +92,10 @@ void PID_UpdateImage(PIDImage *p){
 		p->ErrI+=p->Err0;//积分项累加
 //	}
 //	else{
-//		p->ErrI=0;
+//		p->ErrI=0;+
 //	}
 	p->Out =p->Kp*p->Err0 
-		   +p->Kp2*p->Err0*p->Err0
+		   +p->Kp2*p->Err0*abs((int)p->Err0)
 		   +p->Kd*(p->Err0-p->Err1);//输出
 	
 	if(p->Out>p->OutMax){

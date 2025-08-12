@@ -20,7 +20,8 @@
 #define SON_NUM				(6)  //推荐为2的整数倍
 
 
-extern float Speed;
+extern float SpeedMax;
+extern float SpeedMin;
 #define STR_LEN_MAX			12
 #define MOUSE_DIS			10
 #define MOUSE_LOOK			">"
@@ -51,6 +52,7 @@ typedef enum UNIT_TYPE{USE_FUN=1,NORMAL_PAR,PID_PAR}unit_type;
 #define SCREEN_TYPE		        IPS
 extern char Car_Flag;
 extern int view_state;
+extern int ZXMax;
 #if SCREEN_TYPE==TFT
 	#define 		screen_init				lcd_init
 	#define 		clear							lcd_clear

@@ -77,5 +77,5 @@
   ..\..\libraries\zf_device\zf_device_wireless_uart.h \
   ..\..\libraries\components\fatfs\source\ffconf.h \
   ..\..\libraries\components\fatfs\source\ff.h ..\HardWare\image.h \
-  ..\HardWare\Menu.h ..\HardWare\pid.h ..\HardWare\Motor.h \
-  ..\HardWare\Key.h ..\HardWare\auto_menu.h
+  ..\HardWare\pid.h ..\HardWare\Motor.h ..\HardWare\Key.h \
+  ..\HardWare\auto_menu.h

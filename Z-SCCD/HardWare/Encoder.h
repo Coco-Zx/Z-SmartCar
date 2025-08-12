@@ -5,5 +5,7 @@ extern int E_NumR;
 extern int E_NumL;
 extern char Car_Flag;
 extern float GKD;
+extern int ZX;
+extern int ZXM;
 void Encoder_Init();
 #endif

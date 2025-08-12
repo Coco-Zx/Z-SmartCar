@@ -54,7 +54,7 @@ void PID_Update(PID *p);
 void PID_UpdateZ(PID *p);
 void PID_UpdateImage(PIDImage *p);
 void pid_update();
-
+void pid_Reset();
 void pid_W();
 void pid_Z();
 #endif
