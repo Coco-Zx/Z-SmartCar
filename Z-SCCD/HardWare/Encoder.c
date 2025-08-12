@@ -44,12 +44,12 @@ void pit2_handler(){
 				Inner_R.Actual=(E_NumL+E_NumR)/2;   //实际调速赋值	
 				PID_UpdateImage(&Outer);
 				Speed_Strategy();
-			if(Type_Deal()){
-				Final_Speed*=1.5;
-			}
-			else if(Type_Deal()==0){
-				Final_Speed*=0.8;
-			}
+//			if(Type_Deal()){
+//				Final_Speed*=1.5;
+//			}
+//			else if(Type_Deal()==0){
+//				Final_Speed*=0.8;
+//			}
 			
 				Inner_L.Target=Final_Speed;
 				Inner_R.Target=Final_Speed;

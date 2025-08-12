@@ -196,6 +196,7 @@ void All_Init(){
 	//摄像头初始化
 	while(1)
     {
+	
         if(mt9v03x_init())
         {
             ips200_show_string(0, 16, "mt9v03x reinit.");
@@ -233,8 +234,8 @@ void pit7_handler(){
 	}
 	ZX=Outer.Out+TLY_Out;
 	if(Car_Flag!=0){
-	MotorL_SetSpeed(Inner_L.Out+Outer.Out+TLY_Out);//左轮PID
-	MotorR_SetSpeed(Inner_R.Out-Outer.Out-TLY_Out);
+	MotorL_SetSpeed(Inner_L.Out+Outer.Out-TLY_Out);//左轮PID
+	MotorR_SetSpeed(Inner_R.Out-Outer.Out+TLY_Out);
 	}
 }
 

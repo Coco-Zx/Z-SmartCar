@@ -1,9 +1,9 @@
 #include "zf_common_headfile.h"
 //#include "Menu.h"
-#define MotorR_PWM   TIM5_PWM_CH4_A3  
+#define MotorR_PWM   TIM5_PWM_CH1_A0  
 #define MotorR_Turn  A2
 #define MotorL_PWM   TIM5_PWM_CH2_A1
-#define MotorL_Turn  A0
+#define MotorL_Turn  A3
 
 int pwmL;
 int pwmR;//PWM波装载值
@@ -19,14 +19,14 @@ void MotorR_SetSpeed(int pwm){//右轮设速
 		if(pwm>=8000){
 			pwm=8000;
 		}
-		gpio_set_level (MotorR_Turn,1);
+		gpio_set_level (MotorR_Turn,0);
 		pwm_set_duty (MotorR_PWM,pwm);
 	}
 	if(pwm<0){
 		if(pwm<=-8000){
 			pwm=-8000;
 		}
-		gpio_set_level (MotorR_Turn,0);
+		gpio_set_level (MotorR_Turn,1);
 		pwm_set_duty (MotorR_PWM,-pwm);
 	}
 }
